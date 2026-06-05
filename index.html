@@ -1367,6 +1367,30 @@
     }
 
     .notice-board .team-card { min-height: auto; }
+
+    /* 희귀도 이펙트 */
+    .rarity-rare { border: 2px solid #4fc3f7; box-shadow: 0 0 8px rgba(79,195,247,0.5); }
+    .rarity-epic { border: 2px solid #ce93d8; box-shadow: 0 0 14px rgba(206,147,216,0.7); animation: epicPulse 2s ease-in-out infinite; }
+    .rarity-legendary { border: 2px solid #ffd700; box-shadow: 0 0 20px rgba(255,215,0,0.8); animation: legendaryGlow 1.5s ease-in-out infinite; }
+    .rarity-mythic { border: 3px solid #ff6b6b; box-shadow: 0 0 28px rgba(255,107,107,0.9), 0 0 48px rgba(255,200,0,0.4); animation: mythicAura 1s ease-in-out infinite; }
+    @keyframes epicPulse { 0%,100%{box-shadow:0 0 14px rgba(206,147,216,0.7)} 50%{box-shadow:0 0 24px rgba(206,147,216,1)} }
+    @keyframes legendaryGlow { 0%,100%{box-shadow:0 0 20px rgba(255,215,0,0.8)} 50%{box-shadow:0 0 36px rgba(255,215,0,1),0 0 60px rgba(255,150,0,0.5)} }
+    @keyframes mythicAura { 0%,100%{box-shadow:0 0 28px rgba(255,107,107,0.9),0 0 48px rgba(255,200,0,0.4)} 50%{box-shadow:0 0 44px rgba(255,107,107,1),0 0 80px rgba(255,200,0,0.7)} }
+    .avatar-glow-rare { filter: drop-shadow(0 0 6px #4fc3f7); }
+    .avatar-glow-epic { filter: drop-shadow(0 0 10px #ce93d8) drop-shadow(0 0 20px #7c4dff); }
+    .avatar-glow-legendary { filter: drop-shadow(0 0 14px #ffd700) drop-shadow(0 0 28px #ff8c00); }
+    .avatar-glow-mythic { filter: drop-shadow(0 0 18px #ff6b6b) drop-shadow(0 0 36px #ffd700); }
+    /* 캐릭터 아바타 강화 */
+    .char-avatar-wrap { position: relative; display: inline-block; }
+    .char-class-badge { position: absolute; bottom: -4px; right: -4px; font-size: 0.65em; background: rgba(0,0,0,0.7); color: #fff; border-radius: 8px; padding: 1px 5px; }
+    .hero-score { font-size: 0.75em; color: #ffd84d; font-weight: 700; margin-top: 4px; }
+    /* 알림함 */
+    .notif-badge { display: inline-block; background: #ec4058; color: #fff; border-radius: 50%; min-width: 18px; height: 18px; line-height: 18px; text-align: center; font-size: 0.7em; font-weight: 700; margin-left: 4px; vertical-align: middle; }
+    /* 내 요청 대기 섹션 */
+    .pending-req-card { background: rgba(255,255,255,0.12); border-radius: 14px; padding: 12px 14px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.2); }
+    .pending-req-card .cancel-btn { background: #ec4058; color: #fff; border-radius: 10px; padding: 6px 14px; font-size: 0.85em; margin-top: 8px; border: 0; cursor: pointer; }
+    /* 보물상자 진행도 */
+    .chest-progress { font-size: 0.85em; color: #ffd84d; margin-bottom: 6px; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -1443,7 +1467,8 @@
       { id: "study_mom", title: "엄마의 공부 퀘스트 클리어하기", icon: "📋", xp: 20, coins: 20 },
       { id: "study_focus", title: "15분 집중 모드! 한 과목 클리어", icon: "⏱️", xp: 15, coins: 15 },
       { id: "study_share", title: "오늘 배운 지식 1개 알려주기", icon: "💡", xp: 10, coins: 10 },
-      { id: "study_retry", title: "아깝게 틀린 문제 다시 도전하기", icon: "🔄", xp: 15, coins: 15 }
+      { id: "study_retry", title: "아깝게 틀린 문제 다시 도전하기", icon: "🔄", xp: 15, coins: 15 },
+      { id: "mission_meal_thanks", title: "오늘 밥 감사히 먹고 깨끗하게 마무리하기", icon: "🍚", xp: 10, coins: 10 }
     ];
 
     const LEVELS = [
@@ -1492,7 +1517,13 @@
       { id: "title_family_hero", slot: "title", category: "칭호", name: "가족 히어로", icon: "💪", level: 4, cost: 220, rarity: "에픽" },
       { id: "title_legend_kid", slot: "title", category: "칭호", name: "전설의 어린이", icon: "👑", level: 8, cost: 700, rarity: "신화" },
       { id: "mission_badge", slot: "badge", category: "배지", name: "미션 클리어 배지", icon: "🎖️", level: 2, cost: 90, rarity: "희귀" },
-      { id: "speed_title", slot: "title", category: "칭호", name: "초고속 해결사", icon: "💨", level: 3, cost: 150, rarity: "희귀" }
+      { id: "speed_title", slot: "title", category: "칭호", name: "초고속 해결사", icon: "💨", level: 3, cost: 150, rarity: "희귀" },
+      { id: "weapon_lightning_sword", slot: "weapon", category: "무기", name: "번개검", icon: "⚡🗡️", level: 3, cost: 350, rarity: "희귀" },
+      { id: "weapon_flame_blade", slot: "weapon", category: "무기", name: "불꽃 대검", icon: "🔥🗡️", level: 4, cost: 550, rarity: "에픽" },
+      { id: "weapon_guardian_shield", slot: "weapon", category: "무기", name: "수호 방패", icon: "🛡️✨", level: 4, cost: 500, rarity: "에픽" },
+      { id: "weapon_dragon_spear", slot: "weapon", category: "무기", name: "드래곤 창", icon: "🐉🔱", level: 5, cost: 850, rarity: "전설" },
+      { id: "weapon_energy_blade", slot: "weapon", category: "무기", name: "에너지 블레이드", icon: "💠⚔️", level: 6, cost: 1200, rarity: "전설" },
+      { id: "weapon_legend_hero", slot: "weapon", category: "무기", name: "전설의 용사검", icon: "🌟⚔️", level: 8, cost: 1800, rarity: "신화" }
     ];
 
     const FAMILY_REWARDS = [
@@ -1562,11 +1593,92 @@
     let selectedSettingsAvatar = "";
     let parentOpen = false;
     let parentUnlocked = false;
+    let parentAuthed = false;
     let toastTimer = null;
     let kidGateActive = true;
     let selectedGateKid = null;
     let unlockedKidId = null;
     let state = loadState();
+
+    /* ── 아바타 소유권 헬퍼 ── */
+    function isItemOwned(kidId, itemId) {
+      const kid = state.kids[kidId];
+      if (!kid) return false;
+      const inv = kid.inventory || [];
+      return inv.includes(itemId);
+    }
+    function isAvatarUnlocked(kidId, avatarId) {
+      const defaultAvatars = ['basic_avatar', 'skin_guardian_basic', 'skin_lightning_basic', 'skin_fire_basic'];
+      if (defaultAvatars.includes(avatarId)) return true;
+      return isItemOwned(kidId, avatarId);
+    }
+    function sanitizeAllKidAppearances() {
+      Object.keys(state.kids).forEach(function(kidId) {
+        const kid = state.kids[kidId];
+        if (!kid || !kid.equippedItems) return;
+        const skin = kid.equippedItems.skin || kid.equippedItems.avatar;
+        if (skin && !isAvatarUnlocked(kidId, skin)) {
+          kid.equippedItems.skin = kidConfig(kidId).defaultSkin || 'basic_avatar';
+          kid.equippedItems.avatar = kid.equippedItems.skin;
+        }
+      });
+    }
+    sanitizeAllKidAppearances();
+
+    /* ── 영웅 점수 계산 ── */
+    function calcHeroScore(kidId) {
+      const kid = state.kids[kidId];
+      if (!kid) return 0;
+      const equipped = kid.equippedItems || {};
+      const rarityScore = { '일반': 5, '희귀': 10, '에픽': 20, '전설': 35, '신화': 50 };
+      let score = 0;
+      Object.values(equipped).forEach(function(itemId) {
+        if (!itemId) return;
+        const item = DECOR_ITEMS.find(function(i) { return i.id === itemId; });
+        if (item && item.rarity && rarityScore[item.rarity]) {
+          score += rarityScore[item.rarity];
+        }
+      });
+      return score;
+    }
+
+    /* ── 요청 취소 (변경 7) ── */
+    function getPendingRequestsForKid(kidId) {
+      const reqs = state.pendingApprovals || [];
+      return reqs.filter(function(r) { return r.kidId === kidId && (!r.status || r.status === 'pending'); });
+    }
+    function canCancelRequest(req, kidId) {
+      return req.kidId === kidId && (!req.status || req.status === 'pending');
+    }
+    function cancelKidRequest(requestId, kidId) {
+      const reqs = state.pendingApprovals || [];
+      const req = reqs.find(function(r) { return r.id === requestId; });
+      if (!req || !canCancelRequest(req, kidId)) return;
+      state.pendingApprovals = state.pendingApprovals.filter(function(r) { return r.id !== requestId; });
+      if (state.rewardRequests) {
+        state.rewardRequests = state.rewardRequests.filter(function(r) { return r.id !== requestId; });
+      }
+      addHistory(kidId, '요청 취소', '승인 대기 요청을 직접 취소했어요.');
+      saveState();
+      showToast('시험 보너스 요청을 취소했어요. 다시 고를 수 있어요.');
+      render();
+    }
+
+    /* ── 부모 인증 (변경 10) ── */
+    function requireParentPassword(onSuccess) {
+      parentAuthed = false;
+      const pw = prompt('부모 비밀번호를 입력하세요');
+      if (pw === PARENT_PASSWORD) {
+        parentAuthed = true;
+        onSuccess && onSuccess();
+      } else {
+        showToast('비밀번호가 맞지 않아요.');
+      }
+    }
+    function clearParentAuth() {
+      parentAuthed = false;
+      parentUnlocked = false;
+    }
 
     const els = {
       todayDate: document.getElementById("todayDate"),
@@ -2122,11 +2234,18 @@
         </div>`;
       }
       if (cleared < needed) {
-        return `<div class="chest-section">
+        const chestHints = [
+          "미션 3개를 클리어하면 보물상자가 열려요.",
+          "좋아요! 2개만 더 클리어하면 보물상자가 열려요.",
+          "거의 다 왔어요! 1개만 더 클리어하면 열 수 있어요."
+        ];
+        const hintMsg = chestHints[cleared] || chestHints[0];
+        return `<div class="chest-section" id="chestSection">
           <h3>🎁 오늘의 보물상자</h3>
-          <p>오늘 미션 3개를 클리어하면 보물상자를 열 수 있어요!</p>
-          <div class="xp-bar" style="margin-top:6px;"><span style="width:${Math.min(100, cleared / needed * 100)}%"></span></div>
-          <p style="margin-top:6px;">${cleared}/${needed} 클리어 완료</p>
+          <p class="chest-progress">${cleared}/3 클리어 완료</p>
+          <div class="xp-bar" style="margin-bottom:8px;"><span style="width:${Math.min(100, cleared / needed * 100)}%"></span></div>
+          <p>${hintMsg}</p>
+          <button class="btn alt" id="openChestBtn" type="button">🔒 보물상자 (잠김)</button>
         </div>`;
       }
       return `<div class="chest-section" id="chestSection">
@@ -2138,7 +2257,17 @@
     function openDailyChest() {
       if (!guardKidAction()) return;
       if (state.dailyChests[selectedKidId]) return;
-      if (doneCount(selectedKidId) < 3) { playSound("error"); return; }
+      const cleared = doneCount(selectedKidId);
+      if (cleared < 3) {
+        const hints = [
+          "미션 3개를 클리어하면 보물상자가 열려요.",
+          "좋아요! 2개만 더 클리어하면 보물상자가 열려요.",
+          "거의 다 왔어요! 1개만 더 클리어하면 열 수 있어요."
+        ];
+        showToast(hints[cleared] || hints[0]);
+        playSound("error");
+        return;
+      }
       const pool = [5, 5, 10, 10, 10, 15, 15, 20, 25];
       const coins = pool[Math.floor(Math.random() * pool.length)];
       playSound("chest");
@@ -2316,26 +2445,35 @@
     function showNextUnreadNotification(kidId) {
       const unread = getUnreadNotifications(kidId);
       if (!unread.length) return;
-      const notif = unread[0];
-      const othersCount = unread.length - 1;
-      const isRejected = notif.type === "approval_rejected";
+      // 묶음 표시: 알림이 여러 개면 한 번에 카드 목록으로 보여줌
       const backdrop = document.createElement("div");
       backdrop.className = "modal-backdrop";
       backdrop.id = "notifBackdrop";
+      const cardHtml = unread.map((notif) => `
+        <div class="approval-card" style="margin-bottom:8px;">
+          <div class="card-top"><span><b>${notif.title}</b></span></div>
+          <p class="card-sub" style="margin:4px 0;">${notif.message}</p>
+          ${notif.rewardText ? `<p class="card-sub" style="color:#c05800;font-weight:1000;">${notif.rewardText}</p>` : ""}
+        </div>`).join("");
       backdrop.innerHTML = `<div class="game-modal">
-        <div class="game-modal-head"><h2>${notif.title}</h2></div>
-        <div class="game-modal-body">
-          <p class="card-sub" style="font-size:16px;line-height:1.65;">${notif.message}</p>
-          ${notif.rewardText ? `<div class="next-reward" style="text-align:center;padding:14px;"><strong style="font-size:22px;color:#4b2a00;">${notif.rewardText}</strong></div>` : ""}
-          ${othersCount > 0 ? `<p class="card-sub" style="text-align:center;color:var(--muted);">+ 새 알림 ${othersCount}개 더 있어요</p>` : ""}
-          <button class="btn gold" id="notifConfirmBtn" type="button">${isRejected ? "다시 도전할게요!" : "확인했어요!"}</button>
+        <div class="game-modal-head"><h2>🔔 새 알림 ${unread.length}개</h2></div>
+        <div class="game-modal-body" style="max-height:60vh;overflow-y:auto;">
+          ${cardHtml}
+          <div style="display:grid;gap:8px;margin-top:8px;">
+            <button class="btn gold" id="notifConfirmAllBtn" type="button">✅ 모두 확인했어요</button>
+            <button class="btn alt small" id="notifLaterBtn" type="button">나중에 볼게요</button>
+          </div>
         </div>
       </div>`;
       document.body.appendChild(backdrop);
-      document.getElementById("notifConfirmBtn")?.addEventListener("click", () => {
-        markNotificationRead(notif.id);
+      document.getElementById("notifConfirmAllBtn")?.addEventListener("click", () => {
+        unread.forEach((n) => { n.read = true; });
+        saveState();
         backdrop.remove();
         render();
+      });
+      document.getElementById("notifLaterBtn")?.addEventListener("click", () => {
+        backdrop.remove();
       });
     }
 
@@ -2367,6 +2505,7 @@
               </button>`;
             }).join("")}
           </div>
+          <button id="gateParentMenuBtn" type="button" style="margin-top:14px;background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.38);color:#fff;border-radius:14px;padding:10px 22px;font-size:14px;font-weight:1000;cursor:pointer;width:100%;">🔐 부모 메뉴</button>
         </div>`;
       } else {
         const kid = kidConfig(selectedGateKid);
@@ -2405,6 +2544,17 @@
         selectedGateKid = null;
         renderKidGate();
       });
+      document.getElementById("gateParentMenuBtn")?.addEventListener("click", () => {
+        requireParentPassword(() => {
+          document.getElementById("kidGateOverlay")?.remove();
+          kidGateActive = false;
+          clearParentAuth();
+          parentOpen = false;
+          parentUnlocked = false;
+          activeTab = "parent";
+          render();
+        });
+      });
       setTimeout(() => document.getElementById("kidPinInput")?.focus(), 80);
     }
     function unlockKid(kidId, pin) {
@@ -2431,10 +2581,18 @@
       const inputs = document.querySelectorAll(".pin-change-input");
       if (!inputs.length) return;
       if (!state.gameMeta.kidPins) state.gameMeta.kidPins = {};
+      let blocked = false;
       inputs.forEach((inp) => {
         const v = inp.value.trim();
+        if (v === PARENT_PASSWORD) {
+          showToast("부모 비밀번호와 같은 코드는 사용할 수 없어요. 다른 비밀 코드를 골라주세요.");
+          playSound("error");
+          blocked = true;
+          return;
+        }
         if (v.length >= 1) state.gameMeta.kidPins[inp.dataset.pinKid] = v;
       });
+      if (blocked) return;
       saveState();
       playSound("backup");
       showToast("🔐 아이별 비밀 코드를 저장했어요.");
@@ -2985,6 +3143,7 @@
                 <div class="stat"><span>오늘 클리어</span><strong>${doneCount(selectedKidId)}개</strong></div>
                 <div class="stat"><span>누적 XP</span><strong>${data.xp}</strong></div>
                 <div class="stat"><span>연속 성공일</span><strong>${data.stats.streakDays}일</strong></div>
+                <div class="stat" style="grid-column:1/-1;"><span>영웅 점수</span><strong class="hero-score">⚔️ ${calcHeroScore(selectedKidId)} pts</strong></div>
               </div>
               <div class="next-reward featured">
                 <h3>다음 레벨까지 ${info.remain === 0 ? "최고 레벨" : `${info.remain} XP`}</h3>
@@ -3058,6 +3217,21 @@
       </div>`;
     }
 
+    function renderPendingRequestsForKidSection() {
+      if (!canEditKid(selectedKidId)) return "";
+      const myReqs = getPendingRequestsForKid(selectedKidId);
+      if (!myReqs.length) return "";
+      return `<div class="exam-bonus-form">
+        <h3>⏳ 내 요청 대기 중</h3>
+        <p class="card-sub">아래 요청은 부모님 확인 전에 취소할 수 있어요.</p>
+        ${myReqs.map((req) => `<div class="pending-req-card">
+          <div><b>${req.questTitle || req.rewardName || "요청"}</b></div>
+          <p class="card-sub" style="margin:4px 0;">+${req.xp || 0} XP / +${req.coins || 0} 코인 · ⏳ 대기 중</p>
+          <button class="cancel-btn" type="button" data-cancel-req="${req.id}">취소하기</button>
+        </div>`).join("")}
+      </div>`;
+    }
+
     function renderMissions() {
       const data = kidData();
       const family = FAMILY_MISSIONS.map((m) => {
@@ -3103,6 +3277,7 @@
                 ${btnHtml}
               </div>`;
             }).join("")}</div>
+            ${renderPendingRequestsForKidSection()}
             ${renderExamBonusForm()}
             <div class="panel" style="box-shadow:none;"><div class="panel-head"><h2>팀 미션</h2></div><div class="panel-body grid-2">${family}</div></div>
             ${renderSeasonMissions()}
@@ -3111,6 +3286,7 @@
         </section>`;
       document.getElementById("openChestBtn")?.addEventListener("click", openDailyChest);
       document.getElementById("examBonusReqBtn")?.addEventListener("click", requestExamBonus);
+      document.querySelectorAll("[data-cancel-req]").forEach((b) => b.addEventListener("click", () => cancelKidRequest(b.dataset.cancelReq, selectedKidId)));
       document.querySelectorAll("[data-clear]").forEach((b) => b.addEventListener("click", () => completeQuest(b.dataset.clear)));
       document.querySelectorAll("[data-undo]").forEach((b) => b.addEventListener("click", () => undoQuest(b.dataset.undo)));
       document.querySelectorAll("[data-request]").forEach((b) => b.addEventListener("click", () => requestQuestApproval(b.dataset.request)));
@@ -3142,6 +3318,36 @@
       </div>`;
     }
 
+    function renderGrowthRecord() {
+      const growthPhrases = {
+        jinwoo: ["방어력이 탄탄해지고 있어요!", "꾸준함이 최고의 무기예요!", "오늘도 든든하게 성장 중!"],
+        jinyoung: ["속도와 집중력이 빛나요!", "번개처럼 빠른 성장 중!", "꾸준한 도전이 강점이에요!"],
+        jinhwan: ["열정과 에너지가 넘쳐요!", "불꽃처럼 타오르는 의지!", "도전 정신이 최고예요!"]
+      };
+      return `<div class="notice-board" style="margin-top:0;">
+        <h3>📈 성장 기록</h3>
+        <p class="card-sub" style="margin-bottom:10px;">이번 주 우리 팀의 성장 현황이에요!</p>
+        <div class="grid-3">
+          ${KIDS.map((kid) => {
+            const data = kidData(kid.id);
+            const lvl = levelInfo(data.xp).current;
+            const weeklyXp = data.stats.weeklyXp || 0;
+            const todayMissions = doneCount(kid.id);
+            const phrases = growthPhrases[kid.id] || growthPhrases.jinwoo;
+            const phrase = phrases[Math.floor(Date.now() / 86400000) % phrases.length];
+            return `<div class="team-card" style="--kid-color:${kid.color}">
+              <div class="card-top">${renderCharacterAvatar(kid, { size: "mini" })}<span class="chip">Lv.${lvl.level}</span></div>
+              <h4 class="card-title">${displayName(kid.id)}</h4>
+              <p class="card-sub">이번 주 XP <b>${weeklyXp}</b></p>
+              <p class="card-sub">오늘 미션 <b>${todayMissions}개</b></p>
+              <p class="card-sub">보유 코인 <b>${data.coins}</b></p>
+              <p class="card-sub" style="color:#2f7bff;font-weight:900;">💬 ${phrase}</p>
+            </div>`;
+          }).join("")}
+        </div>
+      </div>`;
+    }
+
     function renderLeague() {
       KIDS.forEach((kid) => syncBadges(kid.id));
       const missionKing = KIDS.reduce((a, b) => doneCount(a.id) >= doneCount(b.id) ? a : b);
@@ -3152,7 +3358,8 @@
         <section class="panel">
           <div class="panel-head"><h2>형제 리그</h2><span class="chip">팀 메달 ${state.gameMeta.teamMedals || 0}개 · 서로 자극받는 성장 보드</span></div>
           <div class="panel-body">
-            <div class="league-awards">
+            ${renderGrowthRecord()}
+            <div class="league-awards" style="margin-top:14px;">
               <div class="award-card"><b>🎯</b>오늘의 미션왕<br>${displayName(missionKing.id)}</div>
               <div class="award-card"><b>📈</b>이번 주 성장왕<br>${displayName(growthKing.id)}</div>
               <div class="award-card"><b>🔥</b>연속 성공왕<br>${displayName(streakKing.id)}</div>
@@ -3826,7 +4033,24 @@
     }
 
     document.querySelectorAll(".tab-btn").forEach((btn) => btn.addEventListener("click", () => {
-      activeTab = btn.dataset.tab;
+      const newTab = btn.dataset.tab;
+      if (newTab === "parent") {
+        // 부모 탭 진입 시 항상 비밀번호 요구
+        clearParentAuth();
+        parentOpen = false;
+        parentUnlocked = false;
+        activeTab = "parent";
+        playSound("tab");
+        saveAndRender();
+        return;
+      }
+      // 다른 탭으로 이동 시 부모 인증 해제
+      if (activeTab === "parent") {
+        clearParentAuth();
+        parentOpen = false;
+        parentUnlocked = false;
+      }
+      activeTab = newTab;
       playSound("tab");
       saveAndRender();
     }));
