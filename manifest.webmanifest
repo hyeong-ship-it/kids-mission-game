@@ -1,0 +1,31 @@
+{
+  "name": "우리집 미션 배틀",
+  "short_name": "미션배틀",
+  "description": "아이들이 미션을 클리어하며 XP와 코인으로 캐릭터를 성장시키는 가족 미션 게임",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#101f63",
+  "theme_color": "#2f3dce",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

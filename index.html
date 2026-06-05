@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>우리집 미션 배틀</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="assets/icon-192.png" />
+  <link rel="apple-touch-icon" href="assets/icon-192.png" />
+  <meta name="theme-color" content="#2f3dce" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="application-name" content="우리집 미션 배틀" />
   <style>
     /*
       ==============================
@@ -971,6 +977,80 @@
       box-shadow: 0 0 0 4px rgba(255,216,77,.18);
     }
 
+    .app-splash {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,216,77,.34), transparent 24%),
+        radial-gradient(circle at 70% 72%, rgba(40,223,155,.22), transparent 28%),
+        linear-gradient(135deg, #101f63 0%, #6038c8 52%, #19b8e6 100%);
+      color: #fff;
+      transition: opacity .22s ease, visibility .22s ease;
+    }
+
+    .app-splash-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .app-splash-card {
+      display: grid;
+      justify-items: center;
+      gap: 12px;
+      text-align: center;
+    }
+
+    .app-splash-logo {
+      position: relative;
+      width: 112px;
+      height: 112px;
+      display: grid;
+      place-items: center;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #2f7bff, #7c4dff);
+      border: 4px solid rgba(255,255,255,.6);
+      box-shadow: 0 13px 0 rgba(9,18,62,.2), 0 22px 44px rgba(0,0,0,.24);
+      font-size: 56px;
+      animation: guardianFloat 2.2s ease-in-out infinite;
+    }
+
+    .app-splash-logo::before {
+      content: "⭐";
+      position: absolute;
+      right: -8px;
+      top: -10px;
+      font-size: 34px;
+      filter: drop-shadow(0 4px 0 rgba(0,0,0,.16));
+    }
+
+    .app-splash-logo::after {
+      content: "🧰";
+      position: absolute;
+      left: -10px;
+      bottom: -8px;
+      font-size: 34px;
+      filter: drop-shadow(0 4px 0 rgba(0,0,0,.16));
+    }
+
+    .app-splash-title {
+      margin: 0;
+      font-size: 34px;
+      font-weight: 1000;
+      text-shadow: 0 5px 0 rgba(13,26,83,.35);
+    }
+
+    .app-splash-subtitle {
+      margin: 0;
+      color: #e9f7ff;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
     @keyframes pagePop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
     @keyframes clearBounce { 0% { transform: scale(1); } 45% { transform: scale(1.025); } 100% { transform: scale(1); } }
     @keyframes pulseGlow { 0%,100% { transform: scale(0.94); opacity: var(--aura-opacity, 0); } 50% { transform: scale(1.08); opacity: calc(var(--aura-opacity, 0) + 0.12); } }
@@ -1129,16 +1209,184 @@
     /* ── 백업 알림 ── */
     .backup-warn { color: var(--danger); font-weight: 1000; padding: 10px 14px; border-radius: 14px; background: #fff0f0; border: 2px solid #ffd0d0; margin-bottom: 10px; }
     .backup-ok   { color: #087755;       font-weight: 1000; padding: 10px 14px; border-radius: 14px; background: #f0fff8; border: 2px solid #b0f0d8; margin-bottom: 10px; }
+
+    /* ── 보물상자 오픈 연출 ── */
+    .chest-opening-overlay {
+      position: fixed; inset: 0; z-index: 62;
+      background: rgba(6,12,48,.9); backdrop-filter: blur(8px);
+      display: grid; place-items: center; padding: 20px;
+    }
+    .chest-anim-box { position: relative; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .chest-emoji { font-size: 88px; display: block; line-height: 1; animation: chestShakeAnim .55s ease-in-out 4; }
+    @keyframes chestShakeAnim {
+      0%,100%{transform:rotate(0) scale(1)} 20%{transform:rotate(-9deg) scale(1.13)} 40%{transform:rotate(9deg) scale(1.18)} 60%{transform:rotate(-7deg) scale(1.12)} 80%{transform:rotate(4deg) scale(1.07)}
+    }
+    .sparkle-ring { position: relative; width: 0; height: 0; }
+    .sparkle-item {
+      position: absolute; font-size: 24px; white-space: nowrap;
+      animation: sparkleOut .8s ease-out forwards;
+    }
+    .sparkle-item:nth-child(1){--sx:-62px;--sy:-58px;}
+    .sparkle-item:nth-child(2){--sx:62px;--sy:-58px;}
+    .sparkle-item:nth-child(3){--sx:0;--sy:-80px;}
+    .sparkle-item:nth-child(4){--sx:-88px;--sy:14px;}
+    .sparkle-item:nth-child(5){--sx:88px;--sy:14px;}
+    .sparkle-item:nth-child(6){--sx:-38px;--sy:-82px;}
+    @keyframes sparkleOut {
+      0%{opacity:1;transform:translate(-50%,-50%) scale(1)} 100%{opacity:0;transform:translate(calc(-50% + var(--sx)),calc(-50% + var(--sy))) scale(.3)}
+    }
+    .chest-reward-popup {
+      background: linear-gradient(135deg,#fff7bf,#ffd84d 50%,#ff9c45);
+      border: 3px solid rgba(255,255,255,.9); border-radius: 30px;
+      padding: 24px 28px; width: min(340px, calc(100vw - 40px));
+      opacity: 0; transform: scale(.6) translateY(16px);
+      transition: opacity .38s ease, transform .38s cubic-bezier(.34,1.56,.64,1);
+    }
+    .chest-reward-popup.visible { opacity: 1; transform: scale(1) translateY(0); }
+    .chest-reward-title-txt { font-size: 26px; font-weight: 1000; color: #4b2a00; margin-bottom: 6px; }
+    .chest-reward-coins-txt { font-size: 34px; font-weight: 1000; color: #c05800; margin-bottom: 5px; }
+    .chest-reward-grade-txt { font-size: 17px; font-weight: 900; color: #8b4e00; margin-bottom: 16px; }
+    @keyframes coinBurst { 0%{transform:translateY(0) scale(1);opacity:1} 100%{transform:translateY(-50px) scale(.4);opacity:0} }
+    .coin-burst { animation: coinBurst .6s ease-out forwards; }
+
+    /* ── 플로팅 보상 텍스트 ── */
+    .floating-reward {
+      position: fixed; z-index: 58; transform: translateX(-50%);
+      background: linear-gradient(135deg,#172860,#2467ff);
+      color: #fff; padding: 8px 18px; border-radius: 999px;
+      font-weight: 1000; font-size: 16px;
+      border: 2px solid rgba(255,255,255,.42);
+      pointer-events: none; white-space: nowrap;
+      animation: floatUpAnim 1.5s ease-out forwards;
+      box-shadow: 0 6px 18px rgba(0,0,0,.24);
+    }
+    @keyframes floatUpAnim {
+      0%{opacity:1;transform:translateX(-50%) translateY(0)} 70%{opacity:1} 100%{opacity:0;transform:translateX(-50%) translateY(-82px)}
+    }
+
+    /* ── 알림 배지 ── */
+    .badge-wrap { position: relative; display: inline-block; }
+    .notification-badge {
+      position: absolute; top: -5px; right: -5px; z-index: 10;
+      background: var(--danger); color: #fff;
+      font-size: 11px; font-weight: 1000;
+      min-width: 18px; height: 18px; padding: 0 4px;
+      border-radius: 999px; border: 2px solid #fff;
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none;
+    }
+
+    /* ── 구경 모드 배지 ── */
+    .view-mode-badge {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 14px; border-radius: 16px;
+      background: linear-gradient(135deg,#fff8e8,#fff3cc);
+      border: 2px solid rgba(255,200,50,.45);
+      color: #6a4a00; font-weight: 1000; font-size: 14px;
+      margin-bottom: 2px;
+    }
+    .owner-only-note {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 5px 10px; border-radius: 999px;
+      background: #f4f8ff; border: 2px solid #d0dcf5;
+      color: var(--muted); font-size: 12px; font-weight: 1000;
+    }
+
+    /* ── 시험 보너스 폼 ── */
+    .exam-bonus-form {
+      padding: 14px; border-radius: 20px;
+      background: linear-gradient(135deg,#e8f4ff,#f0ebff);
+      border: 2px solid rgba(124,77,255,.22);
+      box-shadow: 0 6px 0 rgba(26,44,105,.07);
+    }
+    .exam-bonus-form h3 { margin: 0 0 6px; font-size: 19px; font-weight: 1000; }
+    .exam-bonus-form p { margin: 0 0 10px; color: #556181; font-weight: 900; }
+
+    /* ── 아이 입장 게이트 ── */
+    .kid-gate-overlay {
+      position: fixed; inset: 0; z-index: 50; overflow-y: auto;
+      padding: 20px; display: grid; place-items: center;
+      background:
+        radial-gradient(circle at 15% 15%,rgba(255,216,77,.28),transparent 22%),
+        radial-gradient(circle at 85% 12%,rgba(40,223,155,.2),transparent 25%),
+        linear-gradient(135deg,#101f63 0%,#6038c8 48%,#19b8e6 100%);
+      animation: gateIn .3s ease;
+    }
+    @keyframes gateIn { from{opacity:0;transform:scale(.97)} to{opacity:1;transform:none} }
+    .kid-gate-inner {
+      width: min(500px,100%); padding: 28px 22px;
+      border-radius: 30px; text-align: center;
+      background: rgba(255,255,255,.1); border: 2px solid rgba(255,255,255,.28);
+      backdrop-filter: blur(10px);
+    }
+    .kid-gate-title { color:#fff; font-size:clamp(22px,5vw,30px); font-weight:1000; margin:0 0 6px; text-shadow:0 4px 0 rgba(0,0,0,.26); }
+    .kid-gate-subtitle { color:#ddf4ff; font-weight:900; margin:0 0 18px; font-size:16px; }
+    .kid-gate-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:18px; }
+    .kid-gate-card {
+      display:grid; justify-items:center; gap:7px; padding:14px 8px;
+      border-radius:22px; background:rgba(255,255,255,.14); border:2px solid rgba(255,255,255,.32);
+      color:#fff; cursor:pointer; transition:background .14s,transform .12s; touch-action:manipulation;
+    }
+    .kid-gate-card:hover{background:rgba(255,255,255,.26);transform:translateY(-3px);}
+    .kid-gate-card:active{transform:translateY(2px);}
+    .kid-gate-name { font-size:16px; font-weight:1000; }
+    .kid-gate-info { font-size:12px; color:#b8e0ff; font-weight:900; }
+    .pin-input-wrap { margin:0 auto 10px; max-width:200px; }
+    .pin-input {
+      width:100%; min-height:56px; padding:12px;
+      border:3px solid rgba(255,255,255,.6); border-radius:18px;
+      background:rgba(255,255,255,.16); color:#fff;
+      font-size:28px; text-align:center; letter-spacing:10px; font-weight:1000; outline:none;
+    }
+    .pin-input::placeholder{color:rgba(255,255,255,.45);letter-spacing:4px;font-size:22px;}
+    .pin-input:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(255,216,77,.28);}
+    .pin-error{color:#ffd84d;font-weight:1000;font-size:14px;margin:8px 0;min-height:20px;}
+    .pin-actions{display:grid;gap:8px;margin-top:14px;}
+    @media(max-width:480px){
+      .kid-gate-grid{gap:7px;} .kid-gate-card{padding:10px 5px;} .kid-gate-name{font-size:14px;}
+    }
+    .coop-join-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 10px 0;
+    }
+
+    .shop-card .state-pill.ready,
+    .team-card .state-pill.ready {
+      background: linear-gradient(135deg, #d8fff0, #9ff3ca);
+      color: #075f43;
+      border-color: rgba(14, 165, 129, .35);
+    }
+
+    .shop-card .state-pill.target,
+    .team-card .state-pill.target {
+      background: linear-gradient(135deg, #fff7cf, #ffd86b);
+      color: #704300;
+      border-color: rgba(255, 184, 0, .45);
+    }
+
+    .notice-board .team-card { min-height: auto; }
   </style>
 </head>
 <body>
+  <div class="app-splash" id="appSplash" aria-live="polite">
+    <div class="app-splash-card">
+      <div class="app-splash-logo" aria-hidden="true">🛡️</div>
+      <h1 class="app-splash-title">우리집 미션 배틀</h1>
+      <p class="app-splash-subtitle">오늘의 미션을 불러오는 중...</p>
+    </div>
+  </div>
   <main class="app">
     <header class="hero">
       <div>
         <h1>우리집 미션 배틀</h1>
         <p>미션 클리어 → XP 상승 → 코인 획득 → 아이템 언락 → 캐릭터 성장!</p>
       </div>
-      <div class="date-pill"><small>오늘 미션</small><span id="todayDate"></span></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+        <div class="date-pill"><small>오늘 미션</small><span id="todayDate"></span></div>
+        <button class="btn alt small" id="switchKidBtn" type="button" style="white-space:nowrap;font-size:11px;min-height:34px;padding:6px 10px;">🔄 캐릭터 변경</button>
+      </div>
     </header>
 
     <section class="player-strip" id="playerStrip" aria-label="플레이어 선택"></section>
@@ -1175,7 +1423,7 @@
     const PARENT_PASSWORD = "0903";
 
     const KIDS = [
-      { id: "jinwoo", name: "복댕이", nickname: "", color: "#3f7cff", avatar: "🛡️", image: "./assets/jinwoo-guardian.png", defaultSkin: "skin_guardian_basic" },
+      { id: "jinwoo", name: "상어", nickname: "", color: "#3f7cff", avatar: "🛡️", image: "./assets/jinwoo-guardian.png", defaultSkin: "skin_guardian_basic" },
       { id: "jinyoung", name: "축복이", nickname: "", color: "#20b486", avatar: "⚡", image: "./assets/jinyoung-lightning.png", defaultSkin: "skin_lightning_basic" },
       { id: "jinhwan", name: "복복이", nickname: "", color: "#ff7a45", avatar: "🔥", image: "./assets/jinhwan-firefighter.png", defaultSkin: "skin_fire_basic" }
     ];
@@ -1189,7 +1437,13 @@
       { id: "game_rule", title: "게임 시간 약속 지키기", icon: "🎮", xp: 20, coins: 20 },
       { id: "school_items", title: "준비물 스스로 챙기기", icon: "🎒", xp: 10, coins: 10 },
       { id: "kind_words", title: "형제에게 친절하게 말하기", icon: "🤝", xp: 10, coins: 10 },
-      { id: "family_happy", title: "가족을 기쁘게 하는 행동 1가지 하기", icon: "💝", xp: 15, coins: 15, requiresApproval: true }
+      { id: "family_happy", title: "가족을 기쁘게 하는 행동 1가지 하기", icon: "💝", xp: 15, coins: 15, requiresApproval: true },
+      { id: "fresh_feet", title: "외출 후 발 씻고 상쾌하게 관리하기", icon: "🦶", xp: 10, coins: 10 },
+      { id: "fresh_shower", title: "땀 났을 때 샤워하고 상쾌 모드 켜기", icon: "🚿", xp: 15, coins: 15 },
+      { id: "study_mom", title: "엄마의 공부 퀘스트 클리어하기", icon: "📋", xp: 20, coins: 20 },
+      { id: "study_focus", title: "15분 집중 모드! 한 과목 클리어", icon: "⏱️", xp: 15, coins: 15 },
+      { id: "study_share", title: "오늘 배운 지식 1개 알려주기", icon: "💡", xp: 10, coins: 10 },
+      { id: "study_retry", title: "아깝게 틀린 문제 다시 도전하기", icon: "🔄", xp: 15, coins: 15 }
     ];
 
     const LEVELS = [
@@ -1242,13 +1496,29 @@
     ];
 
     const FAMILY_REWARDS = [
-      { id: "store_with_dad", title: "아빠랑 편의점 가기", cost: 100, rarity: "COMMON" },
-      { id: "game_30", title: "게임 30분 추가권", cost: 150, rarity: "RARE" },
-      { id: "snack", title: "원하는 간식 고르기", cost: 200, rarity: "RARE" },
-      { id: "movie", title: "주말 영화 선택권", cost: 300, rarity: "EPIC" },
-      { id: "chicken", title: "치킨 메뉴 선택권", cost: 500, rarity: "EPIC" },
-      { id: "family_trip", title: "가족 나들이 의견권", cost: 800, rarity: "LEGEND" },
-      { id: "special_gift", title: "특별 선물 협상권", cost: 1000, rarity: "MYTHIC" }
+      { id: "snack_choice", title: "원하는 간식 고르기", cost: 300, level: 1, limitType: "week", limitCount: 2, category: "간식", icon: "🍪" },
+      { id: "game_30min", title: "추가 게임 30분", cost: 500, level: 2, limitType: "week", limitCount: 1, category: "놀이", icon: "🎮" },
+      { id: "ramen_once", title: "라면 1회 먹기", cost: 600, level: 3, limitType: "week", limitCount: 1, category: "간식", icon: "🍜" },
+      { id: "mega_coffee", title: "메가커피 이용권", cost: 750, level: 3, limitType: "month", limitCount: 2, category: "카페", icon: "🥤" },
+      { id: "paik_coffee", title: "빽다방 이용권", cost: 750, level: 3, limitType: "month", limitCount: 2, category: "카페", icon: "🧋" },
+      { id: "french_fries", title: "감자튀김", cost: 850, level: 4, limitType: "month", limitCount: 2, category: "먹거리", icon: "🍟" },
+      { id: "kkokkoma_bunsik", title: "꼬꼬마 분식", cost: 1200, level: 5, limitType: "month", limitCount: 1, category: "먹거리", icon: "🍢" },
+      { id: "book_coupon", title: "도서 구입권", cost: 1400, level: 5, limitType: "month", limitCount: 1, category: "성장", icon: "📚" }
+    ];
+
+    const COOP_REWARDS = [
+      { id: "family_chicken", title: "가족 치킨 파티", totalCost: 4200, perKidCost: 1400, avgLevel: 4, teamMedals: 1, limitType: "month", limitCount: 1, icon: "🍗" },
+      { id: "claw_machine", title: "인형뽑기 1회권", totalCost: 3000, perKidCost: 1000, avgLevel: 5, teamMedals: 2, limitType: "two_month", limitCount: 1, icon: "🧸" },
+      { id: "weekend_pcroom", title: "주말 PC방", totalCost: 6000, perKidCost: 2000, avgLevel: 6, teamMedals: 3, limitType: "month", limitCount: 1, icon: "🖥️" },
+      { id: "comic_cafe", title: "만화 카페", totalCost: 6600, perKidCost: 2200, avgLevel: 6, teamMedals: 3, limitType: "month", limitCount: 1, icon: "📖" }
+    ];
+
+    const SEASON_CHALLENGES = [
+      { id: "season_hygiene", title: "상쾌 루틴 챌린지", icon: "🚿", target: 10, match: ["fresh_feet", "fresh_shower"], badge: "상쾌 루틴 배지", xp: 100, coins: 100, teamMedals: 0 },
+      { id: "season_brain", title: "두뇌 레벨업 챌린지", icon: "🧠", target: 12, match: ["study_mom", "study_focus", "study_share", "study_retry"], badge: "두뇌 레벨업 칭호", xp: 150, coins: 100, teamMedals: 0 },
+      { id: "season_cheer", title: "형제 응원 챌린지", icon: "🤝", target: 10, match: ["kind_words"], badge: "형제 응원단 배지", xp: 0, coins: 0, teamMedals: 1 },
+      { id: "season_reading", title: "독서 탐험 챌린지", icon: "📚", target: 12, match: ["reading"], badge: "독서 탐험가 칭호", xp: 100, coins: 100, teamMedals: 0 },
+      { id: "season_morning", title: "완벽한 아침 챌린지", icon: "🌅", target: 10, match: ["wake_up", "blanket", "brush"], badge: "아침 용사 배지", xp: 100, coins: 50, teamMedals: 0 }
     ];
 
     const FAMILY_MISSIONS = [
@@ -1257,10 +1527,10 @@
     ];
 
     const UPDATE_NOTICES = [
-      "v1.3 스킨샵 오픈!",
-      "새 무기, 오라, 펫, 배경을 장착할 수 있어요.",
-      "미션을 클리어하고 코인을 모아 나만의 캐릭터를 완성하세요.",
-      "전설 아이템과 신화 아이템은 레벨을 올리면 열려요!"
+      "v1.3-9 가족 보상 경제 시즌!",
+      "개인 가족 보상은 부모 승인 후 사용할 수 있어요.",
+      "큰 보상은 3형제가 함께 참여하고 팀 메달로 도전해요.",
+      "주간/월간 마감과 이달 한정 미션으로 시즌 보상을 모아보세요!"
     ];
 
     const MISSION_VOTE_CANDIDATES = [
@@ -1293,6 +1563,9 @@
     let parentOpen = false;
     let parentUnlocked = false;
     let toastTimer = null;
+    let kidGateActive = true;
+    let selectedGateKid = null;
+    let unlockedKidId = null;
     let state = loadState();
 
     const els = {
@@ -1311,6 +1584,22 @@
       const first = new Date(date.getFullYear(), 0, 1);
       const days = Math.floor((date - first) / 86400000);
       return `${date.getFullYear()}-W${String(Math.ceil((days + first.getDay() + 1) / 7)).padStart(2, "0")}`;
+    }
+
+    function getMonthKey(date = new Date()) {
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+    }
+
+    function getWeekProgressDays(date = new Date()) {
+      const day = date.getDay() || 7;
+      return Math.max(1, day);
+    }
+
+    function monthDistance(fromMonth, toMonth = getMonthKey()) {
+      if (!fromMonth) return Infinity;
+      const [fy, fm] = fromMonth.split("-").map(Number);
+      const [ty, tm] = toMonth.split("-").map(Number);
+      return (ty * 12 + tm) - (fy * 12 + fm);
     }
 
     function getYesterdayKey() {
@@ -1341,7 +1630,7 @@
       const oldName = old.name || kid.name || defaultName;
       const migratedName = ["진우", "진영", "진환"].includes(oldName) ? defaultName : defaultName;
       const oldNickname = old.nickname || "";
-      const defaultNicknames = ["진우", "진영", "진환", "방패 용사", "번개 러너", "불꽃 파이터", defaultName, kid.nickname, ""];
+      const defaultNicknames = ["진우", "진영", "진환", "복댕이", "방패 용사", "번개 러너", "불꽃 파이터", defaultName, kid.nickname, ""];
       const nickname = defaultNicknames.includes(oldNickname) ? "" : oldNickname;
 
       return {
@@ -1382,10 +1671,17 @@
     function makeGameMeta(old = {}) {
       const oldVotes = old.missionVotes?.votes || {};
       return {
-        version: "1.3",
+        version: "1.3.9",
         soundEnabled: old.soundEnabled === true,
         lastBackupAt: old.lastBackupAt || null,
-        updateNotices: Array.isArray(old.updateNotices) && old.updateNotices.length ? old.updateNotices : UPDATE_NOTICES,
+        teamMedals: Number(old.teamMedals || 0),
+        rewardUsage: old.rewardUsage && typeof old.rewardUsage === "object" ? old.rewardUsage : {},
+        kidPins: {
+          jinwoo:   old.kidPins?.jinwoo   || "1111",
+          jinyoung: old.kidPins?.jinyoung || "2222",
+          jinhwan:  old.kidPins?.jinhwan  || "3333"
+        },
+        updateNotices: old.version === "1.3.9" && Array.isArray(old.updateNotices) && old.updateNotices.length ? old.updateNotices : UPDATE_NOTICES,
         teamPhotoBackground: old.teamPhotoBackground || "default",
         missionVotes: {
           candidates: MISSION_VOTE_CANDIDATES,
@@ -1402,7 +1698,27 @@
     function makeInitialState() {
       const kids = {};
       KIDS.forEach((kid) => { kids[kid.id] = makeKidData(kid); });
-      return { version: 2, date: getTodayKey(), selectedKidId: KIDS[0].id, kids, familyBonuses: {}, dailyChests: {}, pendingApprovals: [], history: [], activeTab: "character", gameMeta: makeGameMeta() };
+      return {
+        version: 2,
+        date: getTodayKey(),
+        selectedKidId: KIDS[0].id,
+        kids,
+        familyBonuses: {},
+        dailyChests: {},
+        pendingApprovals: [],
+        rewardRequests: [],
+        coopRewardRequests: [],
+        coopRewardJoins: {},
+        weeklyClosings: {},
+        monthlyClosings: {},
+        seasonProgress: {},
+        seasonClaims: {},
+        seasonBadges: {},
+        notifications: [],
+        history: [],
+        activeTab: "character",
+        gameMeta: makeGameMeta()
+      };
     }
 
     function loadState() {
@@ -1419,6 +1735,15 @@
         familyBonuses: base.familyBonuses || {},
         dailyChests: base.dailyChests || {},
         pendingApprovals: Array.isArray(base.pendingApprovals) ? base.pendingApprovals : [],
+        rewardRequests: Array.isArray(base.rewardRequests) ? base.rewardRequests : [],
+        coopRewardRequests: Array.isArray(base.coopRewardRequests) ? base.coopRewardRequests : [],
+        coopRewardJoins: base.coopRewardJoins && typeof base.coopRewardJoins === "object" ? base.coopRewardJoins : {},
+        weeklyClosings: base.weeklyClosings && typeof base.weeklyClosings === "object" ? base.weeklyClosings : {},
+        monthlyClosings: base.monthlyClosings && typeof base.monthlyClosings === "object" ? base.monthlyClosings : {},
+        seasonProgress: base.seasonProgress && typeof base.seasonProgress === "object" ? base.seasonProgress : {},
+        seasonClaims: base.seasonClaims && typeof base.seasonClaims === "object" ? base.seasonClaims : {},
+        seasonBadges: base.seasonBadges && typeof base.seasonBadges === "object" ? base.seasonBadges : {},
+        notifications: Array.isArray(base.notifications) ? base.notifications : [],
         gameMeta: makeGameMeta(base.gameMeta),
         history: Array.isArray(base.history) ? base.history.slice(0, 30) : [],
         kids: {}
@@ -1461,7 +1786,7 @@
     function itemById(id) { return DECOR_ITEMS.find((item) => item.id === id); }
     function doneCount(id) { return QUESTS.filter((quest) => kidData(id).todayDone?.[quest.id]).length; }
     function defaultKidName(id) {
-      return { jinwoo: "복댕이", jinyoung: "축복이", jinhwan: "복복이" }[id] || kidConfig(id).name || "플레이어";
+      return { jinwoo: "상어", jinyoung: "축복이", jinhwan: "복복이" }[id] || kidConfig(id).name || "플레이어";
     }
     function displayName(kidId) {
       const data = kidData(kidId);
@@ -1469,7 +1794,7 @@
     }
     function ideaAuthorName(idea) {
       if (idea?.kidId && state.kids?.[idea.kidId]) return displayName(idea.kidId);
-      return { "진우": "복댕이", "진영": "축복이", "진환": "복복이" }[idea?.kidName] || idea?.kidName || "우리 팀";
+      return { "진우": "상어", "진영": "축복이", "진환": "복복이", "복댕이": "상어" }[idea?.kidName] || idea?.kidName || "우리 팀";
     }
     function avatarIcon(data, kid) {
       const equippedSkin = itemById(data.equippedItems?.skin || data.equippedItems?.avatar);
@@ -1583,7 +1908,12 @@
 
     function addHistory(text) {
       const now = new Date();
-      state.history.unshift({ text, time: `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}` });
+      state.history.unshift({
+        text,
+        date: getTodayKey(),
+        createdAt: now.toISOString(),
+        time: `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`
+      });
       state.history = state.history.slice(0, 30);
     }
 
@@ -1605,6 +1935,115 @@
       const data = kidData(id);
       data.coins = Math.max(0, data.coins - coins);
       data.currentPoints = data.coins;
+    }
+
+    function rewardUsageBucket(rewardId, scopeId = "team") {
+      state.gameMeta.rewardUsage = state.gameMeta.rewardUsage || {};
+      state.gameMeta.rewardUsage[rewardId] = state.gameMeta.rewardUsage[rewardId] || {};
+      state.gameMeta.rewardUsage[rewardId][scopeId] = state.gameMeta.rewardUsage[rewardId][scopeId] || {};
+      return state.gameMeta.rewardUsage[rewardId][scopeId];
+    }
+
+    function rewardPeriodKey(reward) {
+      if (reward.limitType === "week") return getWeekKey();
+      return getMonthKey();
+    }
+
+    function rewardLimitLabel(reward) {
+      if (reward.limitType === "week") return `주 ${reward.limitCount}회`;
+      if (reward.limitType === "two_month") return "2개월 1회";
+      return `월 ${reward.limitCount}회`;
+    }
+
+    function pendingApprovalFor(type, rewardId, kidId = null) {
+      return (state.pendingApprovals || []).some((a) =>
+        a.status === "pending" &&
+        a.approvalType === type &&
+        a.rewardId === rewardId &&
+        (!kidId || a.kidId === kidId)
+      );
+    }
+
+    function canRequestReward(kidId, rewardId, options = {}) {
+      const reward = FAMILY_REWARDS.find((r) => r.id === rewardId);
+      const data = kidData(kidId);
+      const lvl = levelInfo(data.xp).current.level;
+      if (!reward) return { ok: false, reason: "보상을 찾을 수 없어요." };
+      if (!options.ignorePending && pendingApprovalFor("family_reward", rewardId, kidId)) return { ok: false, reason: "부모 승인 대기 중이에요." };
+      if (lvl < reward.level) return { ok: false, reason: `Lv.${reward.level}에 열리는 보상이에요.` };
+      if (data.coins < reward.cost) return { ok: false, reason: `코인 ${reward.cost - data.coins}개만 더 모으면 요청할 수 있어요.` };
+      const bucket = rewardUsageBucket(rewardId, kidId);
+      const used = Number(bucket[rewardPeriodKey(reward)] || 0);
+      if (used >= reward.limitCount) return { ok: false, reason: `${rewardLimitLabel(reward)} 보상이에요. 다음 기회에 다시 도전해요.` };
+      return { ok: true, reason: "부모 승인 요청 가능" };
+    }
+
+    function recordRewardUsage(kidId, rewardId) {
+      const reward = FAMILY_REWARDS.find((r) => r.id === rewardId);
+      if (!reward) return;
+      const bucket = rewardUsageBucket(rewardId, kidId);
+      const key = rewardPeriodKey(reward);
+      bucket[key] = Number(bucket[key] || 0) + 1;
+    }
+
+    function averageTeamLevel() {
+      return KIDS.reduce((sum, kid) => sum + levelInfo(kidData(kid.id).xp).current.level, 0) / KIDS.length;
+    }
+
+    function canRequestCoopReward(rewardId, options = {}) {
+      const reward = COOP_REWARDS.find((r) => r.id === rewardId);
+      if (!reward) return { ok: false, reason: "협동 보상을 찾을 수 없어요." };
+      if (!options.ignorePending && pendingApprovalFor("coop_reward", rewardId)) return { ok: false, reason: "부모 승인 대기 중이에요." };
+      if (averageTeamLevel() < reward.avgLevel) return { ok: false, reason: `평균 Lv.${reward.avgLevel}이 되면 도전할 수 있어요.` };
+      if ((state.gameMeta.teamMedals || 0) < reward.teamMedals) return { ok: false, reason: `팀 메달 ${reward.teamMedals}개가 필요해요.` };
+      const lowCoinKid = KIDS.find((kid) => kidData(kid.id).coins < reward.perKidCost);
+      if (lowCoinKid) return { ok: false, reason: `${displayName(lowCoinKid.id)}가 코인을 조금 더 모으면 도전할 수 있어요.` };
+      const bucket = rewardUsageBucket(rewardId, "team");
+      if (reward.limitType === "two_month") {
+        if (monthDistance(bucket.lastApprovedMonth) < 2) return { ok: false, reason: "2개월에 한 번 도전하는 큰 보상이에요." };
+      } else {
+        const used = Number(bucket[getMonthKey()] || 0);
+        if (used >= reward.limitCount) return { ok: false, reason: "이번 달에는 이미 사용했어요. 다음 달에 다시 도전해요." };
+      }
+      return { ok: true, reason: "3형제 참여 완료 후 부모 승인 요청" };
+    }
+
+    function recordCoopRewardUsage(rewardId) {
+      const reward = COOP_REWARDS.find((r) => r.id === rewardId);
+      if (!reward) return;
+      const bucket = rewardUsageBucket(rewardId, "team");
+      const month = getMonthKey();
+      bucket[month] = Number(bucket[month] || 0) + 1;
+      bucket.lastApprovedMonth = month;
+    }
+
+    function seasonKey(challengeId, kidId = selectedKidId) {
+      return `${getMonthKey()}_${kidId}_${challengeId}`;
+    }
+
+    function ensureSeasonProgress(kidId) {
+      state.seasonProgress = state.seasonProgress || {};
+      state.seasonProgress[kidId] = state.seasonProgress[kidId] || {};
+      return state.seasonProgress[kidId];
+    }
+
+    function trackSeasonProgress(kidId, questId, delta = 1) {
+      const progress = ensureSeasonProgress(kidId);
+      SEASON_CHALLENGES.forEach((challenge) => {
+        if (!challenge.match.includes(questId)) return;
+        const key = `${getMonthKey()}_${challenge.id}`;
+        progress[key] = Math.max(0, Number(progress[key] || 0) + delta);
+      });
+    }
+
+    function getSeasonProgress(kidId, challenge) {
+      const progress = ensureSeasonProgress(kidId);
+      return Number(progress[`${getMonthKey()}_${challenge.id}`] || 0);
+    }
+
+    function hasSeasonClaim(kidId, challengeId) {
+      state.seasonClaims = state.seasonClaims || {};
+      return Boolean(state.seasonClaims[seasonKey(challengeId, kidId)]);
     }
 
     function syncBadges(id) {
@@ -1697,15 +2136,19 @@
       </div>`;
     }
     function openDailyChest() {
+      if (!guardKidAction()) return;
       if (state.dailyChests[selectedKidId]) return;
       if (doneCount(selectedKidId) < 3) { playSound("error"); return; }
       const pool = [5, 5, 10, 10, 10, 15, 15, 20, 25];
       const coins = pool[Math.floor(Math.random() * pool.length)];
-      state.dailyChests[selectedKidId] = true;
-      addXpCoins(selectedKidId, 0, coins);
-      addHistory(`${displayName(selectedKidId)}가 오늘의 보물상자를 열고 ${coins}코인을 얻었어요! 🎁`);
       playSound("chest");
-      saveAndRender(`<strong>🎁 보물상자 오픈!</strong><span>+${coins} 코인 획득!</span>`);
+      showChestAnimation(coins, () => {
+        state.dailyChests[selectedKidId] = true;
+        addXpCoins(selectedKidId, 0, coins);
+        addHistory(`${displayName(selectedKidId)}가 오늘의 보물상자를 열고 ${coins}코인을 얻었어요! 🎁`);
+        showFloatingReward(`+${coins} 코인`);
+        saveAndRender(`<strong>🎁 보물상자 오픈!</strong><span>+${coins} 코인 획득!</span>`);
+      });
     }
 
     /*
@@ -1719,6 +2162,7 @@
       );
     }
     function requestQuestApproval(questId) {
+      if (!guardKidAction()) return;
       const quest = QUESTS.find((q) => q.id === questId);
       const data = kidData();
       if (!quest || data.todayDone[questId] || hasPendingApproval(questId)) return;
@@ -1740,32 +2184,387 @@
     function approveQuest(approvalId) {
       const appr = (state.pendingApprovals || []).find((a) => a.id === approvalId);
       if (!appr || appr.status !== "pending") return;
+      if (appr.approvalType === "family_reward") { approveFamilyReward(appr); return; }
+      if (appr.approvalType === "coop_reward") { approveCoopReward(appr); return; }
       appr.status = "approved";
+      const isExam = appr.approvalType === "exam_bonus";
       const before = levelInfo(kidData(appr.kidId).xp).current.level;
-      kidData(appr.kidId).todayDone[appr.questId] = true;
+      if (appr.questId) {
+        kidData(appr.kidId).todayDone[appr.questId] = true;
+        trackSeasonProgress(appr.kidId, appr.questId, 1);
+      }
       addXpCoins(appr.kidId, appr.xp, appr.coins);
       syncBadges(appr.kidId);
       const after = levelInfo(kidData(appr.kidId).xp).current.level;
-      addHistory(`부모가 ${displayName(appr.kidId)}의 특별 미션을 승인했어요: ${appr.questTitle} +${appr.xp} XP / +${appr.coins} 코인`);
+      addHistory(`부모가 ${displayName(appr.kidId)}의 ${isExam ? "시험 보너스를" : "특별 미션을"} 승인했어요: ${appr.questTitle} +${appr.xp} XP / +${appr.coins} 코인`);
+      addNotification(
+        appr.kidId, "approval_approved",
+        isExam ? "🎉 시험 보너스 승인!" : "🎉 특별 미션 승인!",
+        isExam ? `${displayName(appr.kidId)}의 ${appr.subject} 시험 보너스가 승인되었어요!` : `${displayName(appr.kidId)}의 멋진 행동이 승인되었어요!`,
+        `+${appr.xp} XP / +${appr.coins} 코인 획득!`
+      );
       if (after > before) playSound("levelup"); else playSound("approval");
-      saveAndRender(`<strong>✅ 특별 미션 승인!</strong><span>${displayName(appr.kidId)}에게 +${appr.xp} XP / +${appr.coins} 코인</span>`);
+      saveAndRender(`<strong>✅ ${isExam ? "시험 보너스" : "특별 미션"} 승인!</strong><span>${displayName(appr.kidId)}에게 +${appr.xp} XP / +${appr.coins} 코인</span>`);
     }
     function rejectQuest(approvalId) {
       const appr = (state.pendingApprovals || []).find((a) => a.id === approvalId);
       if (!appr || appr.status !== "pending") return;
+      if (appr.approvalType === "family_reward") {
+        appr.status = "rejected";
+        state.rewardRequests = (state.rewardRequests || []).map((r) => r.id === appr.id ? { ...r, status: "rejected" } : r);
+        addHistory(`부모가 ${displayName(appr.kidId)}의 가족 보상을 다음 기회로 미뤘어요: ${appr.rewardName}`);
+        addNotification(appr.kidId, "reward_later", "🌱 다음 기회에 다시 도전해요", `${appr.rewardName}은 코인을 더 모아 다시 요청할 수 있어요.`, "");
+        playSound("undo");
+        saveAndRender(`${displayName(appr.kidId)}의 가족 보상 요청을 다음 기회로 미뤘습니다.`);
+        return;
+      }
+      if (appr.approvalType === "coop_reward") {
+        appr.status = "rejected";
+        if (appr.rewardId) state.coopRewardJoins[appr.rewardId] = {};
+        state.coopRewardRequests = (state.coopRewardRequests || []).map((r) => r.id === appr.id ? { ...r, status: "rejected" } : r);
+        addHistory(`부모가 형제 협동 보상을 다음 기회로 미뤘어요: ${appr.rewardName}`);
+        KIDS.forEach((kid) => addNotification(kid.id, "coop_reward_later", "🌱 협동 보상은 다시 도전할 수 있어요", `${appr.rewardName}은 다음 기회에 다시 모아봐요.`, ""));
+        playSound("undo");
+        saveAndRender("협동 보상 요청을 다음 기회로 미뤘습니다.");
+        return;
+      }
       appr.status = "rejected";
-      addHistory(`부모가 ${displayName(appr.kidId)}의 특별 미션을 반려했어요: ${appr.questTitle}`);
+      const isExam = appr.approvalType === "exam_bonus";
+      addHistory(`부모가 ${displayName(appr.kidId)}의 ${isExam ? "시험 보너스를" : "특별 미션을"} 반려했어요: ${appr.questTitle}`);
+      addNotification(
+        appr.kidId, "approval_rejected",
+        isExam ? "💛 다시 확인해볼까요?" : "💛 다시 도전해볼까요?",
+        isExam ? "이번 시험 보너스는 다시 요청할 수 있어요. 과목과 점수를 확인해봐요!" : "이번 특별 미션은 다시 요청할 수 있어요. 더 멋진 행동으로 다시 도전해봐요!",
+        ""
+      );
       playSound("undo");
-      saveAndRender(`${displayName(appr.kidId)}의 특별 미션 요청을 반려했습니다.`);
+      saveAndRender(`${displayName(appr.kidId)}의 ${isExam ? "시험 보너스" : "특별 미션"} 요청을 반려했습니다.`);
+    }
+
+    /*
+      ==============================
+      v1.3-6: 보물상자 오픈 연출
+      ==============================
+    */
+    const CHEST_GRADES = { 5: "작은 행운 발견!", 10: "반짝 보상 획득!", 15: "좋은 보물 발견!", 20: "멋진 보상 획득!", 25: "대박 보물 발견!" };
+    function showChestAnimation(coins, onConfirm) {
+      const grade = CHEST_GRADES[coins] || "보물 발견!";
+      const ov = document.createElement("div");
+      ov.className = "chest-opening-overlay";
+      ov.innerHTML = `
+        <div class="chest-anim-box">
+          <span class="chest-emoji">🎁</span>
+          <div class="sparkle-ring">
+            <span class="sparkle-item">✨</span><span class="sparkle-item">⭐</span>
+            <span class="sparkle-item">💫</span><span class="sparkle-item">✨</span>
+            <span class="sparkle-item">⭐</span><span class="sparkle-item">💫</span>
+          </div>
+          <div class="chest-reward-popup" id="chestRewardPop">
+            <div class="chest-reward-title-txt">🎉 보물상자 오픈!</div>
+            <div class="chest-reward-coins-txt">+${coins} 코인 획득!</div>
+            <div class="chest-reward-grade-txt">${grade}</div>
+            <button class="btn gold" id="chestConfirmBtn" type="button">확인!</button>
+          </div>
+        </div>`;
+      document.body.appendChild(ov);
+      setTimeout(() => {
+        const pop = document.getElementById("chestRewardPop");
+        if (pop) pop.classList.add("visible");
+      }, 820);
+      document.getElementById("chestConfirmBtn")?.addEventListener("click", () => {
+        ov.remove();
+        onConfirm();
+      });
+    }
+
+    /*
+      ==============================
+      v1.3-6: 플로팅 보상 텍스트
+      ==============================
+    */
+    function showFloatingReward(text) {
+      const el = document.createElement("div");
+      el.className = "floating-reward";
+      el.textContent = text;
+      el.style.left = (window.innerWidth / 2) + "px";
+      el.style.top = (window.innerHeight * 0.58) + "px";
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1600);
+    }
+
+    /*
+      ==============================
+      v1.3-6: 알림 시스템
+      ==============================
+    */
+    function addNotification(kidId, type, title, message, rewardText) {
+      if (!Array.isArray(state.notifications)) state.notifications = [];
+      state.notifications.unshift({
+        id: `noti_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        kidId, type, title, message, rewardText: rewardText || "",
+        createdAt: new Date().toISOString(), read: false
+      });
+      state.notifications = state.notifications.slice(0, 50);
+    }
+    function getUnreadNotifications(kidId) {
+      return (state.notifications || []).filter((n) => n.kidId === kidId && !n.read);
+    }
+    function markNotificationRead(notiId) {
+      const n = (state.notifications || []).find((n) => n.id === notiId);
+      if (n) { n.read = true; saveState(); }
+    }
+    function showNextUnreadNotification(kidId) {
+      const unread = getUnreadNotifications(kidId);
+      if (!unread.length) return;
+      const notif = unread[0];
+      const othersCount = unread.length - 1;
+      const isRejected = notif.type === "approval_rejected";
+      const backdrop = document.createElement("div");
+      backdrop.className = "modal-backdrop";
+      backdrop.id = "notifBackdrop";
+      backdrop.innerHTML = `<div class="game-modal">
+        <div class="game-modal-head"><h2>${notif.title}</h2></div>
+        <div class="game-modal-body">
+          <p class="card-sub" style="font-size:16px;line-height:1.65;">${notif.message}</p>
+          ${notif.rewardText ? `<div class="next-reward" style="text-align:center;padding:14px;"><strong style="font-size:22px;color:#4b2a00;">${notif.rewardText}</strong></div>` : ""}
+          ${othersCount > 0 ? `<p class="card-sub" style="text-align:center;color:var(--muted);">+ 새 알림 ${othersCount}개 더 있어요</p>` : ""}
+          <button class="btn gold" id="notifConfirmBtn" type="button">${isRejected ? "다시 도전할게요!" : "확인했어요!"}</button>
+        </div>
+      </div>`;
+      document.body.appendChild(backdrop);
+      document.getElementById("notifConfirmBtn")?.addEventListener("click", () => {
+        markNotificationRead(notif.id);
+        backdrop.remove();
+        render();
+      });
+    }
+
+    /*
+      ==============================
+      v1.3-6: 아이 입장 게이트
+      ==============================
+    */
+    function renderKidGate() {
+      document.getElementById("kidGateOverlay")?.remove();
+      const ov = document.createElement("div");
+      ov.id = "kidGateOverlay";
+      ov.className = "kid-gate-overlay";
+      if (!selectedGateKid) {
+        ov.innerHTML = `<div class="kid-gate-inner">
+          <h2 class="kid-gate-title">🏠 우리집 미션 배틀</h2>
+          <p class="kid-gate-subtitle">내 캐릭터를 선택해서 입장하세요!</p>
+          <div class="kid-gate-grid">
+            ${KIDS.map((kid) => {
+              const lvl = levelInfo(kidData(kid.id).xp).current;
+              const unread = getUnreadNotifications(kid.id).length;
+              return `<button class="kid-gate-card" type="button" data-gate-kid="${kid.id}" style="--kid-color:${kid.color}">
+                <span class="badge-wrap">
+                  ${renderCharacterAvatar(kid, { size: "mini" })}
+                  ${unread ? `<span class="notification-badge">${unread}</span>` : ""}
+                </span>
+                <div class="kid-gate-name">${displayName(kid.id)}</div>
+                <div class="kid-gate-info">레벨 ${lvl.level}</div>
+              </button>`;
+            }).join("")}
+          </div>
+        </div>`;
+      } else {
+        const kid = kidConfig(selectedGateKid);
+        ov.innerHTML = `<div class="kid-gate-inner">
+          <div style="margin-bottom:12px;">${renderCharacterAvatar(kid, { size: "preview" })}</div>
+          <h2 class="kid-gate-title">${displayName(selectedGateKid)}의 방으로 들어가기</h2>
+          <p class="kid-gate-subtitle">비밀 코드를 입력해주세요 🔐</p>
+          <div class="pin-input-wrap">
+            <input class="pin-input" id="kidPinInput" type="password" inputmode="numeric" maxlength="4" placeholder="●●●●" autocomplete="off">
+          </div>
+          <div class="pin-error" id="pinErrorMsg"></div>
+          <div class="pin-actions">
+            <button class="btn gold" id="kidPinEnterBtn" type="button">입장하기 ✨</button>
+            <button class="btn alt small" id="kidGateBackBtn" type="button">← 캐릭터 선택</button>
+          </div>
+        </div>`;
+      }
+      document.body.appendChild(ov);
+      ov.querySelectorAll("[data-gate-kid]").forEach((btn) => btn.addEventListener("click", () => {
+        selectedGateKid = btn.dataset.gateKid;
+        renderKidGate();
+      }));
+      document.getElementById("kidPinEnterBtn")?.addEventListener("click", () => {
+        const pin = document.getElementById("kidPinInput")?.value || "";
+        if (!unlockKid(selectedGateKid, pin)) {
+          const errEl = document.getElementById("pinErrorMsg");
+          if (errEl) errEl.textContent = "아직 문이 열리지 않았어요. 다시 입력해보세요! 🔑";
+          playSound("error");
+        }
+      });
+      document.getElementById("kidPinInput")?.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") document.getElementById("kidPinEnterBtn")?.click();
+        document.getElementById("pinErrorMsg") && (document.getElementById("pinErrorMsg").textContent = "");
+      });
+      document.getElementById("kidGateBackBtn")?.addEventListener("click", () => {
+        selectedGateKid = null;
+        renderKidGate();
+      });
+      setTimeout(() => document.getElementById("kidPinInput")?.focus(), 80);
+    }
+    function unlockKid(kidId, pin) {
+      if (!kidId) return false;
+      const correct = state.gameMeta.kidPins?.[kidId] || "1111";
+      if (String(pin).trim() !== String(correct)) return false;
+      selectedKidId = kidId;
+      unlockedKidId = kidId;
+      selectedGateKid = null;
+      kidGateActive = false;
+      document.getElementById("kidGateOverlay")?.remove();
+      saveState();
+      render();
+      setTimeout(() => showNextUnreadNotification(kidId), 300);
+      return true;
+    }
+    function lockKidGate() {
+      unlockedKidId = null;
+      kidGateActive = true;
+      selectedGateKid = null;
+      renderKidGate();
+    }
+    function updateKidPins() {
+      const inputs = document.querySelectorAll(".pin-change-input");
+      if (!inputs.length) return;
+      if (!state.gameMeta.kidPins) state.gameMeta.kidPins = {};
+      inputs.forEach((inp) => {
+        const v = inp.value.trim();
+        if (v.length >= 1) state.gameMeta.kidPins[inp.dataset.pinKid] = v;
+      });
+      saveState();
+      playSound("backup");
+      showToast("🔐 아이별 비밀 코드를 저장했어요.");
+    }
+
+    /*
+      ==============================
+      v1.3-7: 개인방 권한 체계
+      ==============================
+    */
+    function canEditKid(kidId = selectedKidId) {
+      return unlockedKidId !== null && unlockedKidId === kidId;
+    }
+    function guardKidAction(kidId = selectedKidId) {
+      if (canEditKid(kidId)) return true;
+      const owner = displayName(kidId);
+      const me = unlockedKidId ? displayName(unlockedKidId) : null;
+      const msg = me
+        ? `${me}으로 입장 중이에요. ${owner}의 방에서 ${owner}만 바꿀 수 있어요!`
+        : "게이트에서 내 캐릭터로 입장해주세요.";
+      showToast(msg);
+      playSound("error");
+      return false;
+    }
+    function getActiveKidLabel() {
+      if (!unlockedKidId) return `${displayName(selectedKidId)} 출전 중`;
+      if (unlockedKidId === selectedKidId) return `${displayName(selectedKidId)} 출전 중 🎮`;
+      return `${displayName(selectedKidId)} 구경 중 👀`;
+    }
+    function renderViewModeNotice(kidId = selectedKidId) {
+      if (canEditKid(kidId)) return "";
+      const owner = displayName(kidId);
+      const me = unlockedKidId ? displayName(unlockedKidId) : null;
+      const msg = me
+        ? `${me}으로 입장 중 · ${owner}의 방은 구경만 할 수 있어요`
+        : "게이트에서 입장 후 이용할 수 있어요";
+      return `<div class="view-mode-badge">👀 ${msg}</div>`;
+    }
+
+    /*
+      ==============================
+      v1.3-7: 시험 보너스 시스템
+      ==============================
+    */
+    const EXAM_REWARDS = {
+      "90+": { xp: 30, coins: 30, label: "90점 이상" },
+      "100": { xp: 50, coins: 50, label: "100점 완벽!" }
+    };
+    function isDuplicateExamBonus(subject, scoreType) {
+      const today = getTodayKey();
+      const relevant = (state.pendingApprovals || []).filter((a) =>
+        a.approvalType === "exam_bonus" &&
+        a.kidId === selectedKidId &&
+        a.subject === subject &&
+        a.date === today &&
+        a.status !== "rejected"
+      );
+      if (relevant.some((a) => a.scoreType === scoreType)) return "이미 같은 과목·점수로 요청했어요.";
+      if (scoreType === "90+" && relevant.some((a) => a.scoreType === "100")) {
+        return `${subject} 100점 요청이 이미 있어요. 추가 요청은 필요 없어요!`;
+      }
+      return null;
+    }
+    function requestExamBonus() {
+      if (!guardKidAction()) return;
+      const subject = document.getElementById("examSubjectSel")?.value;
+      const scoreType = document.getElementById("examScoreSel")?.value;
+      if (!subject || !scoreType) return;
+      const dup = isDuplicateExamBonus(subject, scoreType);
+      if (dup) { showToast(dup); playSound("error"); return; }
+      const reward = EXAM_REWARDS[scoreType];
+      if (!reward) return;
+      if (!Array.isArray(state.pendingApprovals)) state.pendingApprovals = [];
+      state.pendingApprovals.push({
+        id: `appr_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        kidId: selectedKidId,
+        questId: null,
+        questTitle: `시험 보너스: ${subject} ${reward.label}`,
+        xp: reward.xp,
+        coins: reward.coins,
+        requestedAt: new Date().toISOString(),
+        status: "pending",
+        approvalType: "exam_bonus",
+        subject,
+        scoreType,
+        date: getTodayKey()
+      });
+      addHistory(`${displayName(selectedKidId)}가 ${subject} 시험 보너스를 요청했어요: ${reward.label}`);
+      playSound("click");
+      saveAndRender(`<strong>🎓 시험 보너스 요청!</strong><span>${subject} ${reward.label} 요청을 보냈어요 🙏</span>`);
+    }
+    function renderExamBonusForm() {
+      if (!canEditKid(selectedKidId)) return "";
+      const today = getTodayKey();
+      const myPending = (state.pendingApprovals || []).filter((a) =>
+        a.approvalType === "exam_bonus" && a.kidId === selectedKidId &&
+        a.date === today && a.status === "pending"
+      );
+      const subjects = ["국어", "수학", "사회", "과학", "영어", "기타"];
+      return `<div class="exam-bonus-form">
+        <h3>🎓 시험 보너스 요청</h3>
+        <p>시험을 잘 봤나요? 부모님께 확인 요청을 보내봐요!</p>
+        <div class="grid-2" style="gap:10px;">
+          <div class="field"><label for="examSubjectSel">과목</label>
+            <select id="examSubjectSel">${subjects.map((s) => `<option value="${s}">${s}</option>`).join("")}</select>
+          </div>
+          <div class="field"><label for="examScoreSel">점수</label>
+            <select id="examScoreSel">
+              <option value="90+">90점 이상 (+30 XP / +30 코인)</option>
+              <option value="100">100점 완벽! (+50 XP / +50 코인)</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn gold" id="examBonusReqBtn" type="button" style="margin-top:10px;">🎓 시험 보너스 요청하기</button>
+        ${myPending.length ? `<div class="stack" style="margin-top:10px;">${myPending.map((a) => `<div class="approval-card">
+          <div class="card-top"><span class="icon-box">📝</span><span class="chip">${a.subject} ${a.scoreType === "100" ? "100점" : "90점 이상"}</span></div>
+          <p class="card-sub" style="margin:0;">+${a.xp} XP / +${a.coins} 코인 · ⏳ 부모 확인 중</p>
+        </div>`).join("")}</div>` : ""}
+      </div>`;
     }
 
     function completeQuest(questId) {
+      if (!guardKidAction()) return;
       const quest = QUESTS.find((q) => q.id === questId);
       const data = kidData();
       if (!quest || data.todayDone[questId]) return;
       const beforeLevel = levelInfo(data.xp).current.level;
       data.todayDone[questId] = true;
       addXpCoins(selectedKidId, quest.xp, quest.coins);
+      trackSeasonProgress(selectedKidId, questId, 1);
       syncBadges(selectedKidId);
       const afterLevel = levelInfo(data.xp).current.level;
       addHistory(`${displayName(selectedKidId)}가 ${quest.title} 미션 클리어! +${quest.xp} XP / +${quest.coins} 코인`);
@@ -1776,10 +2575,12 @@
           ? "최고 레벨 도전 완료!"
           : `좋아! 다음 레벨까지 ${remain} XP!`;
       if (afterLevel > beforeLevel) playSound("levelup"); else playSound("clear");
+      showFloatingReward(`+${quest.xp} XP / +${quest.coins} 코인`);
       saveAndRender(`<strong>미션 클리어! +${quest.xp} XP / +${quest.coins} 코인</strong><span>${extra}</span>`);
     }
 
     function undoQuest(questId) {
+      if (!guardKidAction()) return;
       const quest = QUESTS.find((q) => q.id === questId);
       const data = kidData();
       if (!quest || !data.todayDone[questId]) return;
@@ -1787,6 +2588,7 @@
       data.coins = Math.max(0, data.coins - quest.coins);
       data.xp = Math.max(0, data.xp - quest.xp);
       data.stats.weeklyXp = Math.max(0, data.stats.weeklyXp - quest.xp);
+      trackSeasonProgress(selectedKidId, questId, -1);
       addHistory(`${displayName(selectedKidId)}: ${quest.title} 미션 되돌리기 -${quest.xp} XP / -${quest.coins} 코인`);
       playSound("undo");
       saveAndRender("<strong>미션을 되돌렸어요</strong><span>XP와 코인을 원래대로 조정했습니다.</span>");
@@ -1802,7 +2604,35 @@
       saveAndRender(`팀 보너스 +${mission.bonusXp} XP / +${mission.bonusCoins} 코인`);
     }
 
+    function claimSeasonReward(challengeId) {
+      if (!guardKidAction()) return;
+      const challenge = SEASON_CHALLENGES.find((c) => c.id === challengeId);
+      if (!challenge) return;
+      const progress = getSeasonProgress(selectedKidId, challenge);
+      if (progress < challenge.target || hasSeasonClaim(selectedKidId, challenge.id)) return;
+      state.seasonClaims = state.seasonClaims || {};
+      state.seasonClaims[seasonKey(challenge.id, selectedKidId)] = true;
+      state.seasonBadges[selectedKidId] = state.seasonBadges[selectedKidId] || [];
+      if (!state.seasonBadges[selectedKidId].some((b) => b.id === challenge.id && b.monthKey === getMonthKey())) {
+        state.seasonBadges[selectedKidId].push({
+          id: challenge.id,
+          name: challenge.badge,
+          monthKey: getMonthKey(),
+          earnedAt: new Date().toISOString()
+        });
+      }
+      if (challenge.badge && !kidData(selectedKidId).badges.includes(challenge.badge)) kidData(selectedKidId).badges.push(challenge.badge);
+      addXpCoins(selectedKidId, challenge.xp, challenge.coins);
+      if (challenge.teamMedals) state.gameMeta.teamMedals = (state.gameMeta.teamMedals || 0) + challenge.teamMedals;
+      addHistory(`${displayName(selectedKidId)}가 시즌 보상을 받았어요: ${challenge.badge} +${challenge.xp} XP / +${challenge.coins} 코인${challenge.teamMedals ? ` / 팀 메달 +${challenge.teamMedals}` : ""}`);
+      addNotification(selectedKidId, "season_claim", "🏅 시즌 보상 획득!", `${challenge.title} 완료!`, `${challenge.badge}`);
+      playSound("levelup");
+      showFloatingReward(`${challenge.badge} 획득!`);
+      saveAndRender(`<strong>🏅 시즌 보상 획득!</strong><span>${challenge.badge}</span>`);
+    }
+
     function buyDecorItem(id) {
+      if (!guardKidAction()) return;
       const item = itemById(id);
       const data = kidData();
       const lvl = levelInfo(data.xp).current.level;
@@ -1815,17 +2645,98 @@
       saveAndRender(`${item.name} 구매 완료! 보관함에서 착용하세요.`);
     }
 
-    function useFamilyReward(id) {
+    function requestFamilyReward(id) {
+      if (!guardKidAction()) return;
       const reward = FAMILY_REWARDS.find((r) => r.id === id);
-      const data = kidData();
-      if (!reward || data.coins < reward.cost) return;
-      if (!confirm(`${displayName(selectedKidId)}의 ${reward.cost} 코인으로 "${reward.title}" 보상을 교환할까요?`)) return;
-      spendCoins(selectedKidId, reward.cost);
-      addHistory(`${displayName(selectedKidId)}이 가족 보상 교환! ${reward.title} -${reward.cost} 코인`);
-      saveAndRender("가족 보상을 교환했습니다.");
+      const can = canRequestReward(selectedKidId, id);
+      if (!reward || !can.ok) { playSound("error"); showToast(can.reason); return; }
+      const request = {
+        id: `reward_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        approvalType: "family_reward",
+        kidId: selectedKidId,
+        rewardId: reward.id,
+        rewardName: reward.title,
+        cost: reward.cost,
+        requestedAt: new Date().toISOString(),
+        status: "pending"
+      };
+      state.pendingApprovals.push(request);
+      state.rewardRequests = state.rewardRequests || [];
+      state.rewardRequests.push(request);
+      addHistory(`${displayName(selectedKidId)}가 가족 보상을 요청했어요: ${reward.title}`);
+      addNotification(selectedKidId, "reward_pending", "🎁 가족 보상 요청 완료!", "부모 승인 대기 중이에요.", reward.title);
+      playSound("click");
+      saveAndRender(`<strong>🎁 가족 보상 요청 완료!</strong><span>${reward.title} · 부모 승인 대기 중이에요.</span>`);
+    }
+
+    function joinCoopReward(id) {
+      if (!guardKidAction()) return;
+      const reward = COOP_REWARDS.find((r) => r.id === id);
+      if (!reward) return;
+      const can = canRequestCoopReward(id);
+      if (!can.ok && !can.reason.includes("참여")) { playSound("error"); showToast(can.reason); return; }
+      state.coopRewardJoins[id] = state.coopRewardJoins[id] || {};
+      state.coopRewardJoins[id][selectedKidId] = true;
+      addHistory(`${displayName(selectedKidId)}가 형제 협동 보상에 참여했어요: ${reward.title}`);
+      const joinedIds = Object.keys(state.coopRewardJoins[id]).filter((kidId) => state.coopRewardJoins[id][kidId]);
+      if (KIDS.every((kid) => joinedIds.includes(kid.id)) && !pendingApprovalFor("coop_reward", id)) {
+        const finalCheck = canRequestCoopReward(id);
+        if (finalCheck.ok) {
+          const request = {
+            id: `coop_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+            approvalType: "coop_reward",
+            rewardId: reward.id,
+            rewardName: reward.title,
+            kidIds: KIDS.map((kid) => kid.id),
+            totalCost: reward.totalCost,
+            perKidCost: reward.perKidCost,
+            teamMedalCost: reward.teamMedals,
+            requestedAt: new Date().toISOString(),
+            status: "pending"
+          };
+          state.pendingApprovals.push(request);
+          state.coopRewardRequests = state.coopRewardRequests || [];
+          state.coopRewardRequests.push(request);
+          KIDS.forEach((kid) => addNotification(kid.id, "coop_reward_pending", "🤝 협동 보상 요청 완료!", `${reward.title} 부모 승인 대기 중이에요.`, "3형제 참여 완료"));
+          addHistory(`3형제가 협동 보상 승인을 요청했어요: ${reward.title}`);
+        }
+      }
+      playSound("click");
+      saveAndRender(`<strong>🤝 참여 완료!</strong><span>${reward.title} 협동 보상에 참여했어요.</span>`);
+    }
+
+    function approveFamilyReward(appr) {
+      const reward = FAMILY_REWARDS.find((r) => r.id === appr.rewardId);
+      const can = canRequestReward(appr.kidId, appr.rewardId, { ignorePending: true });
+      if (!reward || !can.ok) { showToast(can.reason); return; }
+      appr.status = "approved";
+      spendCoins(appr.kidId, reward.cost);
+      recordRewardUsage(appr.kidId, reward.id);
+      state.rewardRequests = (state.rewardRequests || []).map((r) => r.id === appr.id ? { ...r, status: "approved" } : r);
+      addHistory(`부모가 ${displayName(appr.kidId)}의 가족 보상을 승인했어요: ${reward.title} -${reward.cost} 코인`);
+      addNotification(appr.kidId, "reward_approved", "🎉 가족 보상 승인!", `${reward.title}을 사용할 수 있어요.`, `-${reward.cost} 코인`);
+      playSound("approval");
+      saveAndRender(`<strong>🎉 가족 보상 승인!</strong><span>${displayName(appr.kidId)} · ${reward.title}</span>`);
+    }
+
+    function approveCoopReward(appr) {
+      const reward = COOP_REWARDS.find((r) => r.id === appr.rewardId);
+      const can = canRequestCoopReward(appr.rewardId, { ignorePending: true });
+      if (!reward || !can.ok) { showToast(can.reason); return; }
+      appr.status = "approved";
+      KIDS.forEach((kid) => spendCoins(kid.id, reward.perKidCost));
+      state.gameMeta.teamMedals = Math.max(0, (state.gameMeta.teamMedals || 0) - reward.teamMedals);
+      recordCoopRewardUsage(reward.id);
+      state.coopRewardJoins[reward.id] = {};
+      state.coopRewardRequests = (state.coopRewardRequests || []).map((r) => r.id === appr.id ? { ...r, status: "approved" } : r);
+      addHistory(`부모가 형제 협동 보상을 승인했어요: ${reward.title} · 각 ${reward.perKidCost} 코인 · 팀 메달 ${reward.teamMedals}개`);
+      KIDS.forEach((kid) => addNotification(kid.id, "coop_reward_approved", "🎉 협동 보상 승인!", `${reward.title}을 함께 사용할 수 있어요.`, `팀 보상 열림`));
+      playSound("approval");
+      saveAndRender(`<strong>🎉 협동 보상 승인!</strong><span>${reward.title} · 팀 메달과 코인이 차감됐어요.</span>`);
     }
 
     function equipItem(id) {
+      if (!guardKidAction()) return;
       const item = itemById(id);
       const data = kidData();
       if (!item || !data.inventory.includes(id)) return;
@@ -1839,6 +2750,7 @@
     }
 
     function unequipItem(type) {
+      if (!guardKidAction()) return;
       const data = kidData();
       if (type === "skin" || type === "avatar" || type === "background" || type === "frame" || type === "title") return;
       data.equippedItems[type] = null;
@@ -1847,6 +2759,7 @@
     }
 
     function submitMissionIdea() {
+      if (!guardKidAction()) return;
       const input = document.getElementById("missionIdeaInput");
       if (!input) return;
       const text = input.value.trim().replace(/\s+/g, " ");
@@ -1900,6 +2813,7 @@
     }
 
     function openCharacterSettings() {
+      if (!guardKidAction()) return;
       const data = kidData();
       selectedSettingsAvatar = data.avatar || kidConfig(selectedKidId).avatar;
       settingsModalOpen = true;
@@ -1912,6 +2826,7 @@
     }
 
     function saveCharacterSettings() {
+      if (!guardKidAction()) return;
       const data = kidData();
       const kid = kidConfig(selectedKidId);
       const input = document.getElementById("settingsNickname");
@@ -1979,9 +2894,11 @@
       els.playerStrip.innerHTML = KIDS.map((kid) => {
         const data = kidData(kid.id);
         const lvl = levelInfo(data.xp).current;
+        const unread = getUnreadNotifications(kid.id).length;
+        const badge = unread ? `<span class="notification-badge">${unread}</span>` : "";
         return `
           <button class="player-mini ${kid.id === selectedKidId ? "active" : ""}" style="--kid-color:${kid.color}" type="button" data-select="${kid.id}">
-            ${renderCharacterAvatar(kid, { size: "mini" })}
+            <span class="badge-wrap">${renderCharacterAvatar(kid, { size: "mini" })}${badge}</span>
             <span><h3>${displayName(kid.id)}</h3><p>${className(kid.id)} · 레벨 ${lvl.level}<br>${data.coins} 코인</p></span>
           </button>`;
       }).join("");
@@ -2036,7 +2953,7 @@
       const targetItem = nextTargetItem(data, info.current.level);
       document.getElementById("tab-character").innerHTML = `
         <section class="panel">
-          <div class="panel-head"><h2>내 캐릭터</h2><span class="chip">${displayName(selectedKidId)} 출전 중</span></div>
+          <div class="panel-head"><h2>내 캐릭터</h2><span class="chip">${getActiveKidLabel()}</span></div>
           <div class="panel-body character-layout">
             <div class="character-stage ${classCss(kid.id)}" style="--kid-color:${kid.color};${stageVars(data)}">
               <div class="aura"></div>
@@ -2117,6 +3034,30 @@
       document.getElementById("captureGuide")?.addEventListener("click", () => showToast("팀 사진관 화면을 캡처해서 저장하세요."));
     }
 
+    function renderSeasonMissions() {
+      return `<div class="panel" style="box-shadow:none;">
+        <div class="panel-head">
+          <h2>이달 한정 미션</h2>
+          <span class="chip">${getMonthKey()} 시즌</span>
+        </div>
+        <div class="panel-body grid-2">
+          ${SEASON_CHALLENGES.map((challenge) => {
+            const progress = getSeasonProgress(selectedKidId, challenge);
+            const pct = Math.min(100, progress / challenge.target * 100);
+            const claimed = hasSeasonClaim(selectedKidId, challenge.id);
+            const ready = progress >= challenge.target && !claimed;
+            return `<div class="team-card ${ready ? "next-target" : ""}">
+              <div class="card-top"><span class="icon-box">${challenge.icon}</span><span class="chip">${claimed ? "보상 완료" : `${progress}/${challenge.target}`}</span></div>
+              <h3 class="card-title">${challenge.title}</h3>
+              <p class="card-sub">${challenge.badge} · +${challenge.xp} XP / +${challenge.coins} 코인${challenge.teamMedals ? ` · 팀 메달 +${challenge.teamMedals}` : ""}</p>
+              <div class="xp-bar"><span style="width:${pct}%"></span></div>
+              <button class="btn gold" type="button" data-season-claim="${challenge.id}" ${ready ? "" : "disabled"}>${claimed ? "이미 받았어요" : ready ? "보상 받기" : "조금만 더!"}</button>
+            </div>`;
+          }).join("")}
+        </div>
+      </div>`;
+    }
+
     function renderMissions() {
       const data = kidData();
       const family = FAMILY_MISSIONS.map((m) => {
@@ -2130,17 +3071,23 @@
           <button class="btn gold" type="button" data-family="${m.id}" ${ready && !claimed ? "" : "disabled"}>${claimed ? "수령 완료" : ready ? "팀 보상 받기" : "조건 미달"}</button>
         </div>`;
       }).join("");
+      const isOwner = canEditKid(selectedKidId);
       document.getElementById("tab-missions").innerHTML = `
         <section class="panel">
-          <div class="panel-head"><h2>오늘 미션</h2><span class="chip">${displayName(selectedKidId)} · ${doneCount(selectedKidId)}/${QUESTS.length} 클리어</span></div>
+          <div class="panel-head"><h2>오늘 미션</h2><span class="chip">${getActiveKidLabel()}</span></div>
           <div class="panel-body stack">
+            ${renderViewModeNotice()}
             ${renderDailyChest()}
             <div class="grid-2">${QUESTS.map((q) => {
               const clear = data.todayDone[q.id];
               const pending = q.requiresApproval && hasPendingApproval(q.id);
               const chipText = clear ? "클리어 완료" : pending ? "확인 기다리는 중" : "도전";
               let btnHtml;
-              if (clear) {
+              if (!isOwner) {
+                btnHtml = clear
+                  ? `<span class="state-pill ready">클리어 완료 ✓</span>`
+                  : `<span class="owner-only-note">👀 구경 모드</span>`;
+              } else if (clear) {
                 btnHtml = `<button class="btn alt" type="button" data-undo="${q.id}">되돌리기</button>`;
               } else if (pending) {
                 btnHtml = `<button class="btn alt" type="button" disabled>⏳ 부모 확인 중</button>`;
@@ -2156,15 +3103,19 @@
                 ${btnHtml}
               </div>`;
             }).join("")}</div>
+            ${renderExamBonusForm()}
             <div class="panel" style="box-shadow:none;"><div class="panel-head"><h2>팀 미션</h2></div><div class="panel-body grid-2">${family}</div></div>
+            ${renderSeasonMissions()}
             ${renderMissionIdeas()}
           </div>
         </section>`;
       document.getElementById("openChestBtn")?.addEventListener("click", openDailyChest);
+      document.getElementById("examBonusReqBtn")?.addEventListener("click", requestExamBonus);
       document.querySelectorAll("[data-clear]").forEach((b) => b.addEventListener("click", () => completeQuest(b.dataset.clear)));
       document.querySelectorAll("[data-undo]").forEach((b) => b.addEventListener("click", () => undoQuest(b.dataset.undo)));
       document.querySelectorAll("[data-request]").forEach((b) => b.addEventListener("click", () => requestQuestApproval(b.dataset.request)));
       document.querySelectorAll("[data-family]").forEach((b) => b.addEventListener("click", () => claimFamilyMission(b.dataset.family)));
+      document.querySelectorAll("[data-season-claim]").forEach((b) => b.addEventListener("click", () => claimSeasonReward(b.dataset.seasonClaim)));
       document.getElementById("submitMissionIdea")?.addEventListener("click", submitMissionIdea);
     }
 
@@ -2199,7 +3150,7 @@
       const challenges = nextChallengeTexts();
       document.getElementById("tab-league").innerHTML = `
         <section class="panel">
-          <div class="panel-head"><h2>형제 리그</h2><span class="chip">서로 자극받는 성장 보드</span></div>
+          <div class="panel-head"><h2>형제 리그</h2><span class="chip">팀 메달 ${state.gameMeta.teamMedals || 0}개 · 서로 자극받는 성장 보드</span></div>
           <div class="panel-body">
             <div class="league-awards">
               <div class="award-card"><b>🎯</b>오늘의 미션왕<br>${displayName(missionKing.id)}</div>
@@ -2229,14 +3180,45 @@
         </section>`;
     }
 
+    function renderFamilyRewardCard(reward, data, lvl) {
+      const can = canRequestReward(selectedKidId, reward.id);
+      const pending = pendingApprovalFor("family_reward", reward.id, selectedKidId);
+      return `<div class="shop-card ${!can.ok ? "locked" : ""}">
+        <div class="card-top"><span class="icon-box">${reward.icon}</span><span class="chip">${reward.category}</span></div>
+        <h3 class="card-title">${reward.title}</h3>
+        <p class="card-sub">${reward.cost} 코인 · Lv.${reward.level} 필요 · ${rewardLimitLabel(reward)}</p>
+        <p class="card-sub">${pending ? "부모 승인 대기 중이에요." : can.reason}</p>
+        <button class="btn gold" type="button" data-family-reward="${reward.id}" ${can.ok ? "" : "disabled"}>${pending ? "승인 대기" : can.ok ? "부모 승인 요청" : "조금만 더!"}</button>
+      </div>`;
+    }
+
+    function renderCoopRewardCard(reward) {
+      const joined = state.coopRewardJoins?.[reward.id] || {};
+      const joinedCount = KIDS.filter((kid) => joined[kid.id]).length;
+      const can = canRequestCoopReward(reward.id);
+      const pending = pendingApprovalFor("coop_reward", reward.id);
+      const isJoined = joined[selectedKidId];
+      const avgLevel = averageTeamLevel().toFixed(1);
+      return `<div class="shop-card ${!can.ok && !pending ? "locked" : ""}">
+        <div class="card-top"><span class="icon-box">${reward.icon}</span><span class="chip">형제 협동 보상</span></div>
+        <h3 class="card-title">${reward.title}</h3>
+        <p class="card-sub">총 ${reward.totalCost} 코인 · 1인 ${reward.perKidCost} 코인 · 평균 Lv.${reward.avgLevel} · 팀 메달 ${reward.teamMedals}개</p>
+        <p class="card-sub">현재 평균 Lv.${avgLevel} · 팀 메달 ${state.gameMeta.teamMedals || 0}개 · ${reward.limitType === "two_month" ? "2개월 1회" : "월 1회"}</p>
+        <div class="coop-join-row">${KIDS.map((kid) => `<span class="state-pill ${joined[kid.id] ? "ready" : "target"}">${displayName(kid.id)} ${joined[kid.id] ? "참여" : "대기"}</span>`).join("")}</div>
+        <p class="card-sub">${pending ? "3형제 참여 완료 · 부모 승인 대기 중이에요." : can.reason}</p>
+        <button class="btn gold" type="button" data-coop-reward="${reward.id}" ${(!pending && !isJoined && can.ok) ? "" : "disabled"}>${pending ? "승인 대기" : isJoined ? "참여 완료" : `참여하기 (${joinedCount}/3)`}</button>
+      </div>`;
+    }
+
     function renderShop() {
       const data = kidData();
       const lvl = levelInfo(data.xp).current.level;
       const nextTarget = nextTargetItem(data, lvl);
       document.getElementById("tab-shop").innerHTML = `
         <section class="panel">
-          <div class="panel-head"><h2>상점</h2><span class="chip">${data.coins} 코인 보유</span></div>
+          <div class="panel-head"><h2>상점</h2><span class="chip">${getActiveKidLabel()}</span></div>
           <div class="panel-body stack">
+            ${renderViewModeNotice()}
             <div class="next-reward featured">
               <h3>다음 목표 아이템</h3>
               <p>${nextTarget ? `${nextTarget.icon} ${nextTarget.name} · ${nextTarget.category} · ${nextTarget.rarity}` : "모든 스킨샵 아이템을 모으는 중!"}</p>
@@ -2260,18 +3242,25 @@
                 </div>`;
               }).join("")}</div>
             </div>
-            <div class="panel" style="box-shadow:none;"><div class="panel-head"><h2>가족 보상 상점</h2><span class="chip">코인으로 교환</span></div>
-              <div class="panel-body grid-2">${FAMILY_REWARDS.map((r) => `<div class="shop-card ${data.coins < r.cost ? "locked" : ""}">
-                <div class="card-top"><span class="icon-box">${data.coins >= r.cost ? "🎁" : "🔒"}</span><span class="chip">${rarityName(r.rarity)}</span></div>
-                <h3 class="card-title">${r.title}</h3>
-                <p class="card-sub">${r.cost} 코인 필요</p>
-                <button class="btn gold" type="button" data-family-reward="${r.id}" ${data.coins >= r.cost ? "" : "disabled"}>${data.coins >= r.cost ? "교환하기" : "코인이 부족해요"}</button>
-              </div>`).join("")}</div>
+            <div class="panel" style="box-shadow:none;"><div class="panel-head"><h2>가족 보상 상점</h2><span class="chip">부모 승인형 · 팀 메달 ${state.gameMeta.teamMedals || 0}개</span></div>
+              <div class="panel-body stack">
+                <div class="notice-board">
+                  <h3>개인 보상</h3>
+                  <p class="card-sub">누르자마자 코인이 빠지지 않아요. 부모 승인 후 코인이 차감되고 사용할 수 있어요.</p>
+                  <div class="grid-2" style="margin-top:12px;">${FAMILY_REWARDS.map((r) => renderFamilyRewardCard(r, data, lvl)).join("")}</div>
+                </div>
+                <div class="notice-board">
+                  <h3>형제 협동 보상</h3>
+                  <p class="card-sub">3형제가 모두 참여하면 부모 승인 대기로 올라가요. 큰 보상은 팀 메달과 각자 코인이 필요해요.</p>
+                  <div class="grid-2" style="margin-top:12px;">${COOP_REWARDS.map(renderCoopRewardCard).join("")}</div>
+                </div>
+              </div>
             </div>
           </div>
         </section>`;
       document.querySelectorAll("[data-buy]").forEach((b) => b.addEventListener("click", () => buyDecorItem(b.dataset.buy)));
-      document.querySelectorAll("[data-family-reward]").forEach((b) => b.addEventListener("click", () => useFamilyReward(b.dataset.familyReward)));
+      document.querySelectorAll("[data-family-reward]").forEach((b) => b.addEventListener("click", () => requestFamilyReward(b.dataset.familyReward)));
+      document.querySelectorAll("[data-coop-reward]").forEach((b) => b.addEventListener("click", () => joinCoopReward(b.dataset.coopReward)));
     }
 
     function renderInventory() {
@@ -2281,8 +3270,9 @@
       const filtered = inventoryFilter === "전체" ? owned : owned.filter((item) => (item.category || typeName(itemSlot(item))) === inventoryFilter);
       document.getElementById("tab-inventory").innerHTML = `
         <section class="panel">
-          <div class="panel-head"><h2>내 아이템 창고</h2><span class="chip">${owned.length}개 보유</span></div>
+          <div class="panel-head"><h2>내 아이템 창고</h2><span class="chip">${getActiveKidLabel()}</span></div>
           <div class="panel-body">
+            ${renderViewModeNotice()}
             <div class="photo-controls">
               ${categories.map((category) => `<button class="btn small ${inventoryFilter === category ? "gold" : "alt"}" type="button" data-inventory-filter="${category}">${category}</button>`).join("")}
             </div>
@@ -2402,6 +3392,110 @@
       ];
     }
 
+    function estimatePeriodReport(period = "week") {
+      const now = new Date();
+      const days = period === "week" ? getWeekProgressDays(now) : now.getDate();
+      const possible = Math.max(1, QUESTS.length * days);
+      return KIDS.map((kid) => {
+        const data = kidData(kid.id);
+        const today = Object.keys(data.todayDone || {}).length;
+        const xpEstimate = Math.round((period === "week" ? data.stats.weeklyXp : data.xp / Math.max(1, now.getMonth() + 1)) / 12);
+        const completed = Math.min(possible, Math.max(today, xpEstimate));
+        const rate = Math.min(100, Math.round(completed / possible * 100));
+        const study = Object.keys(data.todayDone || {}).filter((id) => id.startsWith("study_")).length;
+        const hygiene = Object.keys(data.todayDone || {}).filter((id) => id === "fresh_feet" || id === "fresh_shower").length;
+        return { kidId: kid.id, completed, possible, rate, study, hygiene, chests: state.dailyChests?.[kid.id] ? 1 : 0 };
+      });
+    }
+
+    function teamMedalEstimate(reports) {
+      if (reports.every((r) => r.rate >= 90)) return 2;
+      if (reports.every((r) => r.rate >= 70)) return 1;
+      return 0;
+    }
+
+    function renderWeeklyClosingPanel() {
+      const key = getWeekKey();
+      const closed = state.weeklyClosings?.[key];
+      const reports = closed?.reports || estimatePeriodReport("week");
+      const medal = closed?.teamMedals || teamMedalEstimate(reports);
+      return `<div class="notice-board">
+        <h3>⑧ 주간 마감</h3>
+        <p class="card-sub">이번 주: ${key} · 팀 메달 예상 ${medal}개 · 현재 팀 메달 ${state.gameMeta.teamMedals || 0}개</p>
+        <div class="grid-3" style="margin-top:10px;">${reports.map((r) => `<div class="team-card">
+          <h4 class="card-title">${displayName(r.kidId)}</h4>
+          <p class="card-sub">완료 ${r.completed}/${r.possible} · ${r.rate}%</p>
+          <p class="card-sub">학습 ${r.study}회 · 위생 ${r.hygiene}회 · 보물상자 ${r.chests}회</p>
+          <div class="xp-bar"><span style="width:${r.rate}%"></span></div>
+        </div>`).join("")}</div>
+        <button class="btn gold" id="weeklyCloseBtn" type="button" ${closed ? "disabled" : ""}>${closed ? "이번 주는 이미 마감했어요" : "이번 주 마감하기"}</button>
+      </div>`;
+    }
+
+    function renderMonthlyClosingPanel() {
+      const key = getMonthKey();
+      const closed = state.monthlyClosings?.[key];
+      const reports = closed?.reports || estimatePeriodReport("month");
+      const teamMedals = closed?.teamMedals || (reports.every((r) => r.rate >= 90) ? 4 : reports.every((r) => r.rate >= 70) ? 2 : 0);
+      return `<div class="notice-board">
+        <h3>⑨ 월간 마감</h3>
+        <p class="card-sub">이번 달: ${key} · 팀 메달 예상 ${teamMedals}개 · 시즌 배지와 한정 프레임은 월간 성장 보상이에요.</p>
+        <div class="grid-3" style="margin-top:10px;">${reports.map((r) => `<div class="team-card">
+          <h4 class="card-title">${displayName(r.kidId)}</h4>
+          <p class="card-sub">월간 완료 ${r.completed}/${r.possible} · ${r.rate}%</p>
+          <p class="card-sub">획득 시즌 보상: ${(state.seasonBadges?.[r.kidId] || []).filter((b) => b.monthKey === key).length}개</p>
+          <div class="xp-bar"><span style="width:${r.rate}%"></span></div>
+        </div>`).join("")}</div>
+        <button class="btn gold" id="monthlyCloseBtn" type="button" ${closed ? "disabled" : ""}>${closed ? "이번 달은 이미 마감했어요" : "이번 달 마감하기"}</button>
+      </div>`;
+    }
+
+    function closeCurrentWeek() {
+      const key = getWeekKey();
+      if (state.weeklyClosings?.[key]) return;
+      const reports = estimatePeriodReport("week");
+      reports.forEach((r) => {
+        const coins = r.rate >= 90 ? 100 : r.rate >= 70 ? 50 : 0;
+        if (!coins) return;
+        addXpCoins(r.kidId, 0, coins);
+        addNotification(r.kidId, "weekly_close", r.rate >= 90 ? "✨ 주간 빛나는 상자!" : "🎁 주간 작은 상자!", "이번 주도 멋지게 성장했어요!", `+${coins} 코인`);
+        addHistory(`${displayName(r.kidId)} 주간 마감 보상 +${coins} 코인`);
+      });
+      const medals = teamMedalEstimate(reports);
+      if (medals) {
+        state.gameMeta.teamMedals = (state.gameMeta.teamMedals || 0) + medals;
+        addHistory(`주간 마감 팀 메달 +${medals}`);
+      }
+      state.weeklyClosings[key] = { closedAt: new Date().toISOString(), reports, teamMedals: medals };
+      playSound("approval");
+      saveAndRender(`<strong>주간 마감 완료!</strong><span>팀 메달 +${medals}</span>`);
+    }
+
+    function closeCurrentMonth() {
+      const key = getMonthKey();
+      if (state.monthlyClosings?.[key]) return;
+      const reports = estimatePeriodReport("month");
+      const medals = reports.every((r) => r.rate >= 90) ? 4 : reports.every((r) => r.rate >= 70) ? 2 : 0;
+      reports.forEach((r) => {
+        if (r.rate < 70) return;
+        const badgeName = r.rate >= 90 ? `${key} 시즌 한정 프레임` : `${key} 시즌 배지`;
+        state.seasonBadges[r.kidId] = state.seasonBadges[r.kidId] || [];
+        if (!state.seasonBadges[r.kidId].some((b) => b.name === badgeName && b.monthKey === key)) {
+          state.seasonBadges[r.kidId].push({ id: `monthly_${key}_${r.rate >= 90 ? "frame" : "badge"}`, name: badgeName, monthKey: key, earnedAt: new Date().toISOString() });
+        }
+        if (!kidData(r.kidId).badges.includes(badgeName)) kidData(r.kidId).badges.push(badgeName);
+        addNotification(r.kidId, "monthly_close", "🏅 월간 시즌 보상!", "이번 달 성장 보상을 얻었어요.", badgeName);
+        addHistory(`${displayName(r.kidId)} 월간 마감 보상 획득: ${badgeName}`);
+      });
+      if (medals) {
+        state.gameMeta.teamMedals = (state.gameMeta.teamMedals || 0) + medals;
+        addHistory(`월간 마감 팀 메달 +${medals}`);
+      }
+      state.monthlyClosings[key] = { closedAt: new Date().toISOString(), reports, teamMedals: medals };
+      playSound("approval");
+      saveAndRender(`<strong>월간 마감 완료!</strong><span>팀 메달 +${medals}</span>`);
+    }
+
     function renderBackupStatus() {
       const last = state.gameMeta.lastBackupAt;
       if (!last) {
@@ -2419,17 +3513,30 @@
     function renderPendingApprovals() {
       const pending = (state.pendingApprovals || []).filter((a) => a.status === "pending");
       if (!pending.length) {
-        return `<div class="empty">현재 승인 대기 중인 특별 미션이 없습니다.</div>`;
+        return `<div class="empty">현재 승인 대기 중인 미션이 없습니다.</div>`;
       }
       return `<div class="stack">${pending.map((a) => {
-        const t = new Date(a.requestedAt);
+        const isExam = a.approvalType === "exam_bonus";
+        const isFamilyReward = a.approvalType === "family_reward";
+        const isCoopReward = a.approvalType === "coop_reward";
+        const t = new Date(a.requestedAt || a.createdAt || Date.now());
         const timeStr = `${String(t.getHours()).padStart(2,"0")}:${String(t.getMinutes()).padStart(2,"0")}`;
+        const typeLabel = isCoopReward
+          ? `🤝 형제 협동 보상 · 각 ${a.perKidCost} 코인 · 팀 메달 ${a.teamMedalCost}개`
+          : isFamilyReward
+            ? `🎁 개인 가족 보상 · ${a.cost} 코인`
+            : isExam
+              ? `📝 시험 보너스 · ${a.subject} ${a.scoreType === "100" ? "100점" : "90점 이상"}`
+              : `✋ 특별 미션`;
+        const who = isCoopReward ? "3형제 팀" : displayName(a.kidId);
+        const title = isCoopReward || isFamilyReward ? a.rewardName : a.questTitle;
+        const rewardText = isCoopReward ? `${a.totalCost} 코인 / 팀 메달 ${a.teamMedalCost}` : isFamilyReward ? `-${a.cost} 코인` : `+${a.xp} XP / +${a.coins} 코인`;
         return `<div class="approval-card">
           <div class="card-top">
-            <span><b>${displayName(a.kidId)}</b> · ${a.questTitle}</span>
-            <span class="chip">+${a.xp} XP / +${a.coins} 코인</span>
+            <span><b>${who}</b> · ${title}</span>
+            <span class="chip">${rewardText}</span>
           </div>
-          <p class="card-sub" style="margin:0;">요청 시간: ${timeStr}</p>
+          <p class="card-sub" style="margin:0;">${typeLabel} · 요청 시간: ${timeStr}</p>
           <div class="approval-actions">
             <button class="btn gold" type="button" data-approve="${a.id}">✅ 승인</button>
             <button class="btn danger" type="button" data-reject="${a.id}">❌ 반려</button>
@@ -2503,6 +3610,22 @@
                     </div>
                   </div>
 
+                  <!-- 섹션 6: 아이별 비밀 코드 관리 -->
+                  <div class="notice-board">
+                    <h3>⑥ 아이별 비밀 코드 관리</h3>
+                    <p class="card-sub" style="margin-bottom:12px;">게임 입장 시 사용하는 비밀 코드입니다. 숫자 4자리 권장.</p>
+                    ${KIDS.map((kid) => `
+                      <div class="field" style="margin-bottom:10px;">
+                        <label>${displayName(kid.id)} 비밀 코드</label>
+                        <input class="pin-change-input" data-pin-kid="${kid.id}" type="text" inputmode="numeric" maxlength="4" value="${escapeHtml(state.gameMeta.kidPins?.[kid.id] || "1111")}" placeholder="4자리 숫자">
+                      </div>`).join("")}
+                    <button class="btn gold" id="savePinsBtn" type="button">🔐 비밀 코드 저장</button>
+                  </div>
+
+                  ${renderPwaInstallGuide()}
+                  ${renderWeeklyClosingPanel()}
+                  ${renderMonthlyClosingPanel()}
+
                 </div>`}
           </div>
         </section>`;
@@ -2554,6 +3677,10 @@
       document.getElementById("importBackup")?.addEventListener("change", (e) => importBackup(e.target.files[0]));
       document.querySelectorAll("[data-approve]").forEach((b) => b.addEventListener("click", () => approveQuest(b.dataset.approve)));
       document.querySelectorAll("[data-reject]").forEach((b) => b.addEventListener("click", () => rejectQuest(b.dataset.reject)));
+      document.getElementById("savePinsBtn")?.addEventListener("click", updateKidPins);
+      document.getElementById("refreshLatestVersion")?.addEventListener("click", refreshLatestVersion);
+      document.getElementById("weeklyCloseBtn")?.addEventListener("click", closeCurrentWeek);
+      document.getElementById("monthlyCloseBtn")?.addEventListener("click", closeCurrentMonth);
     }
 
     function parentAdjust() {
@@ -2576,7 +3703,9 @@
       state.familyBonuses = {};
       state.dailyChests = {};
       if (Array.isArray(state.pendingApprovals)) {
-        state.pendingApprovals = state.pendingApprovals.filter((a) => a.status !== "pending");
+        state.pendingApprovals = state.pendingApprovals.filter((a) =>
+          a.status !== "pending" || a.approvalType === "family_reward" || a.approvalType === "coop_reward"
+        );
       }
       addHistory("부모 메뉴: 오늘 체크 상태 초기화");
       saveAndRender("오늘 체크 상태를 초기화했습니다.");
@@ -2640,6 +3769,62 @@
       toastTimer = setTimeout(() => els.toast.classList.remove("show"), 1900);
     }
 
+    function isStandaloneAppMode() {
+      return window.matchMedia?.("(display-mode: standalone)")?.matches || window.navigator.standalone === true;
+    }
+
+    function renderPwaInstallGuide() {
+      const appMode = isStandaloneAppMode();
+      return `<div class="notice-board">
+        <h3>⑦ 패드 홈앱 설치 안내</h3>
+        <p class="card-sub">${appMode ? "현재 앱 모드로 실행 중이에요." : "현재는 브라우저 모드예요. 홈 화면에 추가하면 더 앱처럼 사용할 수 있어요."}</p>
+        <ol class="card-sub" style="margin:10px 0 0 20px;line-height:1.7;">
+          <li>Chrome에서 게임 주소 열기</li>
+          <li>오른쪽 위 점 3개 누르기</li>
+          <li>홈 화면에 추가 선택</li>
+          <li>이름을 우리집 미션 배틀로 설정</li>
+          <li>홈 화면 아이콘으로 실행</li>
+        </ol>
+        <div class="parent-actions" style="margin-top:12px;">
+          <button class="btn gold" id="refreshLatestVersion" type="button">최신 버전 다시 불러오기</button>
+        </div>
+        <p class="card-sub" style="margin-top:8px;">아이 데이터는 지우지 않아요. 앱 파일만 새로 받아옵니다.</p>
+      </div>`;
+    }
+
+    async function refreshLatestVersion() {
+      try {
+        if ("serviceWorker" in navigator) {
+          const registration = await navigator.serviceWorker.getRegistration("./");
+          if (registration) await registration.update();
+        }
+        if ("caches" in window) {
+          const names = await caches.keys();
+          await Promise.all(names.filter((name) => name.includes("kids-mission-battle")).map((name) => caches.delete(name)));
+        }
+      } catch (error) {
+        console.warn("최신 버전 갱신 준비 중 문제가 있었지만 데이터를 지우지 않고 새로고침합니다.", error);
+      } finally {
+        window.location.reload();
+      }
+    }
+
+    function registerServiceWorker() {
+      if (!("serviceWorker" in navigator)) return;
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch((error) => {
+          console.warn("Service Worker 등록 실패", error);
+        });
+      });
+    }
+
+    function startAppSplashThenGate() {
+      window.setTimeout(() => {
+        document.getElementById("appSplash")?.classList.add("app-splash-hidden");
+        renderKidGate();
+      }, 950);
+    }
+
     document.querySelectorAll(".tab-btn").forEach((btn) => btn.addEventListener("click", () => {
       activeTab = btn.dataset.tab;
       playSound("tab");
@@ -2647,6 +3832,7 @@
     }));
 
     document.getElementById("soundToggle")?.addEventListener("click", toggleSound);
+    document.getElementById("switchKidBtn")?.addEventListener("click", lockKidGate);
 
     function render() {
       els.todayDate.textContent = formatKoreanDate(state.date);
@@ -2664,7 +3850,9 @@
       renderSettingsModal();
     }
 
+    registerServiceWorker();
     render();
+    startAppSplashThenGate();
   </script>
 </body>
 </html>
