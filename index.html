@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>우리집 미션 배틀</title>
   <style>
     /*
@@ -302,6 +302,105 @@
       z-index: 1;
     }
 
+    .character-visual {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: var(--visual-size, 156px);
+      height: var(--visual-size, 156px);
+      margin: 0 auto;
+      border-radius: 999px;
+      isolation: isolate;
+      animation: guardianFloat 3s ease-in-out infinite;
+    }
+
+    .character-visual.mini { --visual-size: 58px; }
+    .character-visual.preview { --visual-size: 82px; }
+    .character-visual.photo { --visual-size: 86px; }
+    .character-visual.big { --visual-size: 156px; }
+
+    .visual-core {
+      position: relative;
+      z-index: 4;
+      width: calc(var(--visual-size) * .9);
+      height: calc(var(--visual-size) * .9);
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      border: max(3px, calc(var(--visual-size) * .032)) solid #fff;
+      background:
+        radial-gradient(circle at 35% 30%, rgba(255,255,255,.82), transparent 24%),
+        linear-gradient(135deg, color-mix(in srgb, var(--kid-color) 82%, #fff), var(--kid-color));
+      color: #fff;
+      font-size: calc(var(--visual-size) * .38);
+      text-shadow: 0 4px 0 rgba(0,0,0,.18);
+      box-shadow: 0 10px 0 rgba(19,33,93,.16), 0 0 30px color-mix(in srgb, var(--kid-color) 28%, transparent);
+      overflow: hidden;
+    }
+
+    .visual-aura {
+      position: absolute;
+      inset: -22%;
+      z-index: 1;
+      border-radius: 999px;
+      background: var(--visual-aura, radial-gradient(circle, color-mix(in srgb, var(--kid-color) 44%, transparent), transparent 66%));
+      opacity: var(--visual-aura-opacity, .30);
+      filter: blur(12px);
+      animation: auraPulse 2.4s ease-in-out infinite;
+    }
+
+    .visual-ring {
+      position: absolute;
+      inset: 2%;
+      z-index: 2;
+      border-radius: 999px;
+      border: var(--visual-frame, 3px solid rgba(255,255,255,.75));
+      pointer-events: none;
+    }
+
+    .visual-layer {
+      position: absolute;
+      z-index: 6;
+      display: grid;
+      place-items: center;
+      width: calc(var(--visual-size) * .42);
+      height: calc(var(--visual-size) * .42);
+      border-radius: 999px;
+      background: rgba(255,255,255,.88);
+      border: 2px solid rgba(255,255,255,.95);
+      box-shadow: 0 6px 0 rgba(9,18,62,.14), 0 0 10px rgba(255,255,255,.55);
+      font-size: calc(var(--visual-size) * .28);
+      filter: drop-shadow(0 3px 8px rgba(0,0,0,.22));
+    }
+
+    .visual-head { top: -14%; left: 50%; translate: -50% 0; }
+    .visual-weapon { left: -19%; bottom: 16%; rotate: -18deg; }
+    .visual-pet { right: -20%; bottom: 4%; animation: petBounce 2.1s ease-in-out infinite; }
+    .visual-badge { right: -4%; top: 2%; width: calc(var(--visual-size) * .30); height: calc(var(--visual-size) * .30); font-size: calc(var(--visual-size) * .19); }
+
+    .character-visual.aura-fire { --visual-aura: radial-gradient(circle,#ff8845,transparent 66%); --visual-aura-opacity: .72; }
+    .character-visual.aura-lightning { --visual-aura: radial-gradient(circle,#fff173 0%,#2ee59d 35%,transparent 68%); --visual-aura-opacity: .65; animation: runnerFlash 1.9s ease-in-out infinite; }
+    .character-visual.aura-blue { --visual-aura: radial-gradient(circle,#2f7bff,transparent 66%); --visual-aura-opacity: .60; }
+    .character-visual.aura-gold { --visual-aura: radial-gradient(circle,#ffd84d,transparent 66%); --visual-aura-opacity: .75; }
+    .character-visual.frame-blue { --visual-frame: 7px solid #3f7cff; }
+    .character-visual.frame-fire { --visual-frame: 7px solid #ff8845; }
+    .character-visual.frame-gold { --visual-frame: 8px solid #ffd84d; }
+    .character-visual.frame-mythic .visual-ring,
+    .character-visual.frame-gold .visual-ring { animation: frameShine 2.6s ease-in-out infinite; }
+    .character-visual.frame-blue .visual-ring { box-shadow: 0 0 20px rgba(63,124,255,.55), inset 0 0 14px rgba(63,124,255,.18); }
+    .character-visual.frame-fire .visual-ring { box-shadow: 0 0 20px rgba(255,136,69,.62), inset 0 0 14px rgba(255,136,69,.22); }
+    .character-visual.frame-gold .visual-ring { box-shadow: 0 0 24px rgba(255,216,77,.72), inset 0 0 16px rgba(255,216,77,.26); }
+    .character-visual.frame-mythic .visual-ring { box-shadow: 0 0 28px rgba(255,79,163,.72), inset 0 0 18px rgba(255,79,163,.28); }
+
+    .preview-box {
+      display: grid;
+      place-items: center;
+      min-height: 112px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(255,255,255,.78), rgba(232,240,255,.72));
+      border: 2px solid rgba(255,255,255,.82);
+    }
+
     .player-mini h3 { margin: 0; font-size: 22px; font-weight: 1000; }
     .player-mini p { margin: 5px 0 0; color: var(--muted); font-weight: 900; font-size: 13px; }
 
@@ -452,7 +551,9 @@
       box-shadow: 0 7px 0 rgba(9, 18, 62, 0.12);
     }
     .head-item { position: absolute; top: -13px; z-index: 2; font-size: 42px; }
+    .weapon-item { position: absolute; left: -42px; bottom: 28px; z-index: 2; font-size: 48px; transform: rotate(-18deg); }
     .pet-item { position: absolute; right: -42px; bottom: 4px; z-index: 2; font-size: 46px; }
+    .pet-item { animation: petBounce 2.1s ease-in-out infinite; }
 
     .character-stage.defender .avatar-wrap { animation: guardianFloat 3.2s ease-in-out infinite; }
     .character-stage.runner .avatar-wrap { animation: runnerFlash 1.9s ease-in-out infinite; }
@@ -570,6 +671,16 @@
     .shop-card.next-target {
       border-color: var(--yellow);
       box-shadow: 0 0 0 4px rgba(255, 216, 77, 0.18), 0 10px 0 rgba(26, 44, 105, 0.08), 0 18px 30px rgba(255, 136, 69, 0.18);
+    }
+
+    .rarity-common { border-color: #d9e2f5; }
+    .rarity-rare { border-color: #35a7ff; box-shadow: 0 10px 0 rgba(26,44,105,.08), 0 0 18px rgba(53,167,255,.18); }
+    .rarity-epic { border-color: #7c4dff; box-shadow: 0 10px 0 rgba(26,44,105,.08), 0 0 20px rgba(124,77,255,.22); }
+    .rarity-legend { border-color: #ffd84d; box-shadow: 0 10px 0 rgba(26,44,105,.08), 0 0 24px rgba(255,216,77,.34); }
+    .rarity-mythic {
+      border-color: #ff4fa3;
+      background: linear-gradient(180deg, #fff, #fff4fb 42%, #f4f7ff);
+      box-shadow: 0 10px 0 rgba(26,44,105,.08), 0 0 26px rgba(255,79,163,.34);
     }
 
     .state-pill {
@@ -805,6 +916,60 @@
 
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: rgba(8, 16, 56, .62);
+      backdrop-filter: blur(8px);
+    }
+
+    .game-modal {
+      width: min(520px, 100%);
+      border: 2px solid rgba(255,255,255,.48);
+      border-radius: 28px;
+      background: linear-gradient(180deg, #fff, #eef5ff);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .game-modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 17px 18px;
+      background: linear-gradient(135deg, rgba(50,183,255,.18), rgba(124,77,255,.14));
+      border-bottom: 2px solid rgba(27,47,120,.09);
+    }
+
+    .game-modal-head h2 { margin: 0; font-size: 24px; font-weight: 1000; }
+    .game-modal-body { display: grid; gap: 14px; padding: 18px; }
+
+    .avatar-choice-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .avatar-choice {
+      min-height: 52px;
+      border-radius: 16px;
+      background: #fff;
+      border: 2px solid #dfe8ff;
+      font-size: 26px;
+      box-shadow: inset 0 -4px 0 rgba(24,50,113,.06);
+    }
+
+    .avatar-choice.selected {
+      border-color: var(--yellow);
+      background: #fff7cf;
+      box-shadow: 0 0 0 4px rgba(255,216,77,.18);
+    }
+
     @keyframes pagePop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
     @keyframes clearBounce { 0% { transform: scale(1); } 45% { transform: scale(1.025); } 100% { transform: scale(1); } }
     @keyframes pulseGlow { 0%,100% { transform: scale(0.94); opacity: var(--aura-opacity, 0); } 50% { transform: scale(1.08); opacity: calc(var(--aura-opacity, 0) + 0.12); } }
@@ -812,39 +977,74 @@
     @keyframes guardianFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
     @keyframes runnerFlash { 0%,100% { transform: translateX(0); filter: brightness(1); } 45% { transform: translateX(4px); filter: brightness(1.18); } 52% { transform: translateX(-3px); } }
     @keyframes fighterFlame { 0%,100% { transform: translateY(0) rotate(-1deg); filter: saturate(1); } 50% { transform: translateY(-5px) rotate(1deg); filter: saturate(1.2); } }
+    @keyframes petBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+    @keyframes auraPulse { 0%,100% { transform: scale(.9); opacity: var(--visual-aura-opacity,.22); } 50% { transform: scale(1.09); opacity: calc(var(--visual-aura-opacity,.22) + .12); } }
+    @keyframes frameShine { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.35); } }
 
     /*
       ==============================
-      Tablet / Phone
+      Responsive Layout
       ==============================
     */
-    @media (max-width: 980px) {
-      .hero, .character-layout, .grid-2, .grid-3, .league-awards { grid-template-columns: 1fr; }
-      .player-strip { grid-template-columns: 1fr; }
+
+    /* Tablet Portrait: 481px ~ 900px */
+    @media (max-width: 900px) {
+      .app { padding-bottom: calc(160px + env(safe-area-inset-bottom, 0px)); }
+      .character-layout { grid-template-columns: 1fr; }
+      .character-stage { min-height: 320px; }
+      .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .player-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .parent-grid { grid-template-columns: 1fr 1fr; }
+      .bottom-tabs { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+      .tab-btn { min-height: 54px; }
     }
 
-    @media (max-width: 680px) {
-      .app { width: min(100% - 16px, 1180px); padding-top: 10px; padding-bottom: 132px; }
-      .hero { grid-template-columns: 1fr auto; min-height: auto; padding: 13px 14px; border-radius: 20px; gap: 10px; }
-      .hero h1 { font-size: 28px; }
+    /* Mobile: ≤ 480px */
+    @media (max-width: 480px) {
+      .app {
+        width: calc(100% - 16px);
+        padding-top: 8px;
+        padding-bottom: calc(168px + env(safe-area-inset-bottom, 0px));
+      }
+      .hero {
+        grid-template-columns: 1fr auto;
+        min-height: auto;
+        padding: 10px 12px;
+        border-radius: 18px;
+        gap: 8px;
+      }
+      .hero h1 { font-size: 22px; }
       .hero p { display: none; }
-      .date-pill { justify-self: end; min-width: 0; min-height: 46px; padding: 8px 11px; font-size: 12px; }
+      .date-pill { min-width: 0; min-height: 40px; padding: 6px 10px; font-size: 11px; }
       .date-pill small { font-size: 9px; }
-      .player-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin: 9px 0 12px; }
-      .player-mini { grid-template-columns: 1fr; justify-items: center; gap: 5px; min-height: 86px; padding: 8px 6px; border-radius: 16px; text-align: center; }
-      .mini-avatar { width: 42px; height: 42px; border-width: 3px; font-size: 22px; }
-      .player-mini h3 { font-size: 15px; }
-      .player-mini p { margin-top: 2px; font-size: 10px; line-height: 1.2; }
-      .panel-head { align-items: flex-start; flex-direction: column; }
+      .player-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin: 7px 0 10px; }
+      .player-mini { grid-template-columns: 1fr; justify-items: center; gap: 3px; min-height: 78px; padding: 7px 5px; border-radius: 14px; text-align: center; }
+      .player-mini h3 { font-size: 13px; }
+      .player-mini p { margin-top: 1px; font-size: 9px; line-height: 1.2; }
+      .panel-head { align-items: flex-start; flex-direction: column; gap: 8px; }
+      .panel-body { padding: 12px; }
+      .bottom-tabs { grid-template-columns: repeat(3, 1fr); gap: 5px; padding: 7px; }
+      .tab-btn { min-height: 50px; font-size: 11px; gap: 1px; }
+      .tab-btn b { font-size: 18px; }
+      .character-stage { min-height: 260px; padding: 14px; }
+      .character-layout { grid-template-columns: 1fr; }
+      .league-awards { grid-template-columns: 1fr; }
       .parent-grid { grid-template-columns: 1fr; }
-      .bottom-tabs { grid-template-columns: repeat(3, 1fr); }
-      .tab-btn { min-height: 54px; }
-      .avatar-big { width: 134px; height: 134px; font-size: 54px; }
-      .avatar-wrap::before { width: 178px; height: 178px; }
-      .class-mark { bottom: 70px; font-size: 12px; }
-      .character-stage { min-height: 360px; }
-      .btn { width: 100%; }
+      .vote-board .grid-2 { grid-template-columns: 1fr; }
+      .btn:not(.small) { width: 100%; }
+      .photo-controls { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+      .photo-controls .btn { flex-shrink: 0; width: auto; }
+      .shop-card { min-height: auto; }
+      .mission-card, .shop-card, .inventory-card { padding: 12px; }
+      .notice-board, .vote-board, .photo-studio, .challenge-box { padding: 12px; }
+      .team-photo { gap: 6px; padding: 8px; min-height: 170px; }
+      .photo-player { min-height: 130px; padding: 8px 6px; }
+      .character-visual.photo { --visual-size: 60px; }
+      .award-card { padding: 10px; }
+      .next-reward { padding: 12px; }
+      .equip-chip { padding: 7px 8px; min-height: 42px; }
+      .stat { padding: 10px; }
+      .stat strong { font-size: 18px; }
     }
   </style>
 </head>
@@ -878,6 +1078,7 @@
   </nav>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div id="modalRoot"></div>
 
   <script>
     /*
@@ -890,9 +1091,9 @@
     const PARENT_PASSWORD = "0903";
 
     const KIDS = [
-      { id: "jinwoo", name: "진우", nickname: "방패 용사", color: "#3f7cff", avatar: "🛡️", image: "./assets/jinwoo-guardian.png" },
-      { id: "jinyoung", name: "진영", nickname: "번개 러너", color: "#20b486", avatar: "⚡", image: "./assets/jinyoung-lightning.png" },
-      { id: "jinhwan", name: "진환", nickname: "불꽃 파이터", color: "#ff7a45", avatar: "🔥", image: "./assets/jinhwan-firefighter.png" }
+      { id: "jinwoo", name: "복댕이", nickname: "", color: "#3f7cff", avatar: "🛡️", image: "./assets/jinwoo-guardian.png", defaultSkin: "skin_guardian_basic" },
+      { id: "jinyoung", name: "축복이", nickname: "", color: "#20b486", avatar: "⚡", image: "./assets/jinyoung-lightning.png", defaultSkin: "skin_lightning_basic" },
+      { id: "jinhwan", name: "복복이", nickname: "", color: "#ff7a45", avatar: "🔥", image: "./assets/jinhwan-firefighter.png", defaultSkin: "skin_fire_basic" }
     ];
 
     const QUESTS = [
@@ -919,19 +1120,41 @@
     ];
 
     const DECOR_ITEMS = [
-      { id: "basic_avatar", type: "avatar", name: "기본 아바타", icon: "🙂", level: 1, cost: 0 },
-      { id: "basic_bg", type: "background", name: "기본 배경", icon: "🌤️", level: 1, cost: 0 },
-      { id: "ninja_band", type: "head", name: "닌자 머리띠", icon: "🥷", level: 2, cost: 80 },
-      { id: "hero_avatar", type: "avatar", name: "히어로 아바타", icon: "🦸", level: 2, cost: 110 },
-      { id: "robot_helmet", type: "head", name: "로봇 헬멧", icon: "🤖", level: 3, cost: 140 },
-      { id: "robot_avatar", type: "avatar", name: "로봇 아바타", icon: "🤖", level: 3, cost: 170 },
-      { id: "fire_aura", type: "aura", name: "불꽃 오라", icon: "🔥", level: 4, cost: 220 },
-      { id: "dragon_pet", type: "pet", name: "드래곤 펫", icon: "🐲", level: 5, cost: 340 },
-      { id: "gold_frame", type: "frame", name: "황금 프레임", icon: "🏅", level: 6, cost: 460 },
-      { id: "space_bg", type: "background", name: "우주 배경", icon: "🌌", level: 7, cost: 620 },
-      { id: "legend_crown", type: "head", name: "전설 왕관", icon: "👑", level: 8, cost: 800 },
-      { id: "mission_badge", type: "badge", name: "미션 클리어 배지", icon: "🎖️", level: 2, cost: 90 },
-      { id: "speed_title", type: "title", name: "초고속 해결사", icon: "💨", level: 3, cost: 150 }
+      { id: "basic_avatar", slot: "skin", category: "스킨", name: "기본 스킨", icon: "🙂", level: 1, cost: 0, rarity: "일반" },
+      { id: "skin_guardian_basic", slot: "skin", category: "스킨", name: "기본 방패 용사", icon: "🛡️", level: 1, cost: 0, rarity: "일반" },
+      { id: "skin_lightning_basic", slot: "skin", category: "스킨", name: "기본 번개 러너", icon: "⚡", level: 1, cost: 0, rarity: "일반" },
+      { id: "skin_fire_basic", slot: "skin", category: "스킨", name: "기본 불꽃 파이터", icon: "🔥", level: 1, cost: 0, rarity: "일반" },
+      { id: "hero_avatar", slot: "skin", category: "스킨", name: "히어로 아바타", icon: "🦸", level: 2, cost: 110, rarity: "희귀" },
+      { id: "robot_avatar", slot: "skin", category: "스킨", name: "로봇 아바타", icon: "🤖", level: 3, cost: 170, rarity: "에픽" },
+      { id: "blue_sword", slot: "weapon", category: "무기", name: "푸른 검", icon: "🗡️", level: 2, cost: 120, rarity: "희귀" },
+      { id: "lightning_dagger", slot: "weapon", category: "무기", name: "번개 단검", icon: "⚔️", level: 3, cost: 180, rarity: "에픽" },
+      { id: "fire_sword", slot: "weapon", category: "무기", name: "불꽃 검", icon: "🔥", level: 4, cost: 240, rarity: "에픽" },
+      { id: "legend_shield", slot: "weapon", category: "무기", name: "전설 방패", icon: "🛡️", level: 5, cost: 360, rarity: "전설" },
+      { id: "ninja_band", slot: "headgear", category: "머리 장비", name: "닌자 머리띠", icon: "🥷", level: 2, cost: 80, rarity: "희귀" },
+      { id: "robot_helmet", slot: "headgear", category: "머리 장비", name: "로봇 헬멧", icon: "🤖", level: 3, cost: 140, rarity: "에픽" },
+      { id: "legend_crown", slot: "headgear", category: "머리 장비", name: "전설 왕관", icon: "👑", level: 8, cost: 800, rarity: "신화" },
+      { id: "blue_guard_aura", slot: "aura", category: "오라", name: "파란 방어 오라", icon: "🔵", level: 2, cost: 130, rarity: "희귀" },
+      { id: "lightning_aura", slot: "aura", category: "오라", name: "번개 오라", icon: "⚡", level: 3, cost: 200, rarity: "에픽" },
+      { id: "fire_aura", slot: "aura", category: "오라", name: "불꽃 오라", icon: "🔥", level: 4, cost: 220, rarity: "에픽" },
+      { id: "gold_aura", slot: "aura", category: "오라", name: "황금 오라", icon: "✨", level: 6, cost: 480, rarity: "전설" },
+      { id: "mini_dog", slot: "pet", category: "펫", name: "미니 강아지", icon: "🐶", level: 2, cost: 90, rarity: "일반" },
+      { id: "mini_robot", slot: "pet", category: "펫", name: "미니 로봇", icon: "🤖", level: 3, cost: 150, rarity: "희귀" },
+      { id: "dragon_pet", slot: "pet", category: "펫", name: "미니 드래곤", icon: "🐲", level: 5, cost: 340, rarity: "전설" },
+      { id: "basic_bg", slot: "background", category: "배경", name: "기본 배경", icon: "🌤️", level: 1, cost: 0, rarity: "일반" },
+      { id: "forest_training", slot: "background", category: "배경", name: "숲속 훈련장", icon: "🌲", level: 2, cost: 100, rarity: "희귀" },
+      { id: "lightning_arena", slot: "background", category: "배경", name: "번개 아레나", icon: "⚡", level: 3, cost: 180, rarity: "에픽" },
+      { id: "fire_stadium", slot: "background", category: "배경", name: "불꽃 경기장", icon: "🏟️", level: 4, cost: 230, rarity: "에픽" },
+      { id: "space_bg", slot: "background", category: "배경", name: "우주 배경", icon: "🌌", level: 7, cost: 620, rarity: "전설" },
+      { id: "basic_frame", slot: "frame", category: "프레임", name: "기본 프레임", icon: "⬜", level: 1, cost: 0, rarity: "일반" },
+      { id: "blue_frame", slot: "frame", category: "프레임", name: "파란 프레임", icon: "🔷", level: 2, cost: 90, rarity: "희귀" },
+      { id: "fire_frame", slot: "frame", category: "프레임", name: "불꽃 프레임", icon: "🔶", level: 4, cost: 230, rarity: "에픽" },
+      { id: "gold_frame", slot: "frame", category: "프레임", name: "황금 프레임", icon: "🏅", level: 6, cost: 460, rarity: "전설" },
+      { id: "title_starter", slot: "title", category: "칭호", name: "시작하는 용사", icon: "🌱", level: 1, cost: 0, rarity: "일반" },
+      { id: "title_clearer", slot: "title", category: "칭호", name: "미션 클리어러", icon: "🎯", level: 2, cost: 90, rarity: "희귀" },
+      { id: "title_family_hero", slot: "title", category: "칭호", name: "가족 히어로", icon: "💪", level: 4, cost: 220, rarity: "에픽" },
+      { id: "title_legend_kid", slot: "title", category: "칭호", name: "전설의 어린이", icon: "👑", level: 8, cost: 700, rarity: "신화" },
+      { id: "mission_badge", slot: "badge", category: "배지", name: "미션 클리어 배지", icon: "🎖️", level: 2, cost: 90, rarity: "희귀" },
+      { id: "speed_title", slot: "title", category: "칭호", name: "초고속 해결사", icon: "💨", level: 3, cost: 150, rarity: "희귀" }
     ];
 
     const FAMILY_REWARDS = [
@@ -950,10 +1173,10 @@
     ];
 
     const UPDATE_NOTICES = [
-      "다음 주 새 미션이 열려요!",
-      "새로운 장비가 곧 등장해요!",
-      "형제 리그 시즌 이벤트 준비 중!",
-      "다음 업데이트까지 미션을 클리어하고 코인을 모아두세요!"
+      "v1.3 스킨샵 오픈!",
+      "새 무기, 오라, 펫, 배경을 장착할 수 있어요.",
+      "미션을 클리어하고 코인을 모아 나만의 캐릭터를 완성하세요.",
+      "전설 아이템과 신화 아이템은 레벨을 올리면 열려요!"
     ];
 
     const MISSION_VOTE_CANDIDATES = [
@@ -980,6 +1203,9 @@
     */
     let selectedKidId = KIDS[0].id;
     let activeTab = "character";
+    let inventoryFilter = "전체";
+    let settingsModalOpen = false;
+    let selectedSettingsAvatar = "";
     let parentOpen = false;
     let parentUnlocked = false;
     let toastTimer = null;
@@ -988,7 +1214,8 @@
     const els = {
       todayDate: document.getElementById("todayDate"),
       playerStrip: document.getElementById("playerStrip"),
-      toast: document.getElementById("toast")
+      toast: document.getElementById("toast"),
+      modalRoot: document.getElementById("modalRoot")
     };
 
     function getTodayKey() {
@@ -1020,9 +1247,22 @@
       const inventory = Array.isArray(old.inventory) ? old.inventory : ["basic_avatar", "basic_bg"];
       if (!inventory.includes("basic_avatar")) inventory.push("basic_avatar");
       if (!inventory.includes("basic_bg")) inventory.push("basic_bg");
+      if (!inventory.includes("basic_frame")) inventory.push("basic_frame");
+      if (!inventory.includes("title_starter")) inventory.push("title_starter");
+      if (!inventory.includes(kid.defaultSkin)) inventory.push(kid.defaultSkin);
+      const oldEquip = old.equippedItems || {};
+      const skin = oldEquip.skin || oldEquip.avatar || kid.defaultSkin || "basic_avatar";
+      const headgear = oldEquip.headgear || oldEquip.head || null;
+      const defaultName = defaultKidName(kid.id);
+      const oldName = old.name || kid.name || defaultName;
+      const migratedName = ["진우", "진영", "진환"].includes(oldName) ? defaultName : defaultName;
+      const oldNickname = old.nickname || "";
+      const defaultNicknames = ["진우", "진영", "진환", "방패 용사", "번개 러너", "불꽃 파이터", defaultName, kid.nickname, ""];
+      const nickname = defaultNicknames.includes(oldNickname) ? "" : oldNickname;
 
       return {
-        nickname: old.nickname || kid.nickname || kid.name,
+        name: migratedName,
+        nickname,
         avatar: old.avatar || kid.avatar,
         xp,
         coins,
@@ -1032,14 +1272,17 @@
         inventory,
         badges: Array.isArray(old.badges) ? old.badges : [],
         equippedItems: {
-          avatar: old.equippedItems?.avatar || "basic_avatar",
-          background: old.equippedItems?.background || "basic_bg",
-          head: old.equippedItems?.head || null,
-          aura: old.equippedItems?.aura || null,
-          pet: old.equippedItems?.pet || null,
-          frame: old.equippedItems?.frame || null,
-          title: old.equippedItems?.title || null,
-          badge: old.equippedItems?.badge || null
+          skin,
+          weapon: oldEquip.weapon || null,
+          headgear,
+          aura: oldEquip.aura || null,
+          pet: oldEquip.pet || null,
+          background: oldEquip.background || "basic_bg",
+          frame: oldEquip.frame || "basic_frame",
+          title: oldEquip.title || "title_starter",
+          badge: oldEquip.badge || null,
+          avatar: skin,
+          head: headgear
         },
         stats: {
           weekKey: old.stats?.weekKey || getWeekKey(),
@@ -1055,7 +1298,7 @@
     function makeGameMeta(old = {}) {
       const oldVotes = old.missionVotes?.votes || {};
       return {
-        version: "1.2",
+        version: "1.3",
         updateNotices: Array.isArray(old.updateNotices) && old.updateNotices.length ? old.updateNotices : UPDATE_NOTICES,
         teamPhotoBackground: old.teamPhotoBackground || "default",
         missionVotes: {
@@ -1128,18 +1371,87 @@
     function kidData(id = selectedKidId) { return state.kids[id]; }
     function itemById(id) { return DECOR_ITEMS.find((item) => item.id === id); }
     function doneCount(id) { return QUESTS.filter((quest) => kidData(id).todayDone?.[quest.id]).length; }
+    function defaultKidName(id) {
+      return { jinwoo: "복댕이", jinyoung: "축복이", jinhwan: "복복이" }[id] || kidConfig(id).name || "플레이어";
+    }
+    function displayName(kidId) {
+      const data = kidData(kidId);
+      return data?.nickname?.trim() || data?.name || defaultKidName(kidId);
+    }
+    function ideaAuthorName(idea) {
+      if (idea?.kidId && state.kids?.[idea.kidId]) return displayName(idea.kidId);
+      return { "진우": "복댕이", "진영": "축복이", "진환": "복복이" }[idea?.kidName] || idea?.kidName || "우리 팀";
+    }
     function avatarIcon(data, kid) {
-      const equippedAvatar = itemById(data.equippedItems?.avatar);
-      return equippedAvatar && equippedAvatar.id !== "basic_avatar" ? equippedAvatar.icon : (data.avatar || kid.avatar);
+      const equippedSkin = itemById(data.equippedItems?.skin || data.equippedItems?.avatar);
+      if (!equippedSkin || isDefaultSkin(equippedSkin.id)) return data.avatar || kid.avatar;
+      return equippedSkin ? equippedSkin.icon : (data.avatar || kid.avatar);
+    }
+    function isDefaultSkin(skinId) {
+      return ["basic_avatar", "skin_guardian_basic", "skin_lightning_basic", "skin_fire_basic"].includes(skinId);
     }
     function avatarMarkup(data, kid, className) {
       const icon = avatarIcon(data, kid);
       const image = kid.image || "";
+      const skinId = data.equippedItems ? (data.equippedItems.skin || data.equippedItems.avatar) : null;
+      const useDefaultImage = !skinId || isDefaultSkin(skinId);
       return `
         <span class="${className}">
-          ${image ? `<img class="avatar-img" src="${image}" alt="${kid.name} 캐릭터 이미지" onerror="this.style.display='none'">` : ""}
+          ${image && useDefaultImage ? `<img class="avatar-img" src="${image}" alt="${kid.name} 캐릭터" onerror="this.style.display='none'">` : ""}
           <span class="avatar-fallback">${icon}</span>
         </span>`;
+    }
+    function getEquippedItem(kidId, slot, visualState = null) {
+      const data = visualState || kidData(kidId);
+      return itemById(data.equippedItems?.[slot]) || null;
+    }
+    function getCharacterVisualState(kidId, previewItem = null) {
+      const data = kidData(kidId);
+      const equippedItems = { ...data.equippedItems };
+      if (previewItem) {
+        const slot = itemSlot(previewItem);
+        equippedItems[slot] = previewItem.id;
+        if (slot === "skin") equippedItems.avatar = previewItem.id;
+        if (slot === "headgear") equippedItems.head = previewItem.id;
+      }
+      return { ...data, equippedItems };
+    }
+    function visualClasses(visualState) {
+      const aura = visualState.equippedItems?.aura;
+      const frame = visualState.equippedItems?.frame;
+      return [
+        aura === "fire_aura" ? "aura-fire" : "",
+        aura === "lightning_aura" ? "aura-lightning" : "",
+        aura === "blue_guard_aura" ? "aura-blue" : "",
+        aura === "gold_aura" ? "aura-gold" : "",
+        frame === "blue_frame" ? "frame-blue" : "",
+        frame === "fire_frame" ? "frame-fire" : "",
+        frame === "gold_frame" ? "frame-gold" : "",
+        frame === "gold_frame" || itemById(frame)?.rarity === "신화" ? "frame-mythic" : ""
+      ].filter(Boolean).join(" ");
+    }
+    function renderCharacterAvatar(kidOrId, options = {}) {
+      const kid = typeof kidOrId === "string" ? kidConfig(kidOrId) : kidOrId;
+      const visualState = getCharacterVisualState(kid.id, options.previewItem || null);
+      if (options.avatarOverride) {
+        visualState.avatar = options.avatarOverride;
+        visualState.equippedItems.skin = "basic_avatar";
+        visualState.equippedItems.avatar = "basic_avatar";
+      }
+      const size = options.size || "big";
+      const head = getEquippedItem(kid.id, "headgear", visualState) || getEquippedItem(kid.id, "head", visualState);
+      const weapon = getEquippedItem(kid.id, "weapon", visualState);
+      const pet = getEquippedItem(kid.id, "pet", visualState);
+      const badge = getEquippedItem(kid.id, "badge", visualState);
+      return `<div class="character-visual ${size} ${classCss(kid.id)} ${visualClasses(visualState)}" style="--kid-color:${kid.color};${stageVars(visualState)}">
+        <div class="visual-aura"></div>
+        <div class="visual-ring"></div>
+        ${avatarMarkup(visualState, kid, "visual-core")}
+        ${head ? `<span class="visual-layer visual-head">${head.icon}</span>` : ""}
+        ${weapon ? `<span class="visual-layer visual-weapon">${weapon.icon}</span>` : ""}
+        ${pet ? `<span class="visual-layer visual-pet">${pet.icon}</span>` : ""}
+        ${badge ? `<span class="visual-layer visual-badge">${badge.icon}</span>` : ""}
+      </div>`;
     }
     function equippedItem(data, type) {
       return itemById(data.equippedItems?.[type]) || null;
@@ -1147,6 +1459,9 @@
     function equipLabel(data, type, fallback) {
       const item = equippedItem(data, type);
       return item ? `${item.icon} ${item.name}` : fallback;
+    }
+    function itemSlot(item) {
+      return item?.slot || item?.type || "skin";
     }
     function className(kidId) {
       return { jinwoo: "방패 용사 · 방어형", jinyoung: "번개 러너 · 스피드형", jinhwan: "불꽃 파이터 · 공격형" }[kidId] || "미션 플레이어";
@@ -1223,7 +1538,7 @@
       addXpCoins(selectedKidId, quest.xp, quest.coins);
       syncBadges(selectedKidId);
       const afterLevel = levelInfo(data.xp).current.level;
-      addHistory(`${kid.name}가 ${quest.title} 미션 클리어! +${quest.xp} XP / +${quest.coins} 코인`);
+      addHistory(`${displayName(selectedKidId)}가 ${quest.title} 미션 클리어! +${quest.xp} XP / +${quest.coins} 코인`);
       const remain = levelInfo(data.xp).remain;
       const extra = afterLevel > beforeLevel
         ? `레벨업! 레벨 ${afterLevel} 새 아이템을 확인해봐!`
@@ -1242,7 +1557,7 @@
       data.coins = Math.max(0, data.coins - quest.coins);
       data.xp = Math.max(0, data.xp - quest.xp);
       data.stats.weeklyXp = Math.max(0, data.stats.weeklyXp - quest.xp);
-      addHistory(`${kid.name}: ${quest.title} 미션 되돌리기 -${quest.xp} XP / -${quest.coins} 코인`);
+      addHistory(`${displayName(selectedKidId)}: ${quest.title} 미션 되돌리기 -${quest.xp} XP / -${quest.coins} 코인`);
       saveAndRender("<strong>미션을 되돌렸어요</strong><span>XP와 코인을 원래대로 조정했습니다.</span>");
     }
 
@@ -1264,7 +1579,7 @@
       if (!confirm(`${item.name}을 ${item.cost} 코인으로 구매할까요?`)) return;
       spendCoins(selectedKidId, item.cost);
       data.inventory.push(id);
-      addHistory(`${kidConfig(selectedKidId).name}이 꾸미기 아이템 구매! ${item.name} -${item.cost} 코인`);
+      addHistory(`${displayName(selectedKidId)}이 꾸미기 아이템 구매! ${item.name} -${item.cost} 코인`);
       saveAndRender(`${item.name} 구매 완료! 보관함에서 착용하세요.`);
     }
 
@@ -1272,9 +1587,9 @@
       const reward = FAMILY_REWARDS.find((r) => r.id === id);
       const data = kidData();
       if (!reward || data.coins < reward.cost) return;
-      if (!confirm(`${kidConfig(selectedKidId).name}의 ${reward.cost} 코인으로 "${reward.title}" 보상을 교환할까요?`)) return;
+      if (!confirm(`${displayName(selectedKidId)}의 ${reward.cost} 코인으로 "${reward.title}" 보상을 교환할까요?`)) return;
       spendCoins(selectedKidId, reward.cost);
-      addHistory(`${kidConfig(selectedKidId).name}이 가족 보상 교환! ${reward.title} -${reward.cost} 코인`);
+      addHistory(`${displayName(selectedKidId)}이 가족 보상 교환! ${reward.title} -${reward.cost} 코인`);
       saveAndRender("가족 보상을 교환했습니다.");
     }
 
@@ -1282,16 +1597,20 @@
       const item = itemById(id);
       const data = kidData();
       if (!item || !data.inventory.includes(id)) return;
-      data.equippedItems[item.type] = id;
-      if (item.type === "badge" && !data.badges.includes(item.name)) data.badges.push(item.name);
-      saveAndRender(`${item.name} 착용 완료`);
+      const slot = itemSlot(item);
+      data.equippedItems[slot] = id;
+      if (slot === "skin") data.equippedItems.avatar = id;
+      if (slot === "headgear") data.equippedItems.head = id;
+      if (slot === "badge" && !data.badges.includes(item.name)) data.badges.push(item.name);
+      saveAndRender(`${item.name} 장착 완료`);
     }
 
     function unequipItem(type) {
       const data = kidData();
-      if (type === "avatar" || type === "background") return;
+      if (type === "skin" || type === "avatar" || type === "background" || type === "frame" || type === "title") return;
       data.equippedItems[type] = null;
-      saveAndRender("착용을 해제했습니다.");
+      if (type === "headgear") data.equippedItems.head = null;
+      saveAndRender("장착을 해제했습니다.");
     }
 
     function submitMissionIdea() {
@@ -1316,14 +1635,14 @@
       ideas.unshift({
         id: `idea_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
         kidId: selectedKidId,
-        kidName: kid.name,
+        kidName: displayName(selectedKidId),
         text,
         createdAt: new Date().toISOString(),
         status: "pending"
       });
       state.gameMeta.missionIdeas = ideas.slice(0, 50);
       input.value = "";
-      addHistory(`${kid.name}: 새 미션 아이디어 제출 - ${text}`);
+      addHistory(`${displayName(selectedKidId)}: 새 미션 아이디어 제출 - ${text}`);
       saveAndRender("좋은 아이디어예요! 다음 업데이트 후보에 저장됐어요.");
     }
 
@@ -1349,23 +1668,72 @@
 
     function openCharacterSettings() {
       const data = kidData();
-      const kid = kidConfig(selectedKidId);
-      const nickname = prompt("새 닉네임을 입력하세요.", data.nickname || kid.nickname || kid.name);
-      if (nickname === null) return;
-      const cleanName = nickname.trim();
-      if (cleanName) data.nickname = cleanName.slice(0, 16);
+      selectedSettingsAvatar = data.avatar || kidConfig(selectedKidId).avatar;
+      settingsModalOpen = true;
+      renderSettingsModal();
+    }
 
-      const choices = defaultAvatarChoices();
-      const avatar = prompt(`아바타 이모지를 골라 입력하세요.\n추천: ${choices.join(" ")}`, data.avatar || kid.avatar);
-      if (avatar !== null) {
-        const cleanAvatar = avatar.trim();
-        if (cleanAvatar) {
-          data.avatar = cleanAvatar.slice(0, 4);
+    function closeCharacterSettings() {
+      settingsModalOpen = false;
+      renderSettingsModal();
+    }
+
+    function saveCharacterSettings() {
+      const data = kidData();
+      const kid = kidConfig(selectedKidId);
+      const input = document.getElementById("settingsNickname");
+      const cleanName = input?.value.trim();
+      data.nickname = cleanName ? cleanName.slice(0, 16) : "";
+      if (selectedSettingsAvatar) {
+        data.avatar = selectedSettingsAvatar.slice(0, 4);
+        if (isDefaultSkin(data.equippedItems.skin)) {
+          data.equippedItems.skin = "basic_avatar";
           data.equippedItems.avatar = "basic_avatar";
         }
+        if (!data.inventory.includes("basic_avatar")) data.inventory.push("basic_avatar");
       }
-      addHistory(`${kid.name}: 캐릭터 설정 변경`);
-      saveAndRender("<strong>캐릭터 설정 저장!</strong><span>내 캐릭터와 형제 리그에 반영됐어요.</span>");
+      addHistory(`${displayName(selectedKidId)}: 캐릭터 설정 변경`);
+      settingsModalOpen = false;
+      saveAndRender("<strong>캐릭터 설정 저장!</strong><span>내 캐릭터와 형제 리그에 바로 반영됐어요.</span>");
+    }
+
+    function renderSettingsModal() {
+      if (!settingsModalOpen) {
+        els.modalRoot.innerHTML = "";
+        return;
+      }
+      const data = kidData();
+      const kid = kidConfig(selectedKidId);
+      const choices = defaultAvatarChoices();
+      els.modalRoot.innerHTML = `<div class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+        <div class="game-modal">
+          <div class="game-modal-head">
+            <h2 id="settingsTitle">캐릭터 설정</h2>
+            <button class="btn alt small" type="button" id="closeSettings">닫기</button>
+          </div>
+          <div class="game-modal-body">
+            <div class="preview-box">${renderCharacterAvatar(kid, { size: "preview", avatarOverride: selectedSettingsAvatar })}</div>
+            <div class="field">
+              <label for="settingsNickname">내 캐릭터 이름</label>
+              <input id="settingsNickname" type="text" maxlength="16" value="${escapeHtml(data.nickname || "")}" placeholder="${defaultKidName(selectedKidId)}">
+            </div>
+            <div>
+              <p class="card-sub" style="margin-bottom:8px;"><b>대표 아바타 고르기</b></p>
+              <div class="avatar-choice-grid">
+                ${choices.map((icon) => `<button class="avatar-choice ${selectedSettingsAvatar === icon ? "selected" : ""}" type="button" data-avatar-choice="${icon}">${icon}</button>`).join("")}
+              </div>
+            </div>
+            <p class="card-sub">스킨, 무기, 오라, 펫은 스킨샵에서 얻고 보관함에서 장착할 수 있어요.</p>
+            <button class="btn gold" type="button" id="saveSettings">저장하기</button>
+          </div>
+        </div>
+      </div>`;
+      document.getElementById("closeSettings")?.addEventListener("click", closeCharacterSettings);
+      document.getElementById("saveSettings")?.addEventListener("click", saveCharacterSettings);
+      document.querySelectorAll("[data-avatar-choice]").forEach((button) => button.addEventListener("click", () => {
+        selectedSettingsAvatar = button.dataset.avatarChoice;
+        renderSettingsModal();
+      }));
     }
 
     function saveAndRender(message) {
@@ -1385,6 +1753,7 @@
       renderShop();
       renderInventory();
       renderParent();
+      renderSettingsModal();
     }
 
     function renderPlayerStrip() {
@@ -1393,13 +1762,13 @@
         const lvl = levelInfo(data.xp).current;
         return `
           <button class="player-mini ${kid.id === selectedKidId ? "active" : ""}" style="--kid-color:${kid.color}" type="button" data-select="${kid.id}">
-            ${avatarMarkup(data, kid, "mini-avatar")}
-            <span><h3>${kid.name}</h3><p>${className(kid.id)} · 레벨 ${lvl.level}<br>${data.coins} 코인</p></span>
+            ${renderCharacterAvatar(kid, { size: "mini" })}
+            <span><h3>${displayName(kid.id)}</h3><p>${className(kid.id)} · 레벨 ${lvl.level}<br>${data.coins} 코인</p></span>
           </button>`;
       }).join("");
       els.playerStrip.querySelectorAll("[data-select]").forEach((btn) => btn.addEventListener("click", () => {
         selectedKidId = btn.dataset.select;
-        saveAndRender(`${kidConfig(selectedKidId).name} 선택`);
+        saveAndRender(`${displayName(selectedKidId)} 선택`);
       }));
     }
 
@@ -1418,9 +1787,20 @@
       const aura = itemById(data.equippedItems.aura)?.id;
       const frame = itemById(data.equippedItems.frame)?.id;
       return [
-        bg === "space_bg" ? "--stage-bg:linear-gradient(135deg,#151a5f,#6b35d6 48%,#111);" : "--stage-bg:linear-gradient(135deg,#dff6ff,#fff4c4);",
-        aura === "fire_aura" ? "--aura-bg:radial-gradient(circle,#ff8845,transparent 66%);--aura-opacity:.48;" : "--aura-opacity:0;",
-        frame === "gold_frame" ? "--frame-border:7px solid #ffd84d;" : "--frame-border:0 solid transparent;"
+        bg === "space_bg" ? "--stage-bg:linear-gradient(135deg,#151a5f,#6b35d6 48%,#111);" :
+          bg === "forest_training" ? "--stage-bg:linear-gradient(135deg,#d9f8ce,#eaffdf 50%,#b7edc6);" :
+          bg === "lightning_arena" ? "--stage-bg:linear-gradient(135deg,#073a43,#20b486 52%,#d9fff4);" :
+          bg === "fire_stadium" ? "--stage-bg:linear-gradient(135deg,#531b15,#ff8845 56%,#ffd84d);" :
+          "--stage-bg:linear-gradient(135deg,#dff6ff,#fff4c4);",
+        aura === "fire_aura" ? "--aura-bg:radial-gradient(circle,#ff8845,transparent 66%);--aura-opacity:.48;" :
+          aura === "lightning_aura" ? "--aura-bg:radial-gradient(circle,#2ee59d,transparent 66%);--aura-opacity:.42;" :
+          aura === "gold_aura" ? "--aura-bg:radial-gradient(circle,#ffd84d,transparent 66%);--aura-opacity:.46;" :
+          aura === "blue_guard_aura" ? "--aura-bg:radial-gradient(circle,#2f7bff,transparent 66%);--aura-opacity:.38;" :
+          "--aura-opacity:0;",
+        frame === "gold_frame" ? "--frame-border:7px solid #ffd84d;" :
+          frame === "blue_frame" ? "--frame-border:7px solid #3f7cff;" :
+          frame === "fire_frame" ? "--frame-border:7px solid #ff8845;" :
+          "--frame-border:3px solid rgba(255,255,255,.75);"
       ].join("");
     }
 
@@ -1429,26 +1809,24 @@
       const data = kidData();
       const info = levelInfo(data.xp);
       const unlock = nextUnlock(info.current.level);
-      const head = itemById(data.equippedItems.head);
-      const pet = itemById(data.equippedItems.pet);
       const badge = itemById(data.equippedItems.badge)?.name || data.badges[0] || "첫 미션 대기";
       const title = itemById(data.equippedItems.title)?.name || info.current.title;
       const photoBg = state.gameMeta.teamPhotoBackground || "default";
+      const evolution = evolutionName(kid.id, info.current.level);
+      const nextEvo = nextEvolution(kid.id, info.current.level);
+      const targetItem = nextTargetItem(data, info.current.level);
       document.getElementById("tab-character").innerHTML = `
         <section class="panel">
-          <div class="panel-head"><h2>내 캐릭터</h2><span class="chip">${kid.name} 출전 중</span></div>
+          <div class="panel-head"><h2>내 캐릭터</h2><span class="chip">${displayName(selectedKidId)} 출전 중</span></div>
           <div class="panel-body character-layout">
             <div class="character-stage ${classCss(kid.id)}" style="--kid-color:${kid.color};${stageVars(data)}">
               <div class="aura"></div>
-              <div class="avatar-wrap">
-                ${head ? `<span class="head-item">${head.icon}</span>` : ""}
-                ${avatarMarkup(data, kid, "avatar-big")}
-                ${pet ? `<span class="pet-item">${pet.icon}</span>` : ""}
-              </div>
+              <div class="avatar-wrap">${renderCharacterAvatar(kid, { size: "big" })}</div>
               <span class="class-mark">${className(kid.id)}</span>
               <div class="nickname">${data.nickname}</div>
               <div class="equipped-line">
                 <span class="chip">레벨 ${info.current.level}</span>
+                <span class="chip">${evolution}</span>
                 <span class="chip">${title}</span>
                 <span class="chip">대표 배지: ${badge}</span>
               </div>
@@ -1456,11 +1834,14 @@
             <div class="stack">
               <button class="btn gold" type="button" id="characterSettings">캐릭터 설정</button>
               <div class="equipped-board">
-                <div class="equip-chip"><span>🧑</span><span><small>아바타</small>${equipLabel(data, "avatar", "기본 아바타")}</span></div>
+                <div class="equip-chip"><span>🧑</span><span><small>스킨</small>${equipLabel(data, "skin", "기본 스킨")}</span></div>
+                <div class="equip-chip"><span>⚔️</span><span><small>무기</small>${equipLabel(data, "weapon", "무기 없음")}</span></div>
+                <div class="equip-chip"><span>🎩</span><span><small>머리 장비</small>${equipLabel(data, "headgear", "머리 장비 없음")}</span></div>
                 <div class="equip-chip"><span>🌄</span><span><small>배경</small>${equipLabel(data, "background", "기본 배경")}</span></div>
                 <div class="equip-chip"><span>✨</span><span><small>오라</small>${equipLabel(data, "aura", "오라 없음")}</span></div>
                 <div class="equip-chip"><span>🖼️</span><span><small>프레임</small>${equipLabel(data, "frame", "기본 프레임")}</span></div>
                 <div class="equip-chip"><span>🐾</span><span><small>펫</small>${equipLabel(data, "pet", "펫 없음")}</span></div>
+                <div class="equip-chip"><span>🏷️</span><span><small>대표 칭호</small>${title}</span></div>
                 <div class="equip-chip"><span>🎖️</span><span><small>대표 배지</small>${badge}</span></div>
               </div>
               <div class="grid-2">
@@ -1473,6 +1854,12 @@
                 <h3>다음 레벨까지 ${info.remain === 0 ? "최고 레벨" : `${info.remain} XP`}</h3>
                 <div class="xp-bar" aria-label="XP 게이지"><span style="width:${info.progress}%"></span></div>
                 <p style="margin-top:10px;">다음 레벨 보상: ${unlock ? `${unlock.icon} ${unlock.name}` : "모든 레벨 보상 언락 완료"}</p>
+                <p style="margin-top:8px;">다음 진화: ${nextEvo ? `레벨 ${nextEvo[0]} ${nextEvo[1]}` : "최종 진화 완료"}</p>
+              </div>
+              <div class="next-reward">
+                <h3>다음 목표 아이템</h3>
+                <p>${targetItem ? `${targetItem.icon} ${targetItem.name}까지 레벨 ${targetItem.level} · ${targetItem.cost} 코인 필요` : "모든 목표 아이템을 보유 중이에요!"}</p>
+                <p style="margin-top:8px;">미션을 클리어해서 코인을 모아보세요!</p>
               </div>
               <div class="panel" style="box-shadow:none;">
                 <div class="panel-body">
@@ -1493,14 +1880,15 @@
                   const teamData = kidData(teamKid.id);
                   const teamLevel = levelInfo(teamData.xp).current;
                   return `<div class="photo-player" style="--kid-color:${teamKid.color}">
-                    ${avatarMarkup(teamData, teamKid, "mini-avatar")}
-                    <div>${teamKid.name}</div>
+                    ${renderCharacterAvatar(teamKid, { size: "photo" })}
+                    <div>${displayName(teamKid.id)}</div>
                     <small>${itemById(teamData.equippedItems.title)?.name || teamLevel.title}</small>
-                    <small>${equipLabel(teamData, "pet", "대표 아이템 준비 중")}</small>
+                    <small>${equipLabel(teamData, "weapon", "무기 준비 중")} · ${equipLabel(teamData, "pet", "펫 준비 중")}</small>
                   </div>`;
                 }).join("")}
               </div>
-              <p class="card-sub" style="margin-top:10px;">오늘의 팀 사진입니다. <b>화면 캡처해서 저장하기</b> 버튼을 누른 뒤 태블릿이나 핸드폰의 캡처 기능으로 저장하세요.</p>
+              <p class="card-sub" style="margin-top:10px;"><b>우리 팀 오늘도 성장 중!</b> 미션을 클리어하고 더 멋진 장비를 모아보세요.</p>
+              <p class="card-sub">오늘의 팀 사진입니다. <b>화면 캡처해서 저장하기</b> 버튼을 누른 뒤 태블릿이나 핸드폰의 캡처 기능으로 저장하세요.</p>
               <button class="btn gold" type="button" id="captureGuide">화면 캡처해서 저장하기</button>
             </div>
           </div>
@@ -1525,7 +1913,7 @@
       }).join("");
       document.getElementById("tab-missions").innerHTML = `
         <section class="panel">
-          <div class="panel-head"><h2>오늘 미션</h2><span class="chip">${kidConfig(selectedKidId).name} · ${doneCount(selectedKidId)}/${QUESTS.length} 클리어</span></div>
+          <div class="panel-head"><h2>오늘 미션</h2><span class="chip">${displayName(selectedKidId)} · ${doneCount(selectedKidId)}/${QUESTS.length} 클리어</span></div>
           <div class="panel-body stack">
             <div class="grid-2">${QUESTS.map((q) => {
               const clear = data.todayDone[q.id];
@@ -1563,7 +1951,7 @@
           ${recent.map((idea) => `<div class="vote-card">
             <div class="card-top"><span class="icon-box">💡</span><span class="state-pill ${idea.status === "selected" ? "ready" : idea.status === "rejected" ? "lock" : "target"}">${ideaStatusName(idea.status)}</span></div>
             <h4 class="card-title">${escapeHtml(idea.text)}</h4>
-            <p class="card-sub">${idea.kidName || kidConfig(idea.kidId).name}의 아이디어 · ${formatIdeaDate(idea.createdAt)}</p>
+            <p class="card-sub">${ideaAuthorName(idea)}의 아이디어 · ${formatIdeaDate(idea.createdAt)}</p>
           </div>`).join("")}
         </div>` : `<div class="empty" style="margin-top:10px;">아직 아이디어가 없습니다. 우리 게임에 넣고 싶은 재미있는 미션을 남겨보세요!</div>`}
       </div>`;
@@ -1580,9 +1968,9 @@
           <div class="panel-head"><h2>형제 리그</h2><span class="chip">서로 자극받는 성장 보드</span></div>
           <div class="panel-body">
             <div class="league-awards">
-              <div class="award-card"><b>🎯</b>오늘의 미션왕<br>${missionKing.name}</div>
-              <div class="award-card"><b>📈</b>이번 주 성장왕<br>${growthKing.name}</div>
-              <div class="award-card"><b>🔥</b>연속 성공왕<br>${streakKing.name}</div>
+              <div class="award-card"><b>🎯</b>오늘의 미션왕<br>${displayName(missionKing.id)}</div>
+              <div class="award-card"><b>📈</b>이번 주 성장왕<br>${displayName(growthKing.id)}</div>
+              <div class="award-card"><b>🔥</b>연속 성공왕<br>${displayName(streakKing.id)}</div>
             </div>
             <div class="challenge-box">
               <h3>다음 도전 목표</h3>
@@ -1593,13 +1981,14 @@
               const lvl = levelInfo(data.xp).current;
               const equipped = Object.values(data.equippedItems).filter(Boolean).map((id) => itemById(id)?.icon).filter(Boolean).join(" ");
               return `<div class="league-card" style="--kid-color:${kid.color}">
-                <div class="card-top">${avatarMarkup(data, kid, "mini-avatar")}<span class="chip">레벨 ${lvl.level}</span></div>
-                <h3 class="card-title">${kid.name} · ${data.nickname}</h3>
+                <div class="card-top">${renderCharacterAvatar(kid, { size: "mini" })}<span class="chip">레벨 ${lvl.level}</span></div>
+                <h3 class="card-title">${displayName(kid.id)}</h3>
                 <p class="card-sub">${className(kid.id)}</p>
+                <p class="card-sub">진화 단계: ${evolutionName(kid.id, lvl.level)}</p>
                 <p class="card-sub">대표 칭호: ${itemById(data.equippedItems.title)?.name || lvl.title}</p>
                 <p class="card-sub">오늘 클리어 ${doneCount(kid.id)}개 · 이번 주 XP ${data.stats.weeklyXp} · 연속 ${data.stats.streakDays}일</p>
                 <p class="card-sub">보유 배지: ${data.badges.length ? data.badges.join(", ") : "아직 없음"}</p>
-                <p class="card-sub">착용 아이템: ${equipped || "기본 장비"}</p>
+                <p class="card-sub">장착 아이템: ${equipped || "기본 장비"}</p>
               </div>`;
             }).join("")}</div>
           </div>
@@ -1609,21 +1998,30 @@
     function renderShop() {
       const data = kidData();
       const lvl = levelInfo(data.xp).current.level;
-      const nextTarget = DECOR_ITEMS.find((item) => !data.inventory.includes(item.id) && (lvl < item.level || data.coins < item.cost));
+      const nextTarget = nextTargetItem(data, lvl);
       document.getElementById("tab-shop").innerHTML = `
         <section class="panel">
           <div class="panel-head"><h2>상점</h2><span class="chip">${data.coins} 코인 보유</span></div>
           <div class="panel-body stack">
-            <div class="panel" style="box-shadow:none;"><div class="panel-head"><h2>꾸미기 상점</h2><span class="chip">레벨 잠금 해제</span></div>
+            <div class="next-reward featured">
+              <h3>다음 목표 아이템</h3>
+              <p>${nextTarget ? `${nextTarget.icon} ${nextTarget.name} · ${nextTarget.category} · ${nextTarget.rarity}` : "모든 스킨샵 아이템을 모으는 중!"}</p>
+              <p style="margin-top:8px;">${nextTarget ? `레벨 ${nextTarget.level} 필요 · ${Math.max(0, nextTarget.cost - data.coins)} 코인만 더 모으면 가까워져요.` : "새 업데이트를 기대해 주세요."}</p>
+            </div>
+            <div class="panel" style="box-shadow:none;"><div class="panel-head"><h2>스킨샵</h2><span class="chip">스킨 · 무기 · 오라 · 펫</span></div>
               <div class="panel-body grid-3">${DECOR_ITEMS.map((item) => {
                 const state = shopState(item, data, lvl);
                 const isTarget = nextTarget?.id === item.id;
-                return `<div class="shop-card ${state.disabled ? "locked" : ""} ${isTarget ? "next-target" : ""}">
-                  <div class="card-top"><span class="icon-box">${item.icon}</span><span class="chip">레벨 ${item.level}</span></div>
+                return `<div class="shop-card ${state.disabled ? "locked" : ""} ${isTarget ? "next-target" : ""} ${rarityClass(item)}">
+                  <div class="card-top"><span class="icon-box">${item.icon}</span><span class="chip">${item.rarity}</span></div>
+                  <div class="preview-box">
+                    ${renderCharacterAvatar(kidConfig(selectedKidId), { size: "preview", previewItem: item })}
+                    <span class="state-pill">장착 미리보기</span>
+                  </div>
                   <span class="state-pill ${isTarget ? "target" : state.cls}">${isTarget ? "다음 목표" : state.text}</span>
                   <h3 class="card-title">${item.name}</h3>
-                  <p class="card-sub">${typeName(item.type)} · 필요 레벨 ${item.level} · ${item.cost} 코인</p>
-                  <p class="card-sub">${state.text}${lvl < item.level ? ` · ${item.level - lvl}레벨만 더!` : data.coins < item.cost && !data.inventory.includes(item.id) ? ` · 미션으로 코인을 모아봐!` : ""}</p>
+                  <p class="card-sub">${item.category || typeName(itemSlot(item))} · 필요 레벨 ${item.level} · ${item.cost} 코인</p>
+                  <p class="card-sub">${state.text}${lvl < item.level ? ` · 조금만 더 하면 열려요!` : data.coins < item.cost && !data.inventory.includes(item.id) ? ` · 미션으로 코인을 모아봐!` : " · 장착하면 캐릭터에 바로 반영돼요."}</p>
                   <button class="btn" type="button" data-buy="${item.id}" ${state.disabled ? "disabled" : ""}>${state.button}</button>
                 </div>`;
               }).join("")}</div>
@@ -1645,29 +2043,46 @@
     function renderInventory() {
       const data = kidData();
       const owned = data.inventory.map(itemById).filter(Boolean);
+      const categories = ["전체", "스킨", "무기", "머리 장비", "오라", "펫", "배경", "프레임", "칭호", "배지"];
+      const filtered = inventoryFilter === "전체" ? owned : owned.filter((item) => (item.category || typeName(itemSlot(item))) === inventoryFilter);
       document.getElementById("tab-inventory").innerHTML = `
         <section class="panel">
-          <div class="panel-head"><h2>보관함</h2><span class="chip">${owned.length}개 보유</span></div>
+          <div class="panel-head"><h2>내 아이템 창고</h2><span class="chip">${owned.length}개 보유</span></div>
           <div class="panel-body">
-            ${owned.length ? `<div class="grid-3">${owned.map((item) => {
-              const equipped = data.equippedItems[item.type] === item.id;
-              return `<div class="inventory-card">
-                <div class="card-top"><span class="icon-box">${item.icon}</span><span class="chip">${equipped ? "현재 착용 중" : typeName(item.type)}</span></div>
+            <div class="photo-controls">
+              ${categories.map((category) => `<button class="btn small ${inventoryFilter === category ? "gold" : "alt"}" type="button" data-inventory-filter="${category}">${category}</button>`).join("")}
+            </div>
+            <div class="equipped-board" style="margin-bottom:14px;">
+              <div class="equip-chip"><span>🧑</span><span><small>스킨 슬롯</small>${equipLabel(data, "skin", "기본 스킨")}</span></div>
+              <div class="equip-chip"><span>⚔️</span><span><small>무기 슬롯</small>${equipLabel(data, "weapon", "비어 있음")}</span></div>
+              <div class="equip-chip"><span>✨</span><span><small>오라 슬롯</small>${equipLabel(data, "aura", "비어 있음")}</span></div>
+              <div class="equip-chip"><span>🐾</span><span><small>펫 슬롯</small>${equipLabel(data, "pet", "비어 있음")}</span></div>
+            </div>
+            ${filtered.length ? `<div class="grid-3">${filtered.map((item) => {
+              const slot = itemSlot(item);
+              const equipped = data.equippedItems[slot] === item.id;
+              return `<div class="inventory-card ${rarityClass(item)}">
+                <div class="card-top"><span class="icon-box">${item.icon}</span><span class="chip">${equipped ? "장착 중" : item.rarity || typeName(slot)}</span></div>
+                <div class="preview-box">${renderCharacterAvatar(kidConfig(selectedKidId), { size: "preview", previewItem: item })}</div>
                 <h3 class="card-title">${item.name}</h3>
-                <p class="card-sub">내 캐릭터와 형제 리그에 반영됩니다.</p>
+                <p class="card-sub">${item.category || typeName(slot)} · ${item.rarity || "일반"} · 장착 슬롯: ${typeName(slot)}</p>
                 ${equipped
-                  ? `<span class="state-pill equipped">현재 착용 중</span>${item.type !== "avatar" && item.type !== "background" ? `<button class="btn alt" type="button" data-unequip="${item.type}">해제</button>` : `<p class="card-sub">기본으로 유지되는 필수 아이템입니다.</p>`}`
-                  : `<button class="btn" type="button" data-equip="${item.id}">착용하기</button>`}
+                  ? `<span class="state-pill equipped">현재 장착 중</span>${!["skin", "background", "frame", "title"].includes(slot) ? `<button class="btn alt" type="button" data-unequip="${slot}">해제</button>` : `<p class="card-sub">기본으로 유지되는 슬롯입니다.</p>`}`
+                  : `<button class="btn" type="button" data-equip="${item.id}">장착하기</button>`}
               </div>`;
-            }).join("")}</div>` : `<div class="empty">아직 구매한 아이템이 없습니다. 상점에서 첫 아이템을 구매해보세요!</div>`}
+            }).join("")}</div>` : `<div class="empty">이 카테고리에 보유한 아이템이 없습니다. 스킨샵에서 새 장비를 모아보세요!</div>`}
           </div>
         </section>`;
       document.querySelectorAll("[data-equip]").forEach((b) => b.addEventListener("click", () => equipItem(b.dataset.equip)));
       document.querySelectorAll("[data-unequip]").forEach((b) => b.addEventListener("click", () => unequipItem(b.dataset.unequip)));
+      document.querySelectorAll("[data-inventory-filter]").forEach((b) => b.addEventListener("click", () => {
+        inventoryFilter = b.dataset.inventoryFilter;
+        renderInventory();
+      }));
     }
 
     function typeName(type) {
-      return { avatar: "아바타", frame: "프레임", background: "배경", pet: "펫", aura: "오라", title: "칭호", badge: "배지", head: "머리 장비" }[type] || type;
+      return { skin: "스킨", avatar: "스킨", weapon: "무기", headgear: "머리 장비", head: "머리 장비", frame: "프레임", background: "배경", pet: "펫", aura: "오라", title: "칭호", badge: "배지" }[type] || type;
     }
     function escapeHtml(value) {
       return String(value)
@@ -1689,15 +2104,51 @@
     function rarityName(rarity) {
       return { COMMON: "일반", RARE: "희귀", EPIC: "영웅", LEGEND: "전설", MYTHIC: "신화" }[rarity] || rarity;
     }
+    function rarityClass(item) {
+      const rarity = item?.rarity || "일반";
+      return {
+        "일반": "rarity-common",
+        "희귀": "rarity-rare",
+        "에픽": "rarity-epic",
+        "전설": "rarity-legend",
+        "신화": "rarity-mythic"
+      }[rarity] || "rarity-common";
+    }
+    function evolutionName(kidId, level) {
+      const table = {
+        jinwoo: [[8, "전설의 수호자"], [5, "수호 기사"], [3, "강철 방패 용사"], [1, "방패 용사"]],
+        jinyoung: [[8, "전설의 스피드왕"], [5, "번개 히어로"], [3, "스피드 챌린저"], [1, "번개 러너"]],
+        jinhwan: [[8, "전설의 불꽃왕"], [5, "화염 히어로"], [3, "불꽃 챌린저"], [1, "불꽃 파이터"]]
+      };
+      return (table[kidId] || table.jinwoo).find(([min]) => level >= min)?.[1] || "미션 플레이어";
+    }
+    function nextEvolution(kidId, level) {
+      const table = {
+        jinwoo: [[3, "강철 방패 용사"], [5, "수호 기사"], [8, "전설의 수호자"]],
+        jinyoung: [[3, "스피드 챌린저"], [5, "번개 히어로"], [8, "전설의 스피드왕"]],
+        jinhwan: [[3, "불꽃 챌린저"], [5, "화염 히어로"], [8, "전설의 불꽃왕"]]
+      };
+      return (table[kidId] || []).find(([min]) => level < min) || null;
+    }
 
     function shopState(item, data, level) {
       const owned = data.inventory.includes(item.id);
-      const equipped = data.equippedItems[item.type] === item.id;
-      if (equipped) return { text: "착용 중", cls: "equipped", button: "착용 중", disabled: true };
+      const slot = itemSlot(item);
+      const equipped = data.equippedItems[slot] === item.id;
+      if (equipped) return { text: "장착 중", cls: "equipped", button: "장착 중", disabled: true };
       if (owned) return { text: "보유 중", cls: "ready", button: "보유 중", disabled: true };
       if (level < item.level) return { text: `레벨 ${item.level} 필요`, cls: "target", button: "레벨이 부족해요", disabled: true };
       if (data.coins < item.cost) return { text: `코인 ${item.cost - data.coins}개 더`, cls: "lock", button: "코인이 부족해요", disabled: true };
       return { text: "구매 가능", cls: "ready", button: "구매하기", disabled: false };
+    }
+    function nextTargetItem(data, level) {
+      return DECOR_ITEMS
+        .filter((item) => !data.inventory.includes(item.id))
+        .sort((a, b) => {
+          const aGap = Math.max(0, a.level - level) * 1000 + Math.max(0, a.cost - data.coins);
+          const bGap = Math.max(0, b.level - level) * 1000 + Math.max(0, b.cost - data.coins);
+          return aGap - bGap;
+        })[0] || null;
     }
 
     function nextChallengeTexts() {
@@ -1711,9 +2162,9 @@
       const weekNeed = Math.max(10, weekMax - kidData(weekTarget.id).stats.weeklyXp + 10);
       const streakNeed = kidData(streakTarget.id).stats.streakDays >= streakMax ? 1 : Math.max(1, streakMax - kidData(streakTarget.id).stats.streakDays + 1);
       return [
-        `${missionTarget.name}이 오늘 미션 ${missionNeed}개만 더 클리어하면 오늘의 미션왕 도전!`,
-        `${weekTarget.name}이 ${weekNeed} XP만 더 얻으면 이번 주 성장왕 찬스!`,
-        `${streakTarget.name}이 하루만 더 성공하면 연속 성공왕 도전!`
+        `${displayName(missionTarget.id)}이 오늘 미션 ${missionNeed}개만 더 클리어하면 오늘의 미션왕 도전!`,
+        `${displayName(weekTarget.id)}이 ${weekNeed} XP만 더 얻으면 이번 주 성장왕 찬스!`,
+        `${displayName(streakTarget.id)}이 하루만 더 성공하면 연속 성공왕 도전!`
       ];
     }
 
@@ -1728,7 +2179,7 @@
                 <button class="btn" id="unlockParent" type="button">확인</button>
               </div>` : `
               <div class="parent-grid">
-                <div class="field"><label>아이</label><select id="parentKid">${KIDS.map((kid) => `<option value="${kid.id}" ${kid.id === selectedKidId ? "selected" : ""}>${kid.name}</option>`).join("")}</select></div>
+                <div class="field"><label>아이</label><select id="parentKid">${KIDS.map((kid) => `<option value="${kid.id}" ${kid.id === selectedKidId ? "selected" : ""}>${displayName(kid.id)}</option>`).join("")}</select></div>
                 <div class="field"><label>종류</label><select id="parentType"><option value="both">XP+코인 추가</option><option value="xp">XP 추가</option><option value="coins">코인 추가</option><option value="coinsSub">코인 차감</option></select></div>
                 <div class="field"><label>수량</label><input id="parentAmount" type="number" min="1" placeholder="숫자 입력"></div>
                 <div class="field"><label>메모</label><input id="parentReason" type="text" placeholder="예: 특별 칭찬"></div>
@@ -1764,7 +2215,7 @@
         ${ideas.map((idea) => `<div class="vote-card">
           <div class="card-top"><span class="icon-box">💡</span><span class="state-pill ${idea.status === "selected" ? "ready" : idea.status === "rejected" ? "lock" : "target"}">${ideaStatusName(idea.status)}</span></div>
           <h4 class="card-title">${escapeHtml(idea.text)}</h4>
-          <p class="card-sub">작성: ${idea.kidName || kidConfig(idea.kidId).name} · ${formatIdeaDate(idea.createdAt)}</p>
+          <p class="card-sub">작성: ${ideaAuthorName(idea)} · ${formatIdeaDate(idea.createdAt)}</p>
           <label class="field">
             <span style="display:block;margin-bottom:6px;color:var(--muted);font-size:13px;font-weight:1000;">상태 변경</span>
             <select data-idea-status="${idea.id}">
@@ -1805,7 +2256,7 @@
       if (type === "xp") addXpCoins(id, amount, 0);
       if (type === "coins") addXpCoins(id, 0, amount);
       if (type === "coinsSub") spendCoins(id, amount);
-      addHistory(`${kidConfig(id).name}: ${reason} (${type}) ${amount}`);
+      addHistory(`${displayName(id)}: ${reason} (${type}) ${amount}`);
       saveAndRender("부모 조정을 반영했습니다.");
     }
 
