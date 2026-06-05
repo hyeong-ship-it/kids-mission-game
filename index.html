@@ -271,6 +271,7 @@
     }
 
     .mini-avatar, .avatar-big {
+      position: relative;
       display: grid;
       place-items: center;
       border-radius: 999px;
@@ -285,6 +286,21 @@
 
     .mini-avatar { width: 58px; height: 58px; font-size: 28px; }
     .avatar-big { width: 156px; height: 156px; font-size: 62px; }
+
+    .avatar-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit;
+      z-index: 2;
+    }
+
+    .avatar-fallback {
+      position: relative;
+      z-index: 1;
+    }
 
     .player-mini h3 { margin: 0; font-size: 22px; font-weight: 1000; }
     .player-mini p { margin: 5px 0 0; color: var(--muted); font-weight: 900; font-size: 13px; }
@@ -438,6 +454,13 @@
     .head-item { position: absolute; top: -13px; z-index: 2; font-size: 42px; }
     .pet-item { position: absolute; right: -42px; bottom: 4px; z-index: 2; font-size: 46px; }
 
+    .character-stage.defender .avatar-wrap { animation: guardianFloat 3.2s ease-in-out infinite; }
+    .character-stage.runner .avatar-wrap { animation: runnerFlash 1.9s ease-in-out infinite; }
+    .character-stage.fighter .avatar-wrap { animation: fighterFlame 2.4s ease-in-out infinite; }
+    .character-stage.defender .avatar-big { box-shadow: 0 12px 0 rgba(19, 33, 93, 0.18), 0 0 34px rgba(47, 123, 255, 0.34); }
+    .character-stage.runner .avatar-big { box-shadow: 0 12px 0 rgba(19, 33, 93, 0.18), 0 0 34px rgba(40, 223, 155, 0.34); }
+    .character-stage.fighter .avatar-big { box-shadow: 0 12px 0 rgba(19, 33, 93, 0.18), 0 0 34px rgba(255, 136, 69, 0.42); }
+
     .nickname {
       position: relative;
       z-index: 1;
@@ -474,6 +497,32 @@
 
     .next-reward h3 { margin: 0 0 8px; font-size: 24px; font-weight: 1000; color: #4b2a00; }
     .next-reward p { margin: 0; color: #6a4a00; font-size: 17px; font-weight: 1000; }
+
+    .equipped-board {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .equip-chip {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 8px;
+      align-items: center;
+      min-height: 48px;
+      padding: 9px 10px;
+      border: 2px solid #e1e9ff;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #fff, #f3f7ff);
+      font-weight: 1000;
+    }
+
+    .equip-chip small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-bottom: 2px;
+    }
 
     /*
       ==============================
@@ -553,6 +602,107 @@
 
     .challenge-box h3 { margin: 0; font-size: 20px; }
     .challenge-box p { margin: 0; color: #556181; line-height: 1.45; }
+
+    .notice-board,
+    .vote-board,
+    .photo-studio {
+      padding: 15px;
+      border: 2px solid rgba(255,255,255,0.78);
+      border-radius: 24px;
+      background: linear-gradient(135deg, #fff7cf, #e3f7ff);
+      box-shadow: 0 8px 0 rgba(26, 44, 105, 0.08);
+    }
+
+    .notice-board h3,
+    .vote-board h3,
+    .photo-studio h3 {
+      margin: 0 0 10px;
+      font-size: 21px;
+      font-weight: 1000;
+    }
+
+    .notice-list {
+      display: grid;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .notice-list li {
+      padding: 9px 11px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.62);
+      color: #556181;
+      font-weight: 1000;
+    }
+
+    .vote-card {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+      border: 2px solid #e1e9ff;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.76);
+    }
+
+    .vote-result {
+      height: 16px;
+      padding: 3px;
+      border-radius: 999px;
+      background: rgba(29, 45, 109, 0.18);
+      overflow: hidden;
+    }
+
+    .vote-result span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--mint), var(--sky));
+    }
+
+    .photo-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 12px;
+    }
+
+    .team-photo {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      min-height: 280px;
+      padding: 18px;
+      border: 3px solid rgba(255,255,255,0.8);
+      border-radius: 26px;
+      background: var(--photo-bg, linear-gradient(135deg, #dff6ff, #fff4c4));
+      box-shadow: inset 0 -10px 0 rgba(24, 50, 113, 0.08);
+    }
+
+    .team-photo.space { --photo-bg: linear-gradient(135deg, #131852, #572cb8 50%, #111); }
+    .team-photo.fire { --photo-bg: linear-gradient(135deg, #531b15, #ff8845 56%, #ffd84d); }
+    .team-photo.lightning { --photo-bg: linear-gradient(135deg, #073a43, #20b486 52%, #d9fff4); }
+    .team-photo.camp { --photo-bg: linear-gradient(135deg, #d9f8ce, #fff1b8 54%, #ffca83); }
+
+    .photo-player {
+      display: grid;
+      justify-items: center;
+      align-content: end;
+      gap: 8px;
+      min-height: 230px;
+      padding: 12px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.56);
+      text-align: center;
+      font-weight: 1000;
+    }
+
+    .photo-player .mini-avatar {
+      width: 86px;
+      height: 86px;
+      font-size: 42px;
+    }
 
     .empty {
       padding: 22px;
@@ -659,6 +809,9 @@
     @keyframes clearBounce { 0% { transform: scale(1); } 45% { transform: scale(1.025); } 100% { transform: scale(1); } }
     @keyframes pulseGlow { 0%,100% { transform: scale(0.94); opacity: var(--aura-opacity, 0); } 50% { transform: scale(1.08); opacity: calc(var(--aura-opacity, 0) + 0.12); } }
     @keyframes heroAura { 0%, 100% { scale: 0.94; opacity: 0.72; } 50% { scale: 1.04; opacity: 1; } }
+    @keyframes guardianFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes runnerFlash { 0%,100% { transform: translateX(0); filter: brightness(1); } 45% { transform: translateX(4px); filter: brightness(1.18); } 52% { transform: translateX(-3px); } }
+    @keyframes fighterFlame { 0%,100% { transform: translateY(0) rotate(-1deg); filter: saturate(1); } 50% { transform: translateY(-5px) rotate(1deg); filter: saturate(1.2); } }
 
     /*
       ==============================
@@ -702,7 +855,7 @@
         <h1>우리집 미션 배틀</h1>
         <p>미션 클리어 → XP 상승 → 코인 획득 → 아이템 언락 → 캐릭터 성장!</p>
       </div>
-      <div class="date-pill"><small>TODAY QUEST</small><span id="todayDate"></span></div>
+      <div class="date-pill"><small>오늘 미션</small><span id="todayDate"></span></div>
     </header>
 
     <section class="player-strip" id="playerStrip" aria-label="플레이어 선택"></section>
@@ -734,12 +887,12 @@
       아이 이름, 미션, 레벨, 상점, 비밀번호를 바꾸고 싶으면 이 영역을 수정하세요.
     */
     const STORAGE_KEY = "kidsPointGame_v1";
-    const PARENT_PASSWORD = "0000";
+    const PARENT_PASSWORD = "0903";
 
     const KIDS = [
-      { id: "jinwoo", name: "진우", nickname: "방패 용사", color: "#3f7cff", avatar: "🛡️" },
-      { id: "jinyoung", name: "진영", nickname: "번개 러너", color: "#20b486", avatar: "⚡" },
-      { id: "jinhwan", name: "진환", nickname: "불꽃 파이터", color: "#ff7a45", avatar: "🔥" }
+      { id: "jinwoo", name: "진우", nickname: "방패 용사", color: "#3f7cff", avatar: "🛡️", image: "./assets/jinwoo-guardian.png" },
+      { id: "jinyoung", name: "진영", nickname: "번개 러너", color: "#20b486", avatar: "⚡", image: "./assets/jinyoung-lightning.png" },
+      { id: "jinhwan", name: "진환", nickname: "불꽃 파이터", color: "#ff7a45", avatar: "🔥", image: "./assets/jinhwan-firefighter.png" }
     ];
 
     const QUESTS = [
@@ -747,10 +900,11 @@
       { id: "blanket", title: "이불 정리하기", icon: "🛏️", xp: 5, coins: 5 },
       { id: "brush", title: "양치 스스로 하기", icon: "🪥", xp: 5, coins: 5 },
       { id: "homework", title: "숙제 먼저 하기", icon: "📚", xp: 20, coins: 20 },
-      { id: "reading", title: "책 10분 읽기", icon: "📖", xp: 10, coins: 10 },
+      { id: "reading", title: "줄글책 15분 이상 읽기", icon: "📖", xp: 15, coins: 15 },
       { id: "game_rule", title: "게임 시간 약속 지키기", icon: "🎮", xp: 20, coins: 20 },
       { id: "school_items", title: "준비물 스스로 챙기기", icon: "🎒", xp: 10, coins: 10 },
-      { id: "kind_words", title: "형제에게 친절하게 말하기", icon: "🤝", xp: 10, coins: 10 }
+      { id: "kind_words", title: "형제에게 친절하게 말하기", icon: "🤝", xp: 10, coins: 10 },
+      { id: "family_happy", title: "가족을 기쁘게 하는 행동 1가지 하기", icon: "💝", xp: 15, coins: 15 }
     ];
 
     const LEVELS = [
@@ -793,6 +947,30 @@
     const FAMILY_MISSIONS = [
       { id: "all_3", required: 3, bonusXp: 30, bonusCoins: 30, label: "세 명 모두 오늘 미션 3개 이상 클리어" },
       { id: "all_5", required: 5, bonusXp: 50, bonusCoins: 50, label: "세 명 모두 오늘 미션 5개 이상 클리어" }
+    ];
+
+    const UPDATE_NOTICES = [
+      "다음 주 새 미션이 열려요!",
+      "새로운 장비가 곧 등장해요!",
+      "형제 리그 시즌 이벤트 준비 중!",
+      "다음 업데이트까지 미션을 클리어하고 코인을 모아두세요!"
+    ];
+
+    const MISSION_VOTE_CANDIDATES = [
+      { id: "stretch", title: "아침 스트레칭 하기", icon: "🤸" },
+      { id: "thanks", title: "가족에게 고마운 말 하기", icon: "💬" },
+      { id: "room_5", title: "방 5분 정리하기", icon: "🧹" },
+      { id: "reading_20", title: "줄글책 20분 읽기", icon: "📘" },
+      { id: "praise", title: "형제 칭찬하기", icon: "👏" },
+      { id: "house_help", title: "가족을 도와 집안일 1가지 하기", icon: "🏠" }
+    ];
+
+    const PHOTO_BACKGROUNDS = [
+      { id: "default", name: "기본 배경" },
+      { id: "space", name: "우주 배경" },
+      { id: "fire", name: "불꽃 경기장" },
+      { id: "lightning", name: "번개 아레나" },
+      { id: "camp", name: "가족 캠프" }
     ];
 
     /*
@@ -868,14 +1046,34 @@
           weeklyXp: Number(old.stats?.weeklyXp || 0),
           streakDays: Number(old.stats?.streakDays || 0),
           lastActiveDate: old.stats?.lastActiveDate || null
-        }
+        },
+        photoPose: old.photoPose || "ready",
+        favoriteBackground: old.favoriteBackground || "default"
+      };
+    }
+
+    function makeGameMeta(old = {}) {
+      const oldVotes = old.missionVotes?.votes || {};
+      return {
+        version: "1.2",
+        updateNotices: Array.isArray(old.updateNotices) && old.updateNotices.length ? old.updateNotices : UPDATE_NOTICES,
+        teamPhotoBackground: old.teamPhotoBackground || "default",
+        missionVotes: {
+          candidates: MISSION_VOTE_CANDIDATES,
+          votes: {
+            jinwoo: oldVotes.jinwoo || null,
+            jinyoung: oldVotes.jinyoung || null,
+            jinhwan: oldVotes.jinhwan || null
+          }
+        },
+        missionIdeas: Array.isArray(old.missionIdeas) ? old.missionIdeas : []
       };
     }
 
     function makeInitialState() {
       const kids = {};
       KIDS.forEach((kid) => { kids[kid.id] = makeKidData(kid); });
-      return { version: 2, date: getTodayKey(), selectedKidId: KIDS[0].id, kids, familyBonuses: {}, history: [], activeTab: "character" };
+      return { version: 2, date: getTodayKey(), selectedKidId: KIDS[0].id, kids, familyBonuses: {}, history: [], activeTab: "character", gameMeta: makeGameMeta() };
     }
 
     function loadState() {
@@ -890,6 +1088,7 @@
         selectedKidId: base.selectedKidId || KIDS[0].id,
         activeTab: base.activeTab || "character",
         familyBonuses: base.familyBonuses || {},
+        gameMeta: makeGameMeta(base.gameMeta),
         history: Array.isArray(base.history) ? base.history.slice(0, 30) : [],
         kids: {}
       };
@@ -932,6 +1131,22 @@
     function avatarIcon(data, kid) {
       const equippedAvatar = itemById(data.equippedItems?.avatar);
       return equippedAvatar && equippedAvatar.id !== "basic_avatar" ? equippedAvatar.icon : (data.avatar || kid.avatar);
+    }
+    function avatarMarkup(data, kid, className) {
+      const icon = avatarIcon(data, kid);
+      const image = kid.image || "";
+      return `
+        <span class="${className}">
+          ${image ? `<img class="avatar-img" src="${image}" alt="${kid.name} 캐릭터 이미지" onerror="this.style.display='none'">` : ""}
+          <span class="avatar-fallback">${icon}</span>
+        </span>`;
+    }
+    function equippedItem(data, type) {
+      return itemById(data.equippedItems?.[type]) || null;
+    }
+    function equipLabel(data, type, fallback) {
+      const item = equippedItem(data, type);
+      return item ? `${item.icon} ${item.name}` : fallback;
     }
     function className(kidId) {
       return { jinwoo: "방패 용사 · 방어형", jinyoung: "번개 러너 · 스피드형", jinhwan: "불꽃 파이터 · 공격형" }[kidId] || "미션 플레이어";
@@ -1011,7 +1226,7 @@
       addHistory(`${kid.name}가 ${quest.title} 미션 클리어! +${quest.xp} XP / +${quest.coins} 코인`);
       const remain = levelInfo(data.xp).remain;
       const extra = afterLevel > beforeLevel
-        ? `레벨업! LV.${afterLevel} 새 아이템을 확인해봐!`
+        ? `레벨업! 레벨 ${afterLevel} 새 아이템을 확인해봐!`
         : remain === 0
           ? "최고 레벨 도전 완료!"
           : `좋아! 다음 레벨까지 ${remain} XP!`;
@@ -1037,7 +1252,7 @@
       if (!KIDS.every((kid) => doneCount(kid.id) >= mission.required)) return;
       KIDS.forEach((kid) => { addXpCoins(kid.id, mission.bonusXp, mission.bonusCoins); syncBadges(kid.id); });
       state.familyBonuses[id] = true;
-      addHistory(`TEAM MISSION 클리어! 모두에게 +${mission.bonusXp} XP / +${mission.bonusCoins} 코인`);
+      addHistory(`팀 미션 클리어! 모두에게 +${mission.bonusXp} XP / +${mission.bonusCoins} 코인`);
       saveAndRender(`팀 보너스 +${mission.bonusXp} XP / +${mission.bonusCoins} 코인`);
     }
 
@@ -1077,6 +1292,59 @@
       if (type === "avatar" || type === "background") return;
       data.equippedItems[type] = null;
       saveAndRender("착용을 해제했습니다.");
+    }
+
+    function submitMissionIdea() {
+      const input = document.getElementById("missionIdeaInput");
+      if (!input) return;
+      const text = input.value.trim().replace(/\s+/g, " ");
+      if (text.length < 3) {
+        showToast("아이디어를 3글자 이상 적어주세요.");
+        return;
+      }
+      if (text.length > 60) {
+        showToast("아이디어는 60글자 안으로 짧게 적어주세요.");
+        return;
+      }
+      const ideas = state.gameMeta.missionIdeas || [];
+      const duplicated = ideas.some((idea) => idea.kidId === selectedKidId && idea.text === text);
+      if (duplicated) {
+        showToast("이미 저장된 아이디어예요. 새로운 아이디어를 적어보세요!");
+        return;
+      }
+      const kid = kidConfig(selectedKidId);
+      ideas.unshift({
+        id: `idea_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        kidId: selectedKidId,
+        kidName: kid.name,
+        text,
+        createdAt: new Date().toISOString(),
+        status: "pending"
+      });
+      state.gameMeta.missionIdeas = ideas.slice(0, 50);
+      input.value = "";
+      addHistory(`${kid.name}: 새 미션 아이디어 제출 - ${text}`);
+      saveAndRender("좋은 아이디어예요! 다음 업데이트 후보에 저장됐어요.");
+    }
+
+    function updateMissionIdeaStatus(id, status) {
+      const idea = state.gameMeta.missionIdeas.find((item) => item.id === id);
+      if (!idea) return;
+      idea.status = status;
+      saveAndRender("아이디어 상태를 바꿨습니다.");
+    }
+
+    function resetMissionIdeas() {
+      if (!confirm("새 미션 아이디어 목록을 초기화할까요?")) return;
+      state.gameMeta.missionIdeas = [];
+      addHistory("부모 메뉴: 새 미션 아이디어 목록 초기화");
+      saveAndRender("새 미션 아이디어 목록을 초기화했습니다.");
+    }
+
+    function setTeamPhotoBackground(id) {
+      if (!PHOTO_BACKGROUNDS.some((bg) => bg.id === id)) return;
+      state.gameMeta.teamPhotoBackground = id;
+      saveAndRender();
     }
 
     function openCharacterSettings() {
@@ -1125,14 +1393,24 @@
         const lvl = levelInfo(data.xp).current;
         return `
           <button class="player-mini ${kid.id === selectedKidId ? "active" : ""}" style="--kid-color:${kid.color}" type="button" data-select="${kid.id}">
-            <span class="mini-avatar">${avatarIcon(data, kid)}</span>
-            <span><h3>${kid.name}</h3><p>${data.nickname} · LV.${lvl.level} · ${data.coins} 코인</p></span>
+            ${avatarMarkup(data, kid, "mini-avatar")}
+            <span><h3>${kid.name}</h3><p>${className(kid.id)} · 레벨 ${lvl.level}<br>${data.coins} 코인</p></span>
           </button>`;
       }).join("");
       els.playerStrip.querySelectorAll("[data-select]").forEach((btn) => btn.addEventListener("click", () => {
         selectedKidId = btn.dataset.select;
         saveAndRender(`${kidConfig(selectedKidId).name} 선택`);
       }));
+    }
+
+    function renderUpdateNotices() {
+      const notices = state.gameMeta?.updateNotices || UPDATE_NOTICES;
+      return `<div class="notice-board">
+        <h3>다음 업데이트 예고</h3>
+        <ul class="notice-list">
+          ${notices.map((notice) => `<li>📣 ${notice}</li>`).join("")}
+        </ul>
+      </div>`;
     }
 
     function stageVars(data) {
@@ -1155,6 +1433,7 @@
       const pet = itemById(data.equippedItems.pet);
       const badge = itemById(data.equippedItems.badge)?.name || data.badges[0] || "첫 미션 대기";
       const title = itemById(data.equippedItems.title)?.name || info.current.title;
+      const photoBg = state.gameMeta.teamPhotoBackground || "default";
       document.getElementById("tab-character").innerHTML = `
         <section class="panel">
           <div class="panel-head"><h2>내 캐릭터</h2><span class="chip">${kid.name} 출전 중</span></div>
@@ -1163,19 +1442,27 @@
               <div class="aura"></div>
               <div class="avatar-wrap">
                 ${head ? `<span class="head-item">${head.icon}</span>` : ""}
-                <span class="avatar-big">${avatarIcon(data, kid)}</span>
+                ${avatarMarkup(data, kid, "avatar-big")}
                 ${pet ? `<span class="pet-item">${pet.icon}</span>` : ""}
               </div>
               <span class="class-mark">${className(kid.id)}</span>
               <div class="nickname">${data.nickname}</div>
               <div class="equipped-line">
-                <span class="chip">LV.${info.current.level}</span>
+                <span class="chip">레벨 ${info.current.level}</span>
                 <span class="chip">${title}</span>
                 <span class="chip">대표 배지: ${badge}</span>
               </div>
             </div>
             <div class="stack">
               <button class="btn gold" type="button" id="characterSettings">캐릭터 설정</button>
+              <div class="equipped-board">
+                <div class="equip-chip"><span>🧑</span><span><small>아바타</small>${equipLabel(data, "avatar", "기본 아바타")}</span></div>
+                <div class="equip-chip"><span>🌄</span><span><small>배경</small>${equipLabel(data, "background", "기본 배경")}</span></div>
+                <div class="equip-chip"><span>✨</span><span><small>오라</small>${equipLabel(data, "aura", "오라 없음")}</span></div>
+                <div class="equip-chip"><span>🖼️</span><span><small>프레임</small>${equipLabel(data, "frame", "기본 프레임")}</span></div>
+                <div class="equip-chip"><span>🐾</span><span><small>펫</small>${equipLabel(data, "pet", "펫 없음")}</span></div>
+                <div class="equip-chip"><span>🎖️</span><span><small>대표 배지</small>${badge}</span></div>
+              </div>
               <div class="grid-2">
                 <div class="stat"><span>보유 코인</span><strong>${data.coins}</strong></div>
                 <div class="stat"><span>오늘 클리어</span><strong>${doneCount(selectedKidId)}개</strong></div>
@@ -1183,7 +1470,7 @@
                 <div class="stat"><span>연속 성공일</span><strong>${data.stats.streakDays}일</strong></div>
               </div>
               <div class="next-reward featured">
-                <h3>다음 레벨까지 ${info.remain === 0 ? "MAX" : `${info.remain} XP`}</h3>
+                <h3>다음 레벨까지 ${info.remain === 0 ? "최고 레벨" : `${info.remain} XP`}</h3>
                 <div class="xp-bar" aria-label="XP 게이지"><span style="width:${info.progress}%"></span></div>
                 <p style="margin-top:10px;">다음 레벨 보상: ${unlock ? `${unlock.icon} ${unlock.name}` : "모든 레벨 보상 언락 완료"}</p>
               </div>
@@ -1192,10 +1479,35 @@
                   <p class="card-sub"><b>게임 루프</b>: 미션을 클리어하면 XP와 코인을 얻고, 레벨이 오르면 새 꾸미기 아이템이 열립니다. 코인으로 아이템을 구매한 뒤 보관함에서 착용하세요.</p>
                 </div>
               </div>
+              ${renderUpdateNotices()}
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="photo-studio">
+              <h3>팀 사진관</h3>
+              <div class="photo-controls">
+                ${PHOTO_BACKGROUNDS.map((bg) => `<button class="btn small ${photoBg === bg.id ? "gold" : "alt"}" type="button" data-photo-bg="${bg.id}">${bg.name}</button>`).join("")}
+              </div>
+              <div class="team-photo ${photoBg}">
+                ${KIDS.map((teamKid) => {
+                  const teamData = kidData(teamKid.id);
+                  const teamLevel = levelInfo(teamData.xp).current;
+                  return `<div class="photo-player" style="--kid-color:${teamKid.color}">
+                    ${avatarMarkup(teamData, teamKid, "mini-avatar")}
+                    <div>${teamKid.name}</div>
+                    <small>${itemById(teamData.equippedItems.title)?.name || teamLevel.title}</small>
+                    <small>${equipLabel(teamData, "pet", "대표 아이템 준비 중")}</small>
+                  </div>`;
+                }).join("")}
+              </div>
+              <p class="card-sub" style="margin-top:10px;">오늘의 팀 사진입니다. <b>화면 캡처해서 저장하기</b> 버튼을 누른 뒤 태블릿이나 핸드폰의 캡처 기능으로 저장하세요.</p>
+              <button class="btn gold" type="button" id="captureGuide">화면 캡처해서 저장하기</button>
             </div>
           </div>
         </section>`;
       document.getElementById("characterSettings")?.addEventListener("click", openCharacterSettings);
+      document.querySelectorAll("[data-photo-bg]").forEach((button) => button.addEventListener("click", () => setTeamPhotoBackground(button.dataset.photoBg)));
+      document.getElementById("captureGuide")?.addEventListener("click", () => showToast("팀 사진관 화면을 캡처해서 저장하세요."));
     }
 
     function renderMissions() {
@@ -1205,7 +1517,7 @@
         const ready = KIDS.every((kid) => doneCount(kid.id) >= m.required);
         const claimed = state.familyBonuses[m.id];
         return `<div class="team-card">
-          <div class="card-top"><h3 class="card-title">${m.id === "all_5" ? "SUPER BONUS" : "TEAM BONUS"}</h3><span class="chip">+${m.bonusXp} XP / +${m.bonusCoins} 코인</span></div>
+          <div class="card-top"><h3 class="card-title">${m.id === "all_5" ? "슈퍼 보너스" : "팀 보너스"}</h3><span class="chip">+${m.bonusXp} XP / +${m.bonusCoins} 코인</span></div>
           <p class="card-sub">${m.label}</p>
           <div class="xp-bar"><span style="width:${Math.min(100, min / m.required * 100)}%"></span></div>
           <button class="btn gold" type="button" data-family="${m.id}" ${ready && !claimed ? "" : "disabled"}>${claimed ? "수령 완료" : ready ? "팀 보상 받기" : "조건 미달"}</button>
@@ -1213,23 +1525,48 @@
       }).join("");
       document.getElementById("tab-missions").innerHTML = `
         <section class="panel">
-          <div class="panel-head"><h2>TODAY QUEST</h2><span class="chip">${kidConfig(selectedKidId).name} · ${doneCount(selectedKidId)}/${QUESTS.length} 클리어</span></div>
+          <div class="panel-head"><h2>오늘 미션</h2><span class="chip">${kidConfig(selectedKidId).name} · ${doneCount(selectedKidId)}/${QUESTS.length} 클리어</span></div>
           <div class="panel-body stack">
             <div class="grid-2">${QUESTS.map((q) => {
               const clear = data.todayDone[q.id];
               return `<div class="mission-card ${clear ? "clear" : ""}">
-                <div class="card-top"><span class="icon-box">${q.icon}</span><span class="chip">${clear ? "CLEAR" : "MISSION"}</span></div>
+                <div class="card-top"><span class="icon-box">${q.icon}</span><span class="chip">${clear ? "클리어 완료" : "도전"}</span></div>
                 <h3 class="card-title">${q.title}</h3>
                 <p class="card-sub"><span class="reward-line">+${q.xp} XP / +${q.coins} 코인</span> · 하루 1회</p>
                 <button class="btn ${clear ? "alt" : ""}" type="button" data-${clear ? "undo" : "clear"}="${q.id}">${clear ? "되돌리기" : "클리어!"}</button>
               </div>`;
             }).join("")}</div>
-            <div class="panel" style="box-shadow:none;"><div class="panel-head"><h2>TEAM MISSION</h2></div><div class="panel-body grid-2">${family}</div></div>
+            <div class="panel" style="box-shadow:none;"><div class="panel-head"><h2>팀 미션</h2></div><div class="panel-body grid-2">${family}</div></div>
+            ${renderMissionIdeas()}
           </div>
         </section>`;
       document.querySelectorAll("[data-clear]").forEach((b) => b.addEventListener("click", () => completeQuest(b.dataset.clear)));
       document.querySelectorAll("[data-undo]").forEach((b) => b.addEventListener("click", () => undoQuest(b.dataset.undo)));
       document.querySelectorAll("[data-family]").forEach((b) => b.addEventListener("click", () => claimFamilyMission(b.dataset.family)));
+      document.getElementById("submitMissionIdea")?.addEventListener("click", submitMissionIdea);
+    }
+
+    function renderMissionIdeas() {
+      const ideas = state.gameMeta.missionIdeas || [];
+      const recent = ideas.slice(0, 5);
+      return `<div class="vote-board">
+        <h3>새 미션 아이디어</h3>
+        <p class="card-sub"><b>이런 미션이면 재미있게 할 수 있어요!</b></p>
+        <p class="card-sub">다음 업데이트에 넣고 싶은 미션을 적어보세요. 재미있고, 가족에게 도움이 되고, 내가 도전하고 싶은 미션이면 좋아요. 채택되면 특별 배지를 받을 수 있어요!</p>
+        <div class="grid-2" style="margin-top:12px;">
+          <input id="missionIdeaInput" type="text" maxlength="60" placeholder="예: 아빠랑 팔씨름하기, 가족에게 고마운 말 하기, 방에서 보물찾기, 줄글책 20분 읽기">
+          <button class="btn gold" id="submitMissionIdea" type="button">아이디어 보내기</button>
+        </div>
+        <p class="card-sub" style="margin-top:10px;">좋은 아이디어는 다음 업데이트에서 새 미션으로 열릴 수 있어요. 채택된 아이디어는 특별 배지를 받을 수 있어요.</p>
+        <h4 class="card-title" style="margin-top:16px;">우리 팀이 낸 아이디어</h4>
+        ${recent.length ? `<div class="stack" style="margin-top:10px;">
+          ${recent.map((idea) => `<div class="vote-card">
+            <div class="card-top"><span class="icon-box">💡</span><span class="state-pill ${idea.status === "selected" ? "ready" : idea.status === "rejected" ? "lock" : "target"}">${ideaStatusName(idea.status)}</span></div>
+            <h4 class="card-title">${escapeHtml(idea.text)}</h4>
+            <p class="card-sub">${idea.kidName || kidConfig(idea.kidId).name}의 아이디어 · ${formatIdeaDate(idea.createdAt)}</p>
+          </div>`).join("")}
+        </div>` : `<div class="empty" style="margin-top:10px;">아직 아이디어가 없습니다. 우리 게임에 넣고 싶은 재미있는 미션을 남겨보세요!</div>`}
+      </div>`;
     }
 
     function renderLeague() {
@@ -1256,8 +1593,9 @@
               const lvl = levelInfo(data.xp).current;
               const equipped = Object.values(data.equippedItems).filter(Boolean).map((id) => itemById(id)?.icon).filter(Boolean).join(" ");
               return `<div class="league-card" style="--kid-color:${kid.color}">
-                <div class="card-top"><span class="mini-avatar">${avatarIcon(data, kid)}</span><span class="chip">LV.${lvl.level}</span></div>
+                <div class="card-top">${avatarMarkup(data, kid, "mini-avatar")}<span class="chip">레벨 ${lvl.level}</span></div>
                 <h3 class="card-title">${kid.name} · ${data.nickname}</h3>
+                <p class="card-sub">${className(kid.id)}</p>
                 <p class="card-sub">대표 칭호: ${itemById(data.equippedItems.title)?.name || lvl.title}</p>
                 <p class="card-sub">오늘 클리어 ${doneCount(kid.id)}개 · 이번 주 XP ${data.stats.weeklyXp} · 연속 ${data.stats.streakDays}일</p>
                 <p class="card-sub">보유 배지: ${data.badges.length ? data.badges.join(", ") : "아직 없음"}</p>
@@ -1281,7 +1619,7 @@
                 const state = shopState(item, data, lvl);
                 const isTarget = nextTarget?.id === item.id;
                 return `<div class="shop-card ${state.disabled ? "locked" : ""} ${isTarget ? "next-target" : ""}">
-                  <div class="card-top"><span class="icon-box">${item.icon}</span><span class="chip">LV.${item.level}</span></div>
+                  <div class="card-top"><span class="icon-box">${item.icon}</span><span class="chip">레벨 ${item.level}</span></div>
                   <span class="state-pill ${isTarget ? "target" : state.cls}">${isTarget ? "다음 목표" : state.text}</span>
                   <h3 class="card-title">${item.name}</h3>
                   <p class="card-sub">${typeName(item.type)} · 필요 레벨 ${item.level} · ${item.cost} 코인</p>
@@ -1292,10 +1630,10 @@
             </div>
             <div class="panel" style="box-shadow:none;"><div class="panel-head"><h2>가족 보상 상점</h2><span class="chip">코인으로 교환</span></div>
               <div class="panel-body grid-2">${FAMILY_REWARDS.map((r) => `<div class="shop-card ${data.coins < r.cost ? "locked" : ""}">
-                <div class="card-top"><span class="icon-box">${data.coins >= r.cost ? "🎁" : "🔒"}</span><span class="chip">${r.rarity}</span></div>
+                <div class="card-top"><span class="icon-box">${data.coins >= r.cost ? "🎁" : "🔒"}</span><span class="chip">${rarityName(r.rarity)}</span></div>
                 <h3 class="card-title">${r.title}</h3>
                 <p class="card-sub">${r.cost} 코인 필요</p>
-                <button class="btn gold" type="button" data-family-reward="${r.id}" ${data.coins >= r.cost ? "" : "disabled"}>${data.coins >= r.cost ? "교환하기" : "코인 부족"}</button>
+                <button class="btn gold" type="button" data-family-reward="${r.id}" ${data.coins >= r.cost ? "" : "disabled"}>${data.coins >= r.cost ? "교환하기" : "코인이 부족해요"}</button>
               </div>`).join("")}</div>
             </div>
           </div>
@@ -1331,14 +1669,34 @@
     function typeName(type) {
       return { avatar: "아바타", frame: "프레임", background: "배경", pet: "펫", aura: "오라", title: "칭호", badge: "배지", head: "머리 장비" }[type] || type;
     }
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+    function ideaStatusName(status) {
+      return { pending: "검토 중", selected: "채택", rejected: "보류" }[status] || "검토 중";
+    }
+    function formatIdeaDate(value) {
+      if (!value) return "날짜 없음";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "날짜 없음";
+      return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
+    }
+    function rarityName(rarity) {
+      return { COMMON: "일반", RARE: "희귀", EPIC: "영웅", LEGEND: "전설", MYTHIC: "신화" }[rarity] || rarity;
+    }
 
     function shopState(item, data, level) {
       const owned = data.inventory.includes(item.id);
       const equipped = data.equippedItems[item.type] === item.id;
       if (equipped) return { text: "착용 중", cls: "equipped", button: "착용 중", disabled: true };
       if (owned) return { text: "보유 중", cls: "ready", button: "보유 중", disabled: true };
-      if (level < item.level) return { text: `Lv.${item.level} 필요`, cls: "target", button: `LV.${item.level} 잠김`, disabled: true };
-      if (data.coins < item.cost) return { text: `코인 ${item.cost - data.coins}개 더`, cls: "lock", button: "코인 부족", disabled: true };
+      if (level < item.level) return { text: `레벨 ${item.level} 필요`, cls: "target", button: "레벨이 부족해요", disabled: true };
+      if (data.coins < item.cost) return { text: `코인 ${item.cost - data.coins}개 더`, cls: "lock", button: "코인이 부족해요", disabled: true };
       return { text: "구매 가능", cls: "ready", button: "구매하기", disabled: false };
     }
 
@@ -1366,26 +1724,57 @@
           <div class="panel-body">
             ${!parentOpen ? `<p class="card-sub">아이들 게임 화면과 분리된 부모용 관리 메뉴입니다.</p>` : !parentUnlocked ? `
               <div class="parent-grid" style="grid-template-columns:1fr auto;">
-                <div class="field"><label for="parentPassword">비밀번호</label><input id="parentPassword" type="password" inputmode="numeric" placeholder="기본 비밀번호 0000"></div>
+                <div class="field"><label for="parentPassword">비밀번호</label><input id="parentPassword" type="password" inputmode="numeric" placeholder="비밀번호를 입력하세요"></div>
                 <button class="btn" id="unlockParent" type="button">확인</button>
               </div>` : `
               <div class="parent-grid">
                 <div class="field"><label>아이</label><select id="parentKid">${KIDS.map((kid) => `<option value="${kid.id}" ${kid.id === selectedKidId ? "selected" : ""}>${kid.name}</option>`).join("")}</select></div>
                 <div class="field"><label>종류</label><select id="parentType"><option value="both">XP+코인 추가</option><option value="xp">XP 추가</option><option value="coins">코인 추가</option><option value="coinsSub">코인 차감</option></select></div>
-                <div class="field"><label>수량</label><input id="parentAmount" type="number" min="1" value="10"></div>
+                <div class="field"><label>수량</label><input id="parentAmount" type="number" min="1" placeholder="숫자 입력"></div>
                 <div class="field"><label>메모</label><input id="parentReason" type="text" placeholder="예: 특별 칭찬"></div>
                 <button class="btn" id="parentApply" type="button">적용</button>
                 <button class="btn danger" id="resetAll" type="button">전체 초기화</button>
               </div>
               <div class="parent-actions">
                 <button class="btn alt" id="resetToday" type="button">오늘 체크 상태만 초기화</button>
+                <button class="btn alt" id="resetIdeas" type="button">아이디어 목록 초기화</button>
                 <button class="btn alt" id="exportBackup" type="button">백업 파일 다운로드</button>
                 <label class="btn alt" for="importBackup">백업 파일 불러오기</label>
                 <input id="importBackup" type="file" accept="application/json,.json" hidden>
+              </div>
+              <div class="notice-board" style="margin-top:14px;">
+                <h3>새 미션 아이디어 목록</h3>
+                ${renderParentMissionIdeas()}
+              </div>
+              <div class="notice-board" style="margin-top:14px;">
+                <h3>현재 업데이트 예고 문구</h3>
+                <ul class="notice-list">${(state.gameMeta.updateNotices || UPDATE_NOTICES).map((notice) => `<li>${notice}</li>`).join("")}</ul>
               </div>`}
           </div>
         </section>`;
       bindParentEvents();
+    }
+
+    function renderParentMissionIdeas() {
+      const ideas = state.gameMeta.missionIdeas || [];
+      if (!ideas.length) {
+        return `<div class="empty">아직 제출된 새 미션 아이디어가 없습니다.</div>`;
+      }
+      return `<div class="stack">
+        ${ideas.map((idea) => `<div class="vote-card">
+          <div class="card-top"><span class="icon-box">💡</span><span class="state-pill ${idea.status === "selected" ? "ready" : idea.status === "rejected" ? "lock" : "target"}">${ideaStatusName(idea.status)}</span></div>
+          <h4 class="card-title">${escapeHtml(idea.text)}</h4>
+          <p class="card-sub">작성: ${idea.kidName || kidConfig(idea.kidId).name} · ${formatIdeaDate(idea.createdAt)}</p>
+          <label class="field">
+            <span style="display:block;margin-bottom:6px;color:var(--muted);font-size:13px;font-weight:1000;">상태 변경</span>
+            <select data-idea-status="${idea.id}">
+              <option value="pending" ${idea.status === "pending" ? "selected" : ""}>검토 중</option>
+              <option value="selected" ${idea.status === "selected" ? "selected" : ""}>채택</option>
+              <option value="rejected" ${idea.status === "rejected" ? "selected" : ""}>보류</option>
+            </select>
+          </label>
+        </div>`).join("")}
+      </div>`;
     }
 
     function bindParentEvents() {
@@ -1395,10 +1784,12 @@
           parentUnlocked = true;
           renderParent();
           showToast("비밀 메뉴가 열렸습니다.");
-        } else showToast("비밀번호가 다릅니다.");
+        } else showToast("비밀번호가 맞지 않아요");
       });
       document.getElementById("parentApply")?.addEventListener("click", parentAdjust);
       document.getElementById("resetToday")?.addEventListener("click", resetTodayOnly);
+      document.getElementById("resetIdeas")?.addEventListener("click", resetMissionIdeas);
+      document.querySelectorAll("[data-idea-status]").forEach((select) => select.addEventListener("change", () => updateMissionIdeaStatus(select.dataset.ideaStatus, select.value)));
       document.getElementById("resetAll")?.addEventListener("click", resetAllData);
       document.getElementById("exportBackup")?.addEventListener("click", exportBackup);
       document.getElementById("importBackup")?.addEventListener("change", (e) => importBackup(e.target.files[0]));
