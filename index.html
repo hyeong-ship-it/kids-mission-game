@@ -184,6 +184,7 @@
     .btn:active {
       transform: translateY(4px);
       box-shadow: 0 3px 0 rgba(13, 28, 83, 0.24), 0 9px 18px rgba(0, 0, 0, 0.14);
+      filter: brightness(0.90);
     }
 
     .btn.alt { background: linear-gradient(135deg, #f7f9ff, #dfeaff); color: #1b3f95; border-color: #cbd9ff; }
@@ -1001,6 +1002,7 @@
 
     /* Mobile: ≤ 480px */
     @media (max-width: 480px) {
+      /* ── 레이아웃 ── */
       .app {
         width: calc(100% - 16px);
         padding-top: 8px;
@@ -1017,34 +1019,71 @@
       .hero p { display: none; }
       .date-pill { min-width: 0; min-height: 40px; padding: 6px 10px; font-size: 11px; }
       .date-pill small { font-size: 9px; }
+      .panel-head { align-items: flex-start; flex-direction: column; gap: 8px; }
+      .panel-body { padding: 12px; }
+      .character-layout { grid-template-columns: 1fr; }
+      .parent-grid { grid-template-columns: 1fr; }
+
+      /* ── 플레이어 선택 카드 ── */
       .player-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin: 7px 0 10px; }
       .player-mini { grid-template-columns: 1fr; justify-items: center; gap: 3px; min-height: 78px; padding: 7px 5px; border-radius: 14px; text-align: center; }
       .player-mini h3 { font-size: 13px; }
       .player-mini p { margin-top: 1px; font-size: 9px; line-height: 1.2; }
-      .panel-head { align-items: flex-start; flex-direction: column; gap: 8px; }
-      .panel-body { padding: 12px; }
+
+      /* ── 하단 탭 ── */
       .bottom-tabs { grid-template-columns: repeat(3, 1fr); gap: 5px; padding: 7px; }
       .tab-btn { min-height: 50px; font-size: 11px; gap: 1px; }
       .tab-btn b { font-size: 18px; }
+
+      /* ── 내 캐릭터 스테이지 ── */
       .character-stage { min-height: 260px; padding: 14px; }
-      .character-layout { grid-template-columns: 1fr; }
-      .league-awards { grid-template-columns: 1fr; }
-      .parent-grid { grid-template-columns: 1fr; }
+      .character-visual.big { --visual-size: 120px; }
+      .avatar-wrap::before { width: 162px; height: 162px; }
+      .class-mark { bottom: 10px; font-size: 11px; padding: 5px 10px; }
+      .nickname { font-size: 24px; margin: 10px 0 5px; }
+      .equipped-line { gap: 5px; }
+      .equipped-line .chip { font-size: 11px; padding: 5px 8px; min-height: 26px; }
+
+      /* ── 미션 탭: 1열 ── */
+      #tab-missions .grid-2 { grid-template-columns: 1fr; }
+
+      /* ── 스킨샵 탭: 1열 ── */
+      #tab-shop .grid-3 { grid-template-columns: 1fr; }
+
+      /* ── 형제 리그 탭 ── */
+      #tab-league .grid-3 { grid-template-columns: 1fr; }
+      .league-awards { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .award-card { padding: 9px 6px; font-size: 13px; }
+      .award-card b { font-size: 20px; margin-bottom: 4px; }
+
+      /* ── 미션 아이디어 입력 ── */
       .vote-board .grid-2 { grid-template-columns: 1fr; }
+
+      /* ── 버튼 전체 너비 (필터 버튼 제외) ── */
       .btn:not(.small) { width: 100%; }
-      .photo-controls { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+
+      /* ── 필터/배경 버튼: 가로 스크롤 ── */
+      .photo-controls {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+      }
       .photo-controls .btn { flex-shrink: 0; width: auto; }
+
+      /* ── 카드 여백 축소 ── */
       .shop-card { min-height: auto; }
       .mission-card, .shop-card, .inventory-card { padding: 12px; }
       .notice-board, .vote-board, .photo-studio, .challenge-box { padding: 12px; }
-      .team-photo { gap: 6px; padding: 8px; min-height: 170px; }
-      .photo-player { min-height: 130px; padding: 8px 6px; }
-      .character-visual.photo { --visual-size: 60px; }
-      .award-card { padding: 10px; }
       .next-reward { padding: 12px; }
       .equip-chip { padding: 7px 8px; min-height: 42px; }
       .stat { padding: 10px; }
       .stat strong { font-size: 18px; }
+
+      /* ── 팀 사진관 ── */
+      .team-photo { gap: 6px; padding: 8px; min-height: 170px; }
+      .photo-player { min-height: 130px; padding: 8px 6px; }
+      .character-visual.photo { --visual-size: 60px; }
     }
   </style>
 </head>
