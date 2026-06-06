@@ -1,7 +1,7 @@
 {
-  "name": "우리집 미션 배틀",
+  "name": "3형제 미션 배틀",
   "short_name": "미션배틀",
-  "description": "아이들이 미션을 클리어하며 XP와 코인으로 캐릭터를 성장시키는 가족 미션 게임",
+  "description": "3형제가 미션을 클리어하며 XP와 코인으로 캐릭터를 성장시키는 가족 미션 RPG",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

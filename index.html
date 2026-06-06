@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>우리집 미션 배틀</title>
+  <title>3형제 미션 배틀</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="assets/icon-192.png" />
   <link rel="apple-touch-icon" href="assets/icon-192.png" />
   <meta name="theme-color" content="#2f3dce" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="application-name" content="우리집 미션 배틀" />
+  <meta name="application-name" content="3형제 미션 배틀" />
   <style>
     /*
       ==============================
@@ -1391,20 +1391,58 @@
     .pending-req-card .cancel-btn { background: #ec4058; color: #fff; border-radius: 10px; padding: 6px 14px; font-size: 0.85em; margin-top: 8px; border: 0; cursor: pointer; }
     /* 보물상자 진행도 */
     .chest-progress { font-size: 0.85em; color: #ffd84d; margin-bottom: 6px; font-weight: 700; }
+
+    /* ── v1.3-12 부모 운영센터 ── */
+    .parent-nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+    .parent-nav-btn { flex: 1; min-width: 80px; padding: 8px 10px; border-radius: 14px; background: rgba(255,255,255,0.55); border: 2px solid rgba(255,255,255,0.7); color: #3a4a7a; font-size: 13px; font-weight: 1000; cursor: pointer; text-align: center; transition: background .15s, color .15s; }
+    .parent-nav-btn.active { background: linear-gradient(135deg, #2f7bff, #6038c8); color: #fff; border-color: transparent; box-shadow: 0 4px 12px rgba(47,123,255,0.35); }
+    .nav-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 999px; background: var(--danger); color: #fff; font-size: 11px; font-weight: 1000; margin-left: 4px; vertical-align: middle; }
+    .dash-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .dash-card { padding: 12px 14px; border-radius: 18px; background: rgba(255,255,255,0.72); border: 2px solid rgba(255,255,255,0.8); box-shadow: 0 4px 0 rgba(26,44,105,.07); }
+    .dash-label { font-size: 12px; color: var(--muted); font-weight: 1000; margin-bottom: 4px; }
+    .dash-val { font-size: 22px; font-weight: 1000; color: var(--ink); }
+    .dash-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .kid-dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0; }
+    .kid-dash-card { padding: 10px 8px; border-radius: 14px; text-align: center; background: rgba(255,255,255,0.72); border: 2px solid rgba(255,255,255,0.8); }
+    .approval-type-group { margin-bottom: 14px; }
+    .approval-type-group h4 { margin: 0 0 8px; font-size: 15px; font-weight: 1000; color: #5a6a9a; border-bottom: 2px solid rgba(200,220,255,0.6); padding-bottom: 6px; }
+    .economy-card { padding: 12px 14px; border-radius: 18px; margin-bottom: 8px; background: linear-gradient(135deg, #f0fff8, #e8f4ff); border: 2px solid rgba(40,223,155,0.35); }
+    .danger-zone { margin-top: 16px; padding: 14px; border-radius: 20px; background: linear-gradient(135deg, #fff0f0, #ffe8e8); border: 2px solid rgba(236,64,88,0.35); }
+    .danger-zone h4 { margin: 0 0 10px; color: var(--danger); font-size: 16px; }
+    @media(max-width:600px) {
+      .dash-row { grid-template-columns: 1fr; }
+      .kid-dash-grid { grid-template-columns: 1fr 1fr; }
+      .parent-nav-btn { min-width: 66px; font-size: 12px; padding: 7px 7px; }
+    }
+    /* v1.3-13 오늘의 작전 카드 */
+    .today-ops-card { margin-bottom: 14px; }
+    .ops-section { padding: 10px 0; border-bottom: 1px solid var(--line); }
+    .ops-section:last-child { border-bottom: none; padding-bottom: 0; }
+    .ops-section h3 { margin: 0 0 6px; font-size: 14px; font-weight: 800; color: var(--blue); }
+    .ops-chest-bar .ops-chest-count { font-size: 20px; font-weight: 900; color: var(--blue); }
+    /* v1.3-13 칭찬 우체통 */
+    .praise-mailbox { margin-top: 14px; }
+    .praise-mailbox h4 { margin: 0 0 10px; font-size: 15px; font-weight: 900; }
+    .praise-kid-btns { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+    .praise-kid-btn { flex: 1; min-width: 70px; padding: 8px; border: 2px solid var(--line); border-radius: 12px; background: white; cursor: pointer; font-size: 13px; font-weight: 700; transition: all 0.15s; }
+    .praise-kid-btn.active { background: linear-gradient(135deg, #2f7bff, #6038c8); color: white; border-color: #2f7bff; }
+    .praise-quick-btns { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .praise-quick-btn { padding: 6px 10px; border: 1.5px solid var(--blue); border-radius: 10px; background: #f0f5ff; color: var(--blue); font-size: 12px; cursor: pointer; font-weight: 700; }
+    .praise-quick-btn:active { background: var(--blue); color: white; }
   </style>
 </head>
 <body>
   <div class="app-splash" id="appSplash" aria-live="polite">
     <div class="app-splash-card">
       <div class="app-splash-logo" aria-hidden="true">🛡️</div>
-      <h1 class="app-splash-title">우리집 미션 배틀</h1>
+      <h1 class="app-splash-title">3형제 미션 배틀</h1>
       <p class="app-splash-subtitle">오늘의 미션을 불러오는 중...</p>
     </div>
   </div>
   <main class="app">
     <header class="hero">
       <div>
-        <h1>우리집 미션 배틀</h1>
+        <h1>3형제 미션 배틀</h1>
         <p>미션 클리어 → XP 상승 → 코인 획득 → 아이템 언락 → 캐릭터 성장!</p>
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
@@ -1593,6 +1631,7 @@
     let selectedSettingsAvatar = "";
     let parentOpen = false;
     let parentUnlocked = false;
+    let parentActiveSection = 'summary';
     let parentAuthed = false;
     let toastTimer = null;
     let kidGateActive = true;
@@ -2442,6 +2481,10 @@
       const n = (state.notifications || []).find((n) => n.id === notiId);
       if (n) { n.read = true; saveState(); }
     }
+    function markAllNotificationsReadForKid(kidId) {
+      (state.notifications || []).forEach((n) => { if (n.kidId === kidId) n.read = true; });
+      saveState();
+    }
     function showNextUnreadNotification(kidId) {
       const unread = getUnreadNotifications(kidId);
       if (!unread.length) return;
@@ -2489,7 +2532,7 @@
       ov.className = "kid-gate-overlay";
       if (!selectedGateKid) {
         ov.innerHTML = `<div class="kid-gate-inner">
-          <h2 class="kid-gate-title">🏠 우리집 미션 배틀</h2>
+          <h2 class="kid-gate-title">🏠 3형제 미션 배틀</h2>
           <p class="kid-gate-subtitle">내 캐릭터를 선택해서 입장하세요!</p>
           <div class="kid-gate-grid">
             ${KIDS.map((kid) => {
@@ -3110,6 +3153,7 @@
       const nextEvo = nextEvolution(kid.id, info.current.level);
       const targetItem = nextTargetItem(data, info.current.level);
       document.getElementById("tab-character").innerHTML = `
+        ${renderTodayOpsCard(selectedKidId)}
         <section class="panel">
           <div class="panel-head"><h2>내 캐릭터</h2><span class="chip">${getActiveKidLabel()}</span></div>
           <div class="panel-body character-layout">
@@ -3229,6 +3273,59 @@
           <p class="card-sub" style="margin:4px 0;">+${req.xp || 0} XP / +${req.coins || 0} 코인 · ⏳ 대기 중</p>
           <button class="cancel-btn" type="button" data-cancel-req="${req.id}">취소하기</button>
         </div>`).join("")}
+      </div>`;
+    }
+
+    function renderTodayOpsCard(kidId) {
+      const data = kidData(kidId);
+      const info = levelInfo(data.xp);
+      const cleared = doneCount(kidId);
+      const chestOpened = state.dailyChests[kidId];
+      const nextItem = nextUnlock(info.current.level);
+      const myReqs = getPendingRequestsForKid(kidId);
+      const avgLv = averageTeamLevel();
+      const featuredCoop = COOP_REWARDS.find((r) => avgLv >= r.avgLevel - 1) || COOP_REWARDS[0];
+      const coopStatus = canRequestCoopReward(featuredCoop.id);
+
+      const chestHtml = chestOpened
+        ? `<p class="card-sub">오늘 보물상자를 열었어요! 🎉</p>`
+        : `<div class="ops-chest-bar">
+            <span class="ops-chest-count">${cleared}/3</span>
+            <div class="xp-bar" style="margin:4px 0 0;"><span style="width:${Math.min(100, cleared / 3 * 100)}%"></span></div>
+            <p class="card-sub" style="margin-top:4px;">${cleared >= 3 ? "🎉 보물상자를 열 수 있어요!" : `${3 - cleared}개 더 클리어하면 열려요`}</p>
+          </div>`;
+
+      const unlockHtml = nextItem
+        ? `<p>${nextItem.icon} <b>${nextItem.name}</b> <span class="card-sub">(레벨 ${nextItem.level}에서 해금)</span></p>`
+        : `<p class="card-sub">모든 아이템 해금 완료! 최고예요 🏆</p>`;
+
+      const coopHtml = `<p>${featuredCoop.icon} <b>${featuredCoop.title}</b></p>
+        <p class="card-sub">${coopStatus.ok ? "🟢 지금 도전할 수 있어요!" : coopStatus.reason}</p>`;
+
+      const reqHtml = myReqs.length
+        ? `<p class="card-sub">⏳ 부모님 확인 대기 중: <b>${myReqs.length}건</b></p>`
+        : `<p class="card-sub">대기 중인 요청이 없어요 ✅</p>`;
+
+      return `<div class="panel today-ops-card" style="border:2px solid var(--blue);box-shadow:none;">
+        <div class="panel-head"><h2>🗺️ 오늘의 작전</h2><span class="chip">작전 현황</span></div>
+        <div class="panel-body">
+          <div class="ops-section">
+            <h3>🎁 보물상자 진행</h3>
+            ${chestHtml}
+          </div>
+          <div class="ops-section">
+            <h3>🔓 다음 해금 목표</h3>
+            ${unlockHtml}
+          </div>
+          <div class="ops-section">
+            <h3>🤝 팀 협동 목표</h3>
+            ${coopHtml}
+          </div>
+          <div class="ops-section">
+            <h3>📋 내 요청 현황</h3>
+            ${reqHtml}
+          </div>
+        </div>
       </div>`;
     }
 
@@ -3752,8 +3849,365 @@
       }).join("")}</div>`;
     }
 
+    /*
+      ==============================
+      v1.3-12 부모 운영센터 헬퍼
+      ==============================
+    */
+    function getParentDashboardSummary() {
+      const pending = (state.pendingApprovals || []).filter((a) => a.status === "pending");
+      const pendingByType = {
+        special: pending.filter((a) => !["exam_bonus","family_reward","coop_reward"].includes(a.approvalType)).length,
+        exam: pending.filter((a) => a.approvalType === "exam_bonus").length,
+        family: pending.filter((a) => a.approvalType === "family_reward").length,
+        coop: pending.filter((a) => a.approvalType === "coop_reward").length,
+      };
+      const kidSummaries = KIDS.map((kid) => {
+        const data = state.kids[kid.id];
+        const lvl = levelInfo(data.xp).current.level;
+        const today = Object.values(data.todayDone || {}).filter(Boolean).length;
+        const unread = getUnreadNotifications(kid.id).length;
+        const myPending = pending.filter((a) => a.kidId === kid.id || a.approvalType === "coop_reward").length;
+        return { id: kid.id, level: lvl, coins: data.coins, today, unread, pending: myPending };
+      });
+      const teamMedals = state.gameMeta.teamMedals || 0;
+      const weekKey = getWeekKey();
+      const monthKey = getMonthKey();
+      const weekClosed = !!((state.weeklyClosings || {})[weekKey]);
+      const monthClosed = !!((state.monthlyClosings || {})[monthKey]);
+      const lastBackup = state.gameMeta.lastBackupAt;
+      const backupDays = lastBackup ? Math.floor((Date.now() - new Date(lastBackup).getTime()) / 86400000) : null;
+      return { pending, pendingByType, kidSummaries, teamMedals, weekClosed, monthClosed, backupDays };
+    }
+
+    function renderParentDashboard() {
+      const s = getParentDashboardSummary();
+      const alerts = [];
+      if (s.pending.length) alerts.push(`오늘 승인할 일이 있어요 (${s.pending.length}건)`);
+      if (!s.weekClosed) alerts.push("이번 주 마감이 아직 남아 있어요");
+      if (s.backupDays === null) alerts.push("아직 백업한 적이 없어요");
+      else if (s.backupDays >= 7) alerts.push(`최근 백업이 오래되었어요 (${s.backupDays}일 전)`);
+      const subTypeInfo = [
+        s.pendingByType.special ? `특별 미션 ${s.pendingByType.special}건` : "",
+        s.pendingByType.exam ? `시험 보너스 ${s.pendingByType.exam}건` : "",
+        s.pendingByType.family ? `가족 보상 ${s.pendingByType.family}건` : "",
+        s.pendingByType.coop ? `협동 보상 ${s.pendingByType.coop}건` : "",
+      ].filter(Boolean).join(" · ");
+      return `<div class="notice-board">
+        <h3>오늘의 운영 요약</h3>
+        ${alerts.length
+          ? `<div class="backup-warn" style="margin-bottom:10px;font-size:13px;">${alerts.map((a) => `• ${a}`).join("<br>")}</div>`
+          : `<div class="backup-ok" style="margin-bottom:10px;">✓ 오늘은 특별히 처리할 일이 없어요</div>`}
+        <div class="dash-row">
+          <div class="dash-card">
+            <div class="dash-label">승인 대기</div>
+            <div class="dash-val">${s.pending.length}건</div>
+            <div class="dash-sub">${subTypeInfo || "없음"}</div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-label">팀 메달</div>
+            <div class="dash-val">🏅 ${s.teamMedals}개</div>
+            <div class="dash-sub">치킨 파티: 메달 1개 필요</div>
+          </div>
+        </div>
+        <div class="dash-row">
+          <div class="dash-card">
+            <div class="dash-label">이번 주 마감</div>
+            <div class="dash-val">${s.weekClosed ? "✓ 완료" : "⏳ 대기 중"}</div>
+            <div class="dash-sub">${s.weekClosed ? "보상 지급 완료" : "마감 전"}</div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-label">이번 달 마감</div>
+            <div class="dash-val">${s.monthClosed ? "✓ 완료" : "⏳ 대기 중"}</div>
+            <div class="dash-sub">${s.monthClosed ? "시즌 보상 완료" : "마감 전"}</div>
+          </div>
+        </div>
+        <h4 style="margin:10px 0 6px;font-size:15px;font-weight:1000;">아이별 현황</h4>
+        <div class="kid-dash-grid">
+          ${s.kidSummaries.map((k) => `<div class="kid-dash-card">
+            <div style="font-weight:1000;font-size:14px;">${displayName(k.id)}</div>
+            <div style="font-size:12px;color:var(--muted);">Lv.${k.level}</div>
+            <div style="font-size:14px;font-weight:1000;">🪙${k.coins}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:3px;">오늘 ${k.today}개</div>
+            ${k.unread ? `<div style="font-size:11px;color:var(--danger);">알림 ${k.unread}</div>` : ""}
+            ${k.pending ? `<div style="font-size:11px;color:var(--orange);">대기 ${k.pending}건</div>` : ""}
+          </div>`).join("")}
+        </div>
+        <div class="${s.backupDays === null || s.backupDays >= 7 ? "backup-warn" : "backup-ok"}" style="margin-top:8px;font-size:13px;">
+          ${s.backupDays === null
+            ? "⚠️ 아직 백업이 없어요. 데이터/백업 탭에서 백업해 주세요."
+            : s.backupDays >= 7
+              ? `⚠️ 최근 백업: ${s.backupDays}일 전 — 백업을 권장해요`
+              : `✓ 최근 백업: ${s.backupDays === 0 ? "오늘" : s.backupDays + "일 전"}`}
+        </div>
+        <p class="card-sub" style="margin-top:6px;">아이 데이터는 이 패드에 저장돼요. 가끔 백업해 주세요.</p>
+      </div>`;
+    }
+
+    function renderApprovalCardFull(a) {
+      const isExam = a.approvalType === "exam_bonus";
+      const isFamilyReward = a.approvalType === "family_reward";
+      const isCoopReward = a.approvalType === "coop_reward";
+      const t = new Date(a.requestedAt || a.createdAt || Date.now());
+      const timeStr = `${String(t.getHours()).padStart(2,"0")}:${String(t.getMinutes()).padStart(2,"0")}`;
+      const who = isCoopReward ? "3형제 팀" : displayName(a.kidId);
+      const title = isCoopReward || isFamilyReward ? a.rewardName : a.questTitle;
+      const rewardText = isCoopReward
+        ? `총 ${a.totalCost} 코인 · 팀 메달 ${a.teamMedalCost}개 차감`
+        : isFamilyReward
+          ? `-${a.cost} 코인 차감`
+          : `+${a.xp} XP / +${a.coins} 코인`;
+      const detail = isCoopReward
+        ? `각 ${a.perKidCost} 코인 · 팀 메달 ${a.teamMedalCost}개 차감 · 요청: ${timeStr}`
+        : isFamilyReward
+          ? `${a.cost} 코인 차감 · 요청: ${timeStr}`
+          : isExam
+            ? `${a.subject} ${a.scoreType === "100" ? "100점" : "90점 이상"} · 요청: ${timeStr}`
+            : `특별 행동 · 요청: ${timeStr}`;
+      return `<div class="approval-card">
+        <div class="card-top">
+          <span><b>${escapeHtml(who)}</b> · ${escapeHtml(title || "")}</span>
+          <span class="chip">${rewardText}</span>
+        </div>
+        <p class="card-sub" style="margin:0;">${detail}</p>
+        <div class="approval-actions">
+          <button class="btn gold" type="button" data-approve="${a.id}">✅ 승인</button>
+          <button class="btn danger" type="button" data-reject="${a.id}">❌ 반려</button>
+        </div>
+      </div>`;
+    }
+
+    function renderPendingApprovalGroups() {
+      const pending = (state.pendingApprovals || []).filter((a) => a.status === "pending");
+      if (!pending.length) {
+        return `<div class="notice-board"><h3>승인 대기</h3><div class="empty">현재 승인 대기 중인 항목이 없습니다.</div></div>`;
+      }
+      const groups = [
+        { label: "✋ 특별 미션", items: pending.filter((a) => !["exam_bonus","family_reward","coop_reward"].includes(a.approvalType)) },
+        { label: "📝 시험 보너스", items: pending.filter((a) => a.approvalType === "exam_bonus") },
+        { label: "🎁 개인 가족 보상", items: pending.filter((a) => a.approvalType === "family_reward") },
+        { label: "🤝 형제 협동 보상", items: pending.filter((a) => a.approvalType === "coop_reward") },
+      ].filter((g) => g.items.length > 0);
+      return `<div class="notice-board">
+        <h3>승인 대기 <span class="pending-badge">${pending.length}</span></h3>
+        <p class="card-sub" style="margin-bottom:10px;">타입별로 확인하고 승인 또는 반려해 주세요.</p>
+        ${groups.map((g) => `<div class="approval-type-group">
+          <h4>${g.label} (${g.items.length}건)</h4>
+          <div class="stack">${g.items.map((a) => renderApprovalCardFull(a)).join("")}</div>
+        </div>`).join("")}
+      </div>`;
+    }
+
+    function renderRewardEconomySummary() {
+      const teamMedals = state.gameMeta.teamMedals || 0;
+      const avgLevel = averageTeamLevel();
+      const monthKey = getMonthKey();
+      const kidRows = KIDS.map((kid) => {
+        const data = state.kids[kid.id];
+        const lvl = levelInfo(data.xp).current.level;
+        const monthReqCount = (state.rewardRequests || []).filter(
+          (r) => r.kidId === kid.id && r.requestedAt && r.requestedAt.startsWith(monthKey)
+        ).length;
+        return `<div class="kid-dash-card">
+          <div style="font-weight:1000;">${displayName(kid.id)}</div>
+          <div style="font-size:12px;color:var(--muted);">Lv.${lvl}</div>
+          <div style="font-size:14px;font-weight:1000;">🪙 ${data.coins}</div>
+          <div style="font-size:11px;color:var(--muted);">이번 달 요청 ${monthReqCount}회</div>
+        </div>`;
+      }).join("");
+      const coopStatus = COOP_REWARDS.map((r) => {
+        const can = canRequestCoopReward(r.id, { ignorePending: true });
+        const statusColor = can.ok ? "#087755" : "#7280a6";
+        return `<div class="economy-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+            <span style="font-weight:1000;">${r.icon} ${r.title}</span>
+            <span style="font-size:12px;color:${statusColor};font-weight:1000;text-align:right;">${can.ok ? "도전 가능" : can.reason}</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">각 ${r.perKidCost} 코인 · 팀 메달 ${r.teamMedals}개 · ${r.limitType === "two_month" ? "2개월 1회" : "월 " + r.limitCount + "회"}</div>
+        </div>`;
+      }).join("");
+      return `<div class="notice-board">
+        <h3>포인트 관리</h3>
+        <div class="parent-grid" style="margin-top:10px;">
+          <div class="field"><label>아이</label><select id="parentKid">${KIDS.map((kid) => `<option value="${kid.id}" ${kid.id === selectedKidId ? "selected" : ""}>${displayName(kid.id)}</option>`).join("")}</select></div>
+          <div class="field"><label>종류</label><select id="parentType"><option value="both">XP+코인 추가</option><option value="xp">XP 추가</option><option value="coins">코인 추가</option><option value="coinsSub">코인 차감</option></select></div>
+          <div class="field"><label>수량</label><input id="parentAmount" type="number" min="1" placeholder="숫자 입력"></div>
+          <div class="field"><label>메모</label><input id="parentReason" type="text" placeholder="예: 특별 칭찬"></div>
+          <button class="btn" id="parentApply" type="button">적용</button>
+        </div>
+      </div>
+      <div class="notice-board" style="margin-top:10px;">
+        <h3>보상 경제 현황</h3>
+        <p class="card-sub" style="margin-bottom:8px;">팀 메달 현재 ${teamMedals}개 · 평균 레벨 ${avgLevel.toFixed(1)}</p>
+        <div class="kid-dash-grid" style="margin-bottom:12px;">${kidRows}</div>
+        ${coopStatus}
+      </div>`;
+    }
+
+    function renderPraiseMailbox() {
+      return `<div class="praise-mailbox">
+        <h4>💌 칭찬 우체통</h4>
+        <p class="card-sub" style="margin-bottom:10px;">아이에게 칭찬 메시지를 보내세요. 아이 알림함에 바로 도착해요.</p>
+        <div class="praise-kid-btns">
+          ${KIDS.map((kid) => `<button class="praise-kid-btn" data-praise-kid="${kid.id}" type="button">${displayName(kid.id)}</button>`).join("")}
+        </div>
+        <div class="praise-quick-btns">
+          <button class="praise-quick-btn" data-praise-quick="오늘 정말 열심히 했어! 최고야 🌟" type="button">열심히했어 🌟</button>
+          <button class="praise-quick-btn" data-praise-quick="미션 클리어 대단해! 우리 영웅 💪" type="button">미션 완료 💪</button>
+          <button class="praise-quick-btn" data-praise-quick="형제들이랑 사이좋게 지내줘서 고마워 🤝" type="button">사이좋게 🤝</button>
+          <button class="praise-quick-btn" data-praise-quick="꾸준히 노력하는 모습이 너무 자랑스러워 ✨" type="button">자랑스러워 ✨</button>
+        </div>
+        <textarea id="praiseMessage" rows="3" style="width:100%;box-sizing:border-box;border-radius:12px;border:1.5px solid var(--line);padding:10px;font-size:14px;resize:vertical;" placeholder="칭찬 메시지를 입력하세요..."></textarea>
+        <button class="btn gold" id="sendPraiseBtn" type="button" style="margin-top:8px;">💌 칭찬 메시지 보내기</button>
+        <div id="praiseSentNotice" style="display:none;margin-top:8px;padding:8px 12px;border-radius:10px;background:#e8f5e9;color:#2e7d32;font-size:13px;font-weight:700;"></div>
+      </div>`;
+    }
+
+    function renderKidManagementSection() {
+      return `<div class="notice-board">
+        <h3>아이 관리</h3>
+        <div class="stack">
+          <div>
+            <p class="card-sub" style="margin-bottom:12px;">게임 입장 시 사용하는 비밀 코드입니다. 숫자 4자리 권장. 0903은 사용할 수 없어요.</p>
+            ${KIDS.map((kid) => `<div class="field" style="margin-bottom:10px;">
+              <label>${displayName(kid.id)} 비밀 코드</label>
+              <input class="pin-change-input" data-pin-kid="${kid.id}" type="text" inputmode="numeric" maxlength="4" value="${escapeHtml(state.gameMeta.kidPins?.[kid.id] || "1111")}" placeholder="4자리 숫자">
+            </div>`).join("")}
+            <button class="btn gold" id="savePinsBtn" type="button">🔐 비밀 코드 저장</button>
+          </div>
+          <div style="margin-top:14px;">
+            <h4 style="margin:0 0 8px;font-size:15px;font-weight:1000;">아이별 알림 현황</h4>
+            ${KIDS.map((kid) => {
+              const data = state.kids[kid.id];
+              const lvl = levelInfo(data.xp).current.level;
+              const unread = getUnreadNotifications(kid.id).length;
+              return `<div class="kid-dash-card" style="text-align:left;margin-bottom:8px;display:block;padding:12px;">
+                <div style="font-weight:1000;font-size:15px;">${displayName(kid.id)} · Lv.${lvl} · 🪙${data.coins} · ${data.xp} XP</div>
+                <div style="font-size:12px;color:${unread ? "var(--danger)" : "var(--muted)"};">${unread ? `미확인 알림 ${unread}개` : "새 알림 없음"}</div>
+                <button class="btn alt" style="margin-top:6px;min-height:34px;padding:5px 12px;font-size:12px;" type="button" data-mark-read="${kid.id}">알림 모두 읽음 처리</button>
+              </div>`;
+            }).join("")}
+          </div>
+          <div style="margin-top:10px;">
+            <h4 style="margin:0 0 8px;font-size:15px;font-weight:1000;">새 미션 아이디어</h4>
+            ${renderParentMissionIdeas()}
+          </div>
+          <div style="margin-top:10px;border-top:1px solid var(--line);padding-top:14px;">
+            ${renderPraiseMailbox()}
+          </div>
+        </div>
+      </div>`;
+    }
+
+    function renderBackupStatusCard() {
+      const last = state.gameMeta.lastBackupAt;
+      let statusHtml;
+      if (!last) {
+        statusHtml = `<div class="backup-warn">⚠️ 아직 백업한 적이 없어요. 백업 파일을 저장해 주세요!</div>`;
+      } else {
+        const d = new Date(last);
+        const days = Math.floor((Date.now() - d.getTime()) / 86400000);
+        const dateStr = `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`;
+        statusHtml = days >= 7
+          ? `<div class="backup-warn">⚠️ 마지막 백업: ${dateStr} (${days}일 전) — 7일 이상 백업하지 않았어요!<br><small>데이터를 안전하게 보관하려면 주 1회 백업을 권장합니다.</small></div>`
+          : `<div class="backup-ok">✓ 최근 백업: ${dateStr} (${days === 0 ? "오늘" : days + "일 전"})</div>`;
+      }
+      return `<div class="notice-board">
+        <h3>데이터 / 백업</h3>
+        ${statusHtml}
+        <p class="card-sub" style="margin-bottom:10px;">아이 데이터는 이 패드에 저장돼요. 가끔 백업해 주세요.<br>백업 파일은 GitHub에 올리지 말고 따로 보관하세요.</p>
+        <div class="parent-actions">
+          <button class="btn alt" id="exportBackup" type="button">💾 백업 파일 다운로드</button>
+          <label class="btn alt" for="importBackup">📂 백업 파일 불러오기</label>
+          <input id="importBackup" type="file" accept="application/json,.json" hidden>
+        </div>
+        <p class="card-sub" style="margin-top:8px;color:#6a4a00;">잘못된 파일을 불러오면 현재 데이터가 바뀔 수 있어요. 불러오기 전 백업을 먼저 해주세요.</p>
+        <div class="parent-actions" style="margin-top:10px;">
+          <button class="btn alt" id="resetToday" type="button">오늘 체크만 초기화</button>
+          <button class="btn alt" id="resetIdeas" type="button">아이디어 목록 초기화</button>
+        </div>
+      </div>`;
+    }
+
+    function renderAdminDangerZone() {
+      return `<div class="danger-zone">
+        <h4>⚠️ 위험 구역</h4>
+        <p class="card-sub" style="color:#b33;margin-bottom:10px;">전체 초기화는 되돌릴 수 없어요. 반드시 백업 후 진행해 주세요.</p>
+        <div class="field" style="margin-bottom:10px;">
+          <label style="color:#b33;">"초기화"라고 입력하면 전체 초기화 버튼이 활성화됩니다</label>
+          <input id="resetConfirmInput" type="text" placeholder="초기화" style="border-color:#ffd0d0;">
+        </div>
+        <button class="btn danger" id="resetAll" type="button" disabled>전체 데이터 초기화</button>
+      </div>`;
+    }
+
+    function renderAppSettingsSection() {
+      const soundOn = state.gameMeta.soundEnabled;
+      const appMode = isStandaloneAppMode();
+      return `<div class="notice-board">
+        <h3>앱 설정</h3>
+        <div class="dash-row" style="margin-bottom:12px;">
+          <div class="dash-card">
+            <div class="dash-label">효과음</div>
+            <div class="dash-val">${soundOn ? "🔊 켜짐" : "🔇 꺼짐"}</div>
+            <div class="dash-sub">하단 버튼으로 켜고 끌 수 있어요</div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-label">실행 모드</div>
+            <div class="dash-val">${appMode ? "앱 모드" : "브라우저"}</div>
+            <div class="dash-sub">${appMode ? "PWA 홈 앱으로 실행 중" : "홈 화면에 추가 권장"}</div>
+          </div>
+        </div>
+        <div class="dash-row" style="margin-bottom:12px;">
+          <div class="dash-card">
+            <div class="dash-label">앱 버전</div>
+            <div class="dash-val">v1.3.13</div>
+            <div class="dash-sub">부모 운영센터 패치</div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-label">저장 방식</div>
+            <div class="dash-val" style="font-size:16px;">로컬 저장</div>
+            <div class="dash-sub">이 패드에만 저장돼요</div>
+          </div>
+        </div>
+        <h4 style="margin:10px 0 8px;font-size:15px;font-weight:1000;">패드 홈앱 설치 안내</h4>
+        <p class="card-sub">${appMode ? "현재 앱 모드로 실행 중이에요." : "현재는 브라우저 모드예요. 홈 화면에 추가하면 더 앱처럼 사용할 수 있어요."}</p>
+        <ol class="card-sub" style="margin:10px 0 0 20px;line-height:1.7;">
+          <li>Chrome에서 게임 주소 열기</li>
+          <li>오른쪽 위 점 3개 누르기</li>
+          <li>홈 화면에 추가 선택</li>
+          <li>이름을 우리집 미션 배틀로 설정</li>
+          <li>홈 화면 아이콘으로 실행</li>
+        </ol>
+        <div class="parent-actions" style="margin-top:12px;">
+          <button class="btn gold" id="refreshLatestVersion" type="button">최신 버전 다시 불러오기</button>
+        </div>
+        <p class="card-sub" style="margin-top:8px;">아이 데이터는 지우지 않아요. 앱 파일만 새로 받아옵니다.</p>
+      </div>`;
+    }
+
     function renderParent() {
       const pendingCount = (state.pendingApprovals || []).filter((a) => a.status === "pending").length;
+      const navSections = [
+        { id: "summary",  label: "요약",      badge: 0 },
+        { id: "pending",  label: "승인 대기", badge: pendingCount },
+        { id: "rewards",  label: "보상 관리", badge: 0 },
+        { id: "closing",  label: "주간/월간", badge: 0 },
+        { id: "kids",     label: "아이 관리", badge: 0 },
+        { id: "data",     label: "데이터/백업", badge: 0 },
+        { id: "settings", label: "앱 설정",   badge: 0 },
+      ];
+      const navHtml = `<div class="parent-nav">
+        ${navSections.map((s) => `<button class="parent-nav-btn${parentActiveSection === s.id ? " active" : ""}" type="button" data-parent-section="${s.id}">${s.label}${s.badge ? `<span class="nav-badge">${s.badge}</span>` : ""}</button>`).join("")}
+      </div>`;
+      let sectionHtml = "";
+      if (parentActiveSection === "summary")  sectionHtml = renderParentDashboard();
+      else if (parentActiveSection === "pending")  sectionHtml = renderPendingApprovalGroups();
+      else if (parentActiveSection === "rewards")  sectionHtml = renderRewardEconomySummary();
+      else if (parentActiveSection === "closing")  sectionHtml = renderWeeklyClosingPanel() + renderMonthlyClosingPanel();
+      else if (parentActiveSection === "kids")     sectionHtml = renderKidManagementSection();
+      else if (parentActiveSection === "data")     sectionHtml = renderBackupStatusCard() + renderAdminDangerZone();
+      else if (parentActiveSection === "settings") sectionHtml = renderAppSettingsSection();
       document.getElementById("tab-parent").innerHTML = `
         <section class="panel">
           <div class="panel-head">
@@ -3768,72 +4222,7 @@
                   <div class="field"><label for="parentPassword">비밀번호</label><input id="parentPassword" type="password" inputmode="numeric" placeholder="비밀번호를 입력하세요"></div>
                   <button class="btn" id="unlockParent" type="button">확인</button>
                 </div>`
-              : `<div class="stack">
-
-                  <!-- 섹션 1: 포인트 관리 -->
-                  <div class="notice-board">
-                    <h3>① 포인트 관리</h3>
-                    <div class="parent-grid" style="margin-top:10px;">
-                      <div class="field"><label>아이</label><select id="parentKid">${KIDS.map((kid) => `<option value="${kid.id}" ${kid.id === selectedKidId ? "selected" : ""}>${displayName(kid.id)}</option>`).join("")}</select></div>
-                      <div class="field"><label>종류</label><select id="parentType"><option value="both">XP+코인 추가</option><option value="xp">XP 추가</option><option value="coins">코인 추가</option><option value="coinsSub">코인 차감</option></select></div>
-                      <div class="field"><label>수량</label><input id="parentAmount" type="number" min="1" placeholder="숫자 입력"></div>
-                      <div class="field"><label>메모</label><input id="parentReason" type="text" placeholder="예: 특별 칭찬"></div>
-                      <button class="btn" id="parentApply" type="button">적용</button>
-                      <button class="btn danger" id="resetAll" type="button">전체 초기화</button>
-                    </div>
-                  </div>
-
-                  <!-- 섹션 2: 승인 대기 미션 -->
-                  <div class="notice-board">
-                    <h3>② 승인 대기 미션${pendingCount ? `<span class="pending-badge">${pendingCount}</span>` : ""}</h3>
-                    <p class="card-sub" style="margin-bottom:10px;">아이가 요청한 특별 미션을 확인하고 승인 또는 반려해 주세요.</p>
-                    ${renderPendingApprovals()}
-                  </div>
-
-                  <!-- 섹션 3: 새 미션 아이디어 -->
-                  <div class="notice-board">
-                    <h3>③ 새 미션 아이디어</h3>
-                    ${renderParentMissionIdeas()}
-                  </div>
-
-                  <!-- 섹션 4: 데이터 백업 -->
-                  <div class="notice-board">
-                    <h3>④ 데이터 백업</h3>
-                    ${renderBackupStatus()}
-                    <div class="parent-actions" style="margin-top:10px;">
-                      <button class="btn alt" id="exportBackup" type="button">💾 백업 파일 다운로드</button>
-                      <label class="btn alt" for="importBackup">📂 백업 파일 불러오기</label>
-                      <input id="importBackup" type="file" accept="application/json,.json" hidden>
-                    </div>
-                    <p class="card-sub" style="margin-top:8px;">데이터를 안전하게 보관하려면 주 1회 백업을 권장합니다.</p>
-                  </div>
-
-                  <!-- 섹션 5: 초기화 -->
-                  <div class="notice-board">
-                    <h3>⑤ 초기화</h3>
-                    <div class="parent-actions" style="margin-top:10px;">
-                      <button class="btn alt" id="resetToday" type="button">오늘 체크 상태만 초기화</button>
-                      <button class="btn alt" id="resetIdeas" type="button">아이디어 목록 초기화</button>
-                    </div>
-                  </div>
-
-                  <!-- 섹션 6: 아이별 비밀 코드 관리 -->
-                  <div class="notice-board">
-                    <h3>⑥ 아이별 비밀 코드 관리</h3>
-                    <p class="card-sub" style="margin-bottom:12px;">게임 입장 시 사용하는 비밀 코드입니다. 숫자 4자리 권장.</p>
-                    ${KIDS.map((kid) => `
-                      <div class="field" style="margin-bottom:10px;">
-                        <label>${displayName(kid.id)} 비밀 코드</label>
-                        <input class="pin-change-input" data-pin-kid="${kid.id}" type="text" inputmode="numeric" maxlength="4" value="${escapeHtml(state.gameMeta.kidPins?.[kid.id] || "1111")}" placeholder="4자리 숫자">
-                      </div>`).join("")}
-                    <button class="btn gold" id="savePinsBtn" type="button">🔐 비밀 코드 저장</button>
-                  </div>
-
-                  ${renderPwaInstallGuide()}
-                  ${renderWeeklyClosingPanel()}
-                  ${renderMonthlyClosingPanel()}
-
-                </div>`}
+              : `<div class="stack">${navHtml}${sectionHtml}</div>`}
           </div>
         </section>`;
       bindParentEvents();
@@ -3870,24 +4259,103 @@
       document.getElementById("unlockParent")?.addEventListener("click", () => {
         if (document.getElementById("parentPassword").value === PARENT_PASSWORD) {
           parentUnlocked = true;
+          parentActiveSection = "summary";
           playSound("parent");
           renderParent();
           showToast("비밀 메뉴가 열렸습니다.");
         } else { playSound("error"); showToast("비밀번호가 맞지 않아요"); }
       });
+      // 섹션 탭 네비게이션
+      document.querySelectorAll("[data-parent-section]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          parentActiveSection = btn.dataset.parentSection;
+          renderParent();
+        });
+      });
       document.getElementById("parentApply")?.addEventListener("click", parentAdjust);
       document.getElementById("resetToday")?.addEventListener("click", resetTodayOnly);
       document.getElementById("resetIdeas")?.addEventListener("click", resetMissionIdeas);
-      document.querySelectorAll("[data-idea-status]").forEach((select) => select.addEventListener("change", () => updateMissionIdeaStatus(select.dataset.ideaStatus, select.value)));
-      document.getElementById("resetAll")?.addEventListener("click", resetAllData);
+      document.querySelectorAll("[data-idea-status]").forEach((select) => {
+        select.addEventListener("change", () => updateMissionIdeaStatus(select.dataset.ideaStatus, select.value));
+      });
+      // 전체 초기화: "초기화" 입력 시 버튼 활성화 (1단계)
+      const resetInput = document.getElementById("resetConfirmInput");
+      const resetBtn = document.getElementById("resetAll");
+      if (resetInput && resetBtn) {
+        resetInput.addEventListener("input", () => {
+          resetBtn.disabled = resetInput.value.trim() !== "초기화";
+        });
+        resetBtn.addEventListener("click", resetAllData);
+      }
       document.getElementById("exportBackup")?.addEventListener("click", exportBackup);
       document.getElementById("importBackup")?.addEventListener("change", (e) => importBackup(e.target.files[0]));
-      document.querySelectorAll("[data-approve]").forEach((b) => b.addEventListener("click", () => approveQuest(b.dataset.approve)));
+      // 승인 버튼: 큰 보상은 확인창 먼저 띄움
+      document.querySelectorAll("[data-approve]").forEach((b) => b.addEventListener("click", () => {
+        const appr = (state.pendingApprovals || []).find((a) => a.id === b.dataset.approve);
+        if (!appr) return;
+        if (appr.approvalType === "family_reward") {
+          if (!confirm(`이 보상을 승인하고 코인을 차감할까요?\n\n${appr.rewardName} · ${appr.cost} 코인 차감`)) return;
+        } else if (appr.approvalType === "coop_reward") {
+          if (!confirm(`3형제 협동 보상을 승인할까요?\n\n${appr.rewardName}\n각 ${appr.perKidCost} 코인 + 팀 메달 ${appr.teamMedalCost}개가 차감돼요.`)) return;
+        }
+        approveQuest(b.dataset.approve);
+      }));
       document.querySelectorAll("[data-reject]").forEach((b) => b.addEventListener("click", () => rejectQuest(b.dataset.reject)));
       document.getElementById("savePinsBtn")?.addEventListener("click", updateKidPins);
       document.getElementById("refreshLatestVersion")?.addEventListener("click", refreshLatestVersion);
-      document.getElementById("weeklyCloseBtn")?.addEventListener("click", closeCurrentWeek);
-      document.getElementById("monthlyCloseBtn")?.addEventListener("click", closeCurrentMonth);
+      // 주간/월간 마감: 확인창 후 실행
+      document.getElementById("weeklyCloseBtn")?.addEventListener("click", () => {
+        const key = getWeekKey();
+        if ((state.weeklyClosings || {})[key]) { showToast("이번 주는 이미 마감했어요. 보상은 한 번만 지급돼요."); return; }
+        const reports = estimatePeriodReport("week");
+        const medal = teamMedalEstimate(reports);
+        if (!confirm(`이번 주 마감 보상을 지급할까요?\n팀 메달 +${medal}개 지급 예정`)) return;
+        closeCurrentWeek();
+      });
+      document.getElementById("monthlyCloseBtn")?.addEventListener("click", () => {
+        const key = getMonthKey();
+        if ((state.monthlyClosings || {})[key]) { showToast("이번 달은 이미 마감했어요. 보상은 한 번만 지급돼요."); return; }
+        if (!confirm(`이번 달 시즌 결과를 마감할까요?\n시즌 배지와 팀 메달이 지급됩니다.`)) return;
+        closeCurrentMonth();
+      });
+      // 아이별 알림 모두 읽음 처리
+      document.querySelectorAll("[data-mark-read]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          markAllNotificationsReadForKid(btn.dataset.markRead);
+          showToast(`${displayName(btn.dataset.markRead)}의 알림을 모두 읽음 처리했어요.`);
+          renderParent();
+        });
+      });
+      // 칭찬 우체통 아이 선택
+      const praiseKidBtns = document.querySelectorAll("[data-praise-kid]");
+      praiseKidBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          praiseKidBtns.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+        });
+      });
+      if (praiseKidBtns.length) praiseKidBtns[0].classList.add("active");
+      // 칭찬 빠른 입력
+      document.querySelectorAll("[data-praise-quick]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const ta = document.getElementById("praiseMessage");
+          if (ta) ta.value = btn.dataset.praiseQuick;
+        });
+      });
+      // 칭찬 메시지 보내기
+      document.getElementById("sendPraiseBtn")?.addEventListener("click", () => {
+        const activeKidBtn = document.querySelector(".praise-kid-btn.active");
+        const kidId = activeKidBtn ? activeKidBtn.dataset.praiseKid : KIDS[0].id;
+        const ta = document.getElementById("praiseMessage");
+        const msg = ta ? ta.value.trim() : "";
+        if (!msg) { showToast("칭찬 메시지를 입력해 주세요."); return; }
+        addNotification(kidId, "praise_message", "💌 칭찬 우체통", msg, "");
+        saveState();
+        if (ta) ta.value = "";
+        const notice = document.getElementById("praiseSentNotice");
+        if (notice) { notice.textContent = `${displayName(kidId)}에게 칭찬 메시지를 보냈어요! 💌`; notice.style.display = "block"; setTimeout(() => { notice.style.display = "none"; }, 3000); }
+        playSound("approval");
+      });
     }
 
     function parentAdjust() {

@@ -1,4 +1,4 @@
-const CACHE_NAME = "kids-mission-battle-v1.3.10";
+const CACHE_NAME = "kids-mission-battle-v1.3.13";
 const APP_SHELL = [
   "./",
   "./index.html",
