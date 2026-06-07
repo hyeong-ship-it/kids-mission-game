@@ -1,6 +1,27 @@
 # 변경 이력
 
-문서 기준일: 2026-06-06
+문서 기준일: 2026-06-07
+
+## v1.4-0 (설계 문서 패치 — 앱 기능 변경 없음)
+
+- `JINWOO_DIRECTOR_MODE_SPEC.md` 추가: PC 전용 진우 개발자 모드 제품 설계
+- `LEARNING_DUNGEON_SPEC.md` 추가: 아이별 수준에 맞춘 두뇌 던전 설계
+- `AI_COLLABORATION_RULES_FOR_KIDS.md` 추가: 아이가 AI를 회의 친구로 쓰기 위한 원칙
+- `QUESTION_PACK_FORMAT.md` 추가: 두뇌 던전 문제팩 JSON 형식과 승인 흐름
+- `JINWOO_ACTIVITY_GUIDE.md` 추가: 형님/부모/진우가 함께 진행할 주간 활동 가이드
+- `PROJECT_STATE.md`, `ROADMAP.md`, `PATCH_QUEUE.md`, `AI_HANDOFF.md`, `TEST_CHECKLIST.md` 갱신
+- `make_release_package.py` 업로드 대상 문서 목록에 신규 설계 문서 5개 추가
+- `index.html`, `sw.js`, `manifest.webmanifest`, `assets/` 기능 파일은 수정하지 않음
+
+## v1.3-14 (배포 관리 패치 — 앱 기능 변경 없음)
+
+- 폴더 구조 정비: `_github_upload/`, `_do_not_upload/backups/logs/temp/notes/` 생성
+- 루트 백업 파일 20개 → `_do_not_upload/backups/`로 이동
+- `make_release_package.py`: GitHub 업로드 패키지 자동 생성 스크립트 추가
+- `make_release_package.bat`: 배치 실행 파일 추가
+- `RELEASE_GUIDE.md`: 배포 관리 안내 문서 추가
+- `_github_upload/UPLOAD_CHECKLIST.md`: 업로드 체크리스트 자동 생성 확인
+- 문서 6개 v1.3-14 기준으로 갱신
 
 ## v1.3-13
 

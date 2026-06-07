@@ -1,30 +1,31 @@
 # 프로젝트 상태 문서
 
-문서 기준일: 2026-06-06  
-문서 정리 패치: v1.3-13  
-최신 적용 보고 버전: v1.3-13
+문서 기준일: 2026-06-07  
+앱 기능 최신 버전: v1.3-13  
+배포 관리 패치: v1.3-14  
+설계 문서 패치: v1.4-0
 
 ## 프로젝트 목적
 
-3형제 미션 배틀은 아이들이 집안 미션, 학습 퀘스트, 위생 미션, 가족 협동 미션을 완료하면서 XP, 코인, 아이템, 성장 기록을 얻는 가족용 미션 RPG다. 부모는 승인, 보상, 마감, 백업, 칭찬 우체통을 관리하고, 아이 화면은 성장, 해금, 칭찬, 협동 중심으로 운영한다.
+`3형제 미션 배틀`은 아이들이 집안 미션, 학습 퀘스트, 위생 미션, 가족 협동 미션을 완료하면서 XP, 코인, 아이템, 성장 기록을 얻는 가족용 미션 RPG다. 부모는 승인, 보상, 마감, 백업, 칭찬 우체통을 관리하고, 아이 화면은 성장, 해금, 칭찬, 협동 중심으로 운영한다.
 
 ## 현재 운영 상태
 
-- 최신 기능 적용 기준: v1.3-10
+- 최신 기능 적용 기준: v1.3-13
 - 실행 방식: GitHub Pages 배포 + 공용 Android 패드 1대 홈앱/PWA 설치
 - 저장 방식: 브라우저 localStorage
-- localStorage 키: `kidsPointGame_v1`
+- 메인 게임 localStorage 키: `kidsPointGame_v1`
 - 부모 비밀번호: `0903`
 - 현재 운영 기준: 공용 Android 패드 1대에서 가족이 함께 사용
-- GitHub Pages 주소: 현재 폴더에는 원격 저장소 정보가 없어 확인 필요
+- GitHub Pages 주소: `https://hyeong-ship-it.github.io/kids-mission-game/`
 
 ## 아이 정보
 
-| 내부 kid ID | 표시 이름 |
-| --- | --- |
-| `jinwoo` | 상어 |
-| `jinyoung` | 축복이 |
-| `jinhwan` | 복복이 |
+| 내부 kid ID | 표시 이름 | 두뇌 던전 기본 학년 |
+| --- | --- | -: |
+| `jinwoo` | 상어 | 초6 |
+| `jinyoung` | 축복이 | 초5 |
+| `jinhwan` | 복복이 | 초2 |
 
 ## 현재 주요 기능
 
@@ -52,27 +53,29 @@
 - 알림함과 묶음 알림
 - 백업 알림과 데이터 불러오기
 - Android PWA 설치 지원
+- 부모 칭찬 우체통
 
-## v1.3-13까지 적용된 핵심 기능 요약
+## v1.4-0 설계 문서 패치
 
-- 해금 버그 수정 (v1.3-10)
-- 캐릭터 매력 강화 (v1.3-10)
-- 요청 취소 UX 추가 (v1.3-10)
-- 성장 기록 강화 (v1.3-10)
-- 부모 메뉴 재인증 강화 (v1.3-10)
-- 알림함 추가 (v1.3-10)
-- 식사 감사 미션 추가 (v1.3-10)
-- 보물상자 안내 개선 (v1.3-10)
-- 부모 운영센터 탭 구조 (v1.3-12)
-- 오늘의 운영 요약 대시보드 (v1.3-12)
-- 승인 대기 타입별 그룹화 (v1.3-12)
-- 보상 경제 현황 카드 (v1.3-12)
-- 주간/월간 마감 확인창 강화 (v1.3-12)
-- 전체 초기화 2단계 확인 (v1.3-12)
-- 아이별 알림 일괄 읽음 처리 (v1.3-12)
-- 앱 이름 3형제 미션 배틀 리브랜딩 (v1.3-13)
-- 아이 홈 "오늘의 작전" 대시보드 카드 (v1.3-13)
-- 부모 칭찬 우체통 (v1.3-13)
+v1.4-0은 기능 구현이 아니라 다음 큰 버전 v1.4를 안전하게 준비하기 위한 설계 문서 패치다. 이번 패치에서는 `index.html`, `sw.js`, `manifest.webmanifest`, `assets/` 아이콘 파일을 수정하지 않는다.
+
+추가된 설계 방향:
+
+- PC 전용 `진우 개발자 모드`
+- 진우 역할명: `주니어 게임 디렉터`
+- 진우 개발자 모드 추천 저장 키: `jinwooDirectorMode_v1`
+- 메인 게임 저장 키 `kidsPointGame_v1`과 완전 분리
+- 아이별 수준에 맞춘 `두뇌 던전`
+- 문제팩 형식과 부모 승인 흐름
+- 아이가 AI를 회의 친구로 쓰기 위한 협업 원칙
+
+## v1.4-0 신규 문서
+
+- `JINWOO_DIRECTOR_MODE_SPEC.md`
+- `LEARNING_DUNGEON_SPEC.md`
+- `AI_COLLABORATION_RULES_FOR_KIDS.md`
+- `QUESTION_PACK_FORMAT.md`
+- `JINWOO_ACTIVITY_GUIDE.md`
 
 ## 업로드해야 할 파일
 
@@ -91,15 +94,33 @@ GitHub Pages 배포 시 아래 파일을 업로드한다.
 - `PATCH_QUEUE.md`
 - `TEST_CHECKLIST.md`
 - `AI_HANDOFF.md`
+- `JINWOO_DIRECTOR_MODE_SPEC.md`
+- `LEARNING_DUNGEON_SPEC.md`
+- `AI_COLLABORATION_RULES_FOR_KIDS.md`
+- `QUESTION_PACK_FORMAT.md`
+- `JINWOO_ACTIVITY_GUIDE.md`
 
 ## 업로드하지 말아야 할 파일
 
-- `index.backup-*.html`
-- 기타 임시 백업 파일
+- `index.backup-*.html` 파일
+- `_do_not_upload/` 폴더 전체
+- `_github_upload/` 폴더 자체
 - `.claude/`
+- `make_release_package.py`, `make_release_package.bat`
+- `RELEASE_GUIDE.md`
 - 개인 설정 파일
 - 로컬 실행 로그
-- 작업 중 생성한 검수용 임시 파일
+- 임시 파일, 백업 파일
+
+## 배포 패키지 생성 방법
+
+GitHub Pages 업로드 전 아래 스크립트를 실행한다.
+
+```bash
+python make_release_package.py
+```
+
+실행 후 `_github_upload/UPLOAD_CHECKLIST.md`를 확인하고 `_github_upload/` 안의 내용물을 GitHub에 올린다. `_github_upload/` 폴더 자체를 올리지 않는다.
 
 ## 아직 실제 패드에서 검수해야 할 항목
 
@@ -116,7 +137,14 @@ GitHub Pages 배포 시 아래 파일을 업로드한다.
 - 주간/월간 마감
 - 시즌 미션
 - 스킨샵, 보관함, 장착 상태
-- 로봇 아바타 해금
 - 알림함과 묶음 알림
 - 백업과 불러오기
 - 모바일/패드 화면 깨짐 여부
+
+## v1.4 구현 전 주의사항
+
+- v1.4-0 문서는 설계 기준이며 앱 기능은 아직 구현되지 않았다.
+- `진우 개발자 모드`는 PC 전용 별도 도구로 설계한다.
+- `두뇌 던전`은 메인 코인 경제와 학습 재화를 분리한다.
+- AI API 연결은 별도 승인 전까지 구현하지 않는다.
+- 승인되지 않은 진우 아이디어나 문제팩은 메인 게임에 자동 반영하지 않는다.
