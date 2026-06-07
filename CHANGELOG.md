@@ -2,6 +2,78 @@
 
 문서 기준일: 2026-06-07
 
+## v1.4-2a (두뇌 던전 복구 + PWA 캐시 갱신)
+
+- `index.html` `renderMissions()`에 `dungeonState.active` 분기 추가 — 스플래시 멈춤·던전 시작 후 클릭 미전환 문제 복구
+- `missionsEl` null guard 추가로 초기 렌더링 안정성 보강
+- `sw.js` 캐시 버전을 `kids-mission-battle-v1.4.2a`로 갱신 (구버전 `index.html` PWA 캐시 무효화)
+- `kidsPointGame_v1` localStorage 키·부모 비밀번호·kid ID 변경 없음
+- GitHub 업로드 전 로컬 검수 필요. Android 패드는 업로드 후 새로고침 또는 최신 버전 다시 불러오기 필요
+- 백업: `_do_not_upload/backups/index.backup-before-v1-4-2a-splash-recovery.html`
+
+## v1.4-2 (두뇌 던전 MVP 구현 및 문서 불일치 수정)
+
+- `index.html`에 두뇌 던전 MVP 로직 및 화면 구현
+  - 내장 문제팩(아이별 9문제) `LEARNING_DUNGEON_QUESTIONS` 추가
+  - 1일 1회차 10코인, 2회차 5코인, 3회차 이상 0코인 지급 로직 적용
+  - 지식 조각 및 두뇌 XP 부여 로직 구현
+  - 오답(다시 도전 문제) 재도전 로직 적용
+  - 금지어(오답, 실패) 대신 긍정적 메시지 적용
+- `kidsPointGame_v1` localStorage 데이터 안전 마이그레이션 (`state.brainDungeon` 추가)
+- `sw.js` 캐시 버전을 `kids-mission-battle-v1.4.2`로 갱신
+- `v1.3-13 패드 실사용 검수` 관련 상태 문서 불일치(완료 처리) 수정
+- `make_release_package.py`에 `GEMINI_HANDOFF_V1_4_1C.md` 업로드 포함
+
+## v1.4-1c (진우 개발자 모드 실사용 전 미니 UX 점검 — 메인 앱 기능 변경 없음)
+
+- `jinwoo_director_mode.html` VERSION 1.4.1c로 갱신
+- 저장함 불러오기(importBackup) — 파일 선택 후 confirm() 없이 즉시 덮어쓰는 치명적 버그 수정: 확인 창 추가
+- 저장 파일 다시 가져오기 카드에 경고 kid-note 추가 ("지금 기록이 바뀔 수 있어. 먼저 저장 파일 만들기를 해두면 안전해.")
+- 불러오기 버튼 색상을 secondary → warn(주황)으로 변경하여 위험도 시각화
+- 초기화 카드에 kid-note 추가 ("3형제 미션 배틀의 코인, 레벨, 아이템은 절대 지워지지 않아요")
+- AI랑 작전회의 탭에 kid-note 추가 ("① 내 생각 쓰기 → ② AI에게 묻기 → ③ 쓸 것 고르기 → ④ 진우가 최종 결정" 흐름 강조)
+- `GEMINI_HANDOFF_V1_4_1C.md` 생성: Gemini 인계 문서 (현재 상태, 다음 작업 제안, 검토 질문 8개)
+- 백업: `jinwoo_director_mode.backup-before-v1-4-1c-mini-ux.html`
+- 메인 게임 파일(`index.html`, `sw.js`, `manifest.webmanifest`, `assets/`) 수정 없음
+
+## v1.4-1b (운영 책임 원칙 문서 반영 + v1.4-1a 결과 검수 — 앱 기능 변경 없음)
+
+- `PROJECT_RULES.md`에 AI 운영 책임 원칙 섹션 추가: 사용자 역할, AI 역할, 다단계 합의 원칙, 상태 관리 원칙, 도구 전환 원칙, 완료 보고 검수 기준
+- `AI_HANDOFF.md`에 AI 운영 책임 원칙·작업 지시서 포함 원칙·Codex/Claude/Gemini 전환 기준·완료 보고 검수 기준 추가, 기존 도구 운영 원칙 섹션과 통합
+- `PROJECT_STATE.md`에 AI 운영 철학 확정 기록 추가
+- `PATCH_QUEUE.md`에 v1.4-1b 완료 기록 추가, v1.4-1c 진우 개발자 모드 실사용 검수 후보 추가
+- `TEST_CHECKLIST.md`에 AI 작업 결과 목적 기준 검수 섹션 추가
+- `AGENTS.md` 신규 생성: 작업 시작 전 읽을 문서, 절대 금지 사항, 저장 키, 전환 기준 등 요약
+- `make_release_package.py`에 `AGENTS.md` 업로드 대상 추가
+- v1.4-1a 결과 검수: 메뉴명·첫 화면·체크 피드백·AI 회의실 원칙·저장 키 분리 모두 확인
+- 메인 게임 파일(`index.html`, `sw.js`, `manifest.webmanifest`, `assets/`) 수정 없음
+- 진우 개발자 모드 HTML 수정 없음
+- `v1.3-13 패드 실사용 검수` 완료 처리 문서 반영 (사용자 확인 완료)
+
+## v1.4-1a (진우 개발자 모드 어린이 UX 리디자인 — 메인 앱 기능 변경 없음)
+
+- `jinwoo_director_mode.html` 첫 화면을 `오늘의 개발자 작전` 중심으로 변경
+- 메뉴명을 초6 아이 눈높이로 변경: 오늘의 작전, 동생 반응 보기, 새 기능 만들기, 퀴즈 만들기, AI랑 작전회의, 게임에 넣을 후보, 내 개발자 배지, 저장함
+- 오늘의 작전 0/4 진행률, 다음 추천 행동, 4개 완료 메시지 추가
+- 체크박스 클릭 시 작전 완료 피드백과 CSS 애니메이션 추가
+- 각 탭 상단에 “여기서 하는 일” 설명 추가
+- AI 회의실 문구를 “내 생각 먼저”와 “AI는 회의 친구” 중심으로 개선
+- 어려운 용어를 아이 눈높이 문구로 순화
+- 기존 저장 키 `jinwooDirectorMode_v1` 유지
+- 메인 게임 파일과 메인 게임 저장 키는 건드리지 않음
+
+## v1.4-1 (PC 전용 진우 개발자 모드 MVP 구현 패치 — 메인 앱 기능 변경 없음)
+
+- `_do_not_upload/jinwoo_director_mode/` 폴더 추가
+- `jinwoo_director_mode.html` 추가: PC 로컬 전용 진우 개발자 모드 단일 HTML 도구
+- `start_jinwoo_director.bat` 추가: 로컬 HTML 실행 배치 파일
+- `create_desktop_shortcut.bat` 추가: Windows 바탕화면 바로가기 생성 파일
+- `README_JINWOO_DIRECTOR_MODE.md` 추가: 실행 방법, 저장 키, 백업/불러오기 안내
+- 저장 키 `jinwooDirectorMode_v1` 사용
+- 메인 게임 저장 키와 메인 앱 파일은 건드리지 않음
+- AI API 직접 연결 없이 ChatGPT에 붙여넣을 수 있는 프롬프트 생성 방식으로 구현
+- `PROJECT_STATE.md`, `ROADMAP.md`, `PATCH_QUEUE.md`, `AI_HANDOFF.md`, `TEST_CHECKLIST.md`, `RELEASE_GUIDE.md` 갱신
+
 ## v1.4-0 (설계 문서 패치 — 앱 기능 변경 없음)
 
 - `JINWOO_DIRECTOR_MODE_SPEC.md` 추가: PC 전용 진우 개발자 모드 제품 설계

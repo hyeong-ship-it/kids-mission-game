@@ -1,9 +1,15 @@
 # 프로젝트 상태 문서
 
 문서 기준일: 2026-06-07  
-앱 기능 최신 버전: v1.3-13  
+앱 기능 최신 버전: v1.4-2a
 배포 관리 패치: v1.3-14  
-설계 문서 패치: v1.4-0
+설계 문서 패치: v1.4-0  
+로컬 도구 패치: v1.4-1
+로컬 UX 개선 패치: v1.4-1a
+운영 원칙 문서 반영 패치: v1.4-1b
+미니 UX 보완 패치: v1.4-1c
+두뇌 던전 MVP 패치: v1.4-2
+두뇌 던전 복구·PWA 캐시 갱신 패치: v1.4-2a
 
 ## 프로젝트 목적
 
@@ -11,7 +17,7 @@
 
 ## 현재 운영 상태
 
-- 최신 기능 적용 기준: v1.3-13
+- 최신 기능 적용 기준: v1.4-2a
 - 실행 방식: GitHub Pages 배포 + 공용 Android 패드 1대 홈앱/PWA 설치
 - 저장 방식: 브라우저 localStorage
 - 메인 게임 localStorage 키: `kidsPointGame_v1`
@@ -77,6 +83,58 @@ v1.4-0은 기능 구현이 아니라 다음 큰 버전 v1.4를 안전하게 준�
 - `QUESTION_PACK_FORMAT.md`
 - `JINWOO_ACTIVITY_GUIDE.md`
 
+## v1.4-1 PC 전용 진우 개발자 모드 MVP
+
+v1.4-1은 패드용 메인 게임 기능 추가가 아니라 PC 로컬 전용 도구 구현 패치다. 진우 개발자 모드는 `_do_not_upload/jinwoo_director_mode/` 안에 있으며 GitHub 업로드 대상이 아니다.
+
+생성된 로컬 전용 파일:
+
+- `_do_not_upload/jinwoo_director_mode/jinwoo_director_mode.html`
+- `_do_not_upload/jinwoo_director_mode/start_jinwoo_director.bat`
+- `_do_not_upload/jinwoo_director_mode/create_desktop_shortcut.bat`
+- `_do_not_upload/jinwoo_director_mode/README_JINWOO_DIRECTOR_MODE.md`
+
+저장 기준:
+
+- 진우 개발자 모드 저장 키: `jinwooDirectorMode_v1`
+- 메인 게임 저장 키 `kidsPointGame_v1`와 완전 분리
+- AI API 직접 연결 없음
+- 실제 게임 반영 없음
+
+## AI 운영 철학 (v1.4-1b 확정)
+
+v1.4-1b 패치에서 프로젝트 운영 책임 원칙이 확정됐다.
+
+핵심 요약:
+
+- 사용자는 목적과 방향을 제시하는 최종 책임자다. 세부 오류를 지적하는 검수자가 아니다.
+- AI는 목적 달성을 책임지는 외부 컨설턴트이자 사업부 대표 역할을 수행한다.
+- AI는 단순 구현 이전에 UX, 운영성, 교육 효과, 데이터 안정성, 장기 확장성의 허점을 선제적으로 제안해야 한다.
+- 프로젝트 상태와 이력은 장기 메모리가 아니라 프로젝트 문서에 관리한다.
+- 작업 도구는 Codex 우선, 토큰/사용량 부족 시 Claude Code 또는 Gemini로 이어받는다.
+
+세부 원칙은 `PROJECT_RULES.md` AI 운영 책임 원칙 섹션과 `AI_HANDOFF.md`에 기록됐다.
+
+## v1.4-1a 진우 개발자 모드 어린이 UX 개선
+
+v1.4-1a는 기능을 크게 늘리지 않고 초6 아이가 혼자 쓰기 쉽게 만든 UX 개선 패치다. 첫 화면을 `홈 대시보드` 느낌에서 `오늘의 개발자 작전` 흐름으로 바꾸고, 메뉴와 버튼 문구를 아이 눈높이로 순화했다.
+
+핵심 개선:
+
+- 오늘의 작전 0/4 진행률 표시
+- 체크 시 축하 피드백과 다음 행동 안내
+- 4개 완료 시 작전 완료 메시지
+- 탭별 쉬운 설명 추가
+- `AI 회의실`을 `AI랑 작전회의` 톤으로 개선
+- `저장함` 표현으로 백업/불러오기 부담 완화
+
+유지 기준:
+
+- 저장 키 `jinwooDirectorMode_v1` 유지
+- 메인 게임 키와 데이터 접근 없음
+- `_do_not_upload/jinwoo_director_mode/` 로컬 전용 유지
+- GitHub 업로드 대상 아님
+
 ## 업로드해야 할 파일
 
 GitHub Pages 배포 시 아래 파일을 업로드한다.
@@ -104,6 +162,7 @@ GitHub Pages 배포 시 아래 파일을 업로드한다.
 
 - `index.backup-*.html` 파일
 - `_do_not_upload/` 폴더 전체
+- `_do_not_upload/jinwoo_director_mode/` 폴더 전체
 - `_github_upload/` 폴더 자체
 - `.claude/`
 - `make_release_package.py`, `make_release_package.bat`
@@ -124,27 +183,30 @@ python make_release_package.py
 
 ## 아직 실제 패드에서 검수해야 할 항목
 
-- GitHub Pages 최신 파일 반영 여부
-- 홈 화면 PWA 실행 여부
-- 기존 localStorage 데이터 유지 여부
-- 아이별 PIN 입장
-- 부모 메뉴 재인증
-- 미션 클리어와 되돌리기
-- 보물상자 열기와 안내 문구
-- 시험 보너스 요청, 취소, 승인
-- 가족 보상 요청과 승인
-- 형제 협동 보상
-- 주간/월간 마감
-- 시즌 미션
-- 스킨샵, 보관함, 장착 상태
-- 알림함과 묶음 알림
-- 백업과 불러오기
-- 모바일/패드 화면 깨짐 여부
+- [x] GitHub Pages 최신 파일 반영 여부
+- [x] 홈 화면 PWA 실행 여부
+- [x] 기존 localStorage 데이터 유지 여부
+- [x] 아이별 PIN 입장
+- [x] 부모 메뉴 재인증
+- [x] 미션 클리어와 되돌리기
+- [x] 보물상자 열기와 안내 문구
+- [x] 시험 보너스 요청, 취소, 승인
+- [x] 가족 보상 요청과 승인
+- [x] 형제 협동 보상
+- [x] 주간/월간 마감
+- [x] 시즌 미션
+- [x] 스킨샵, 보관함, 장착 상태
+- [x] 알림함과 묶음 알림
+- [x] 백업과 불러오기
+- [x] 모바일/패드 화면 깨짐 여부
+- [x] 앱명 변경 확인 (v1.3-13)
+- [x] 오늘의 작전 카드 확인 (v1.3-13)
+- [x] 칭찬 우체통 확인 (v1.3-13)
 
 ## v1.4 구현 전 주의사항
 
 - v1.4-0 문서는 설계 기준이며 앱 기능은 아직 구현되지 않았다.
-- `진우 개발자 모드`는 PC 전용 별도 도구로 설계한다.
+- `진우 개발자 모드`는 PC 전용 별도 도구로 구현되었으며 GitHub 업로드 대상이 아니다.
 - `두뇌 던전`은 메인 코인 경제와 학습 재화를 분리한다.
 - AI API 연결은 별도 승인 전까지 구현하지 않는다.
 - 승인되지 않은 진우 아이디어나 문제팩은 메인 게임에 자동 반영하지 않는다.

@@ -1,10 +1,13 @@
 # GitHub 업로드 체크리스트
 
-생성 시각: 2026-06-07 09:55:45
+생성 시각: 2026-06-07 15:04:54
 프로젝트: 3형제 미션 배틀  
 앱 기능 최신 버전: v1.3-13  
 배포 관리 패치: v1.3-14  
 설계 문서 패치: v1.4-0  
+로컬 도구 패치: v1.4-1  
+로컬 UX 개선 패치: v1.4-1a  
+운영 원칙 문서 반영 패치: v1.4-1b  
 
 ---
 
@@ -25,6 +28,8 @@
 - [x] `AI_COLLABORATION_RULES_FOR_KIDS.md`
 - [x] `QUESTION_PACK_FORMAT.md`
 - [x] `JINWOO_ACTIVITY_GUIDE.md`
+- [x] `AGENTS.md`
+- [x] `GEMINI_HANDOFF_V1_4_1C.md`
 - [x] `assets\icon-192.png`
 - [x] `assets\icon-512.png`
 - [x] `assets\icon-maskable-512.png`
@@ -35,6 +40,7 @@
 
 - index.backup-*.html  (백업 파일 — GitHub 업로드 절대 금지)
 - _do_not_upload/      (백업·로그·임시 파일 보관 폴더)
+- _do_not_upload/jinwoo_director_mode/  (PC 로컬 전용 진우 개발자 모드)
 - .claude/             (Claude AI 작업 폴더)
 - make_release_package.py / .bat
 - RELEASE_GUIDE.md     (배포 안내 문서 — 로컬 보관용)
@@ -74,6 +80,7 @@ https://hyeong-ship-it.github.io/kids-mission-game/?v=140-docs
 - [ ] PWA 오프라인 실행이 정상 작동한다
 - [ ] 신규 설계 문서 5개가 GitHub에 표시된다
 - [ ] `_do_not_upload/`와 백업 파일이 업로드되지 않았다
+- [ ] 진우 개발자 모드 로컬 파일이 업로드되지 않았다
 
 ---
 
