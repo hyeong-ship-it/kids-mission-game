@@ -1342,8 +1342,38 @@
     .pin-input:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(255,216,77,.28);}
     .pin-error{color:#ffd84d;font-weight:1000;font-size:14px;margin:8px 0;min-height:20px;}
     .pin-actions{display:grid;gap:8px;margin-top:14px;}
+    .school-lock-card {
+      width: min(640px,100%); padding: 26px 22px;
+      border-radius: 30px; text-align: center;
+      background: rgba(255,255,255,.94); border: 2px solid rgba(255,255,255,.78);
+      box-shadow: 0 18px 0 rgba(9,18,62,.17), 0 30px 52px rgba(5,10,38,.3);
+    }
+    .school-lock-title { margin:0 0 10px; color:#173271; font-size:clamp(26px,5vw,38px); font-weight:1000; letter-spacing:0; }
+    .school-lock-text { margin:0 auto 16px; max-width:540px; color:#425176; font-size:18px; line-height:1.62; font-weight:900; }
+    .school-lock-plan {
+      margin:18px auto 14px; max-width:420px; padding:16px 18px; text-align:left;
+      border-radius:22px; background:linear-gradient(180deg,#fffdf1,#edf7ff);
+      border:2px solid #d9e6ff; box-shadow:inset 0 -5px 0 rgba(24,50,113,.06);
+    }
+    .school-lock-plan h3 { margin:0 0 10px; color:#173271; font-size:18px; font-weight:1000; }
+    .school-lock-plan ul { margin:0; padding-left:22px; color:#23325f; font-weight:1000; line-height:1.85; }
+    .school-lock-parent-link {
+      margin-top:10px; min-height:34px; padding:7px 13px; border-radius:999px;
+      background:rgba(23,50,113,.08); color:#4c5f8b; border:1px solid rgba(23,50,113,.22);
+      font-size:12px; font-weight:1000; box-shadow:none;
+    }
+    .school-lock-panel {
+      margin-top:16px; padding:14px; text-align:left; border-radius:18px;
+      background:#f5f8ff; border:2px solid #dce7ff;
+    }
+    .school-lock-panel h3 { margin:0 0 6px; font-size:17px; font-weight:1000; color:#173271; }
+    .school-lock-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:10px; }
+    .school-lock-grid .field { margin:0; }
     @media(max-width:480px){
       .kid-gate-grid{gap:7px;} .kid-gate-card{padding:10px 5px;} .kid-gate-name{font-size:14px;}
+      .school-lock-card{padding:22px 16px;}
+      .school-lock-text{font-size:16px;}
+      .school-lock-grid{grid-template-columns:1fr;}
     }
     .coop-join-row {
       display: flex;
@@ -2305,9 +2335,62 @@
       modalRoot: document.getElementById("modalRoot")
     };
 
-    function getTodayKey() {
-      const now = new Date();
+    function getTodayKey(date = new Date()) {
+      const now = date;
       return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+    }
+
+    function makeSchoolMorningLockDefaults() {
+      return {
+        enabled: true,
+        start: "06:30",
+        end: "08:30",
+        weekdays: [1, 2, 3, 4, 5],
+        skipDate: ""
+      };
+    }
+
+    function normalizeTimeValue(value, fallback) {
+      const raw = typeof value === "string" ? value.trim() : "";
+      return /^([01]\d|2[0-3]):[0-5]\d$/.test(raw) ? raw : fallback;
+    }
+
+    function parseTimeToMinutes(value, fallback = "00:00") {
+      const safe = normalizeTimeValue(value, fallback);
+      const [hours, minutes] = safe.split(":").map(Number);
+      return hours * 60 + minutes;
+    }
+
+    function normalizeSchoolMorningLock(old = {}) {
+      const defaults = makeSchoolMorningLockDefaults();
+      const source = old && typeof old === "object" ? old : {};
+      const weekdays = Array.isArray(source.weekdays)
+        ? [...new Set(source.weekdays.map(Number).filter((day) => Number.isInteger(day) && day >= 0 && day <= 6))]
+        : defaults.weekdays;
+      let start = normalizeTimeValue(source.start, defaults.start);
+      let end = normalizeTimeValue(source.end, defaults.end);
+      if (parseTimeToMinutes(start, defaults.start) >= parseTimeToMinutes(end, defaults.end)) {
+        start = defaults.start;
+        end = defaults.end;
+      }
+      return {
+        enabled: source.enabled === false ? false : defaults.enabled,
+        start,
+        end,
+        weekdays: weekdays.length ? weekdays : defaults.weekdays,
+        skipDate: typeof source.skipDate === "string" ? source.skipDate : ""
+      };
+    }
+
+    function isSchoolMorningLockActive(date = new Date()) {
+      const lock = normalizeSchoolMorningLock(state.gameMeta?.schoolMorningLock);
+      if (!lock.enabled) return false;
+      if (!lock.weekdays.includes(date.getDay())) return false;
+      if (lock.skipDate === getTodayKey(date)) return false;
+      const nowMinutes = date.getHours() * 60 + date.getMinutes();
+      const startMinutes = parseTimeToMinutes(lock.start, "06:30");
+      const endMinutes = parseTimeToMinutes(lock.end, "08:30");
+      return nowMinutes >= startMinutes && nowMinutes < endMinutes;
     }
 
     function getWeekKey(date = new Date()) {
@@ -2421,7 +2504,8 @@
             jinhwan: oldVotes.jinhwan || null
           }
         },
-        missionIdeas: Array.isArray(old.missionIdeas) ? old.missionIdeas : []
+        missionIdeas: Array.isArray(old.missionIdeas) ? old.missionIdeas : [],
+        schoolMorningLock: normalizeSchoolMorningLock(old.schoolMorningLock)
       };
     }
 
@@ -3110,6 +3194,87 @@
       v1.3-6: 아이 입장 게이트
       ==============================
     */
+    function renderSchoolMorningParentPanel(lock) {
+      return `<div class="school-lock-panel">
+        <h3>부모 설정</h3>
+        <p class="card-sub">평일 아침에는 아이들이 미션 체크보다 등교 준비를 먼저 하도록 안내해요.</p>
+        <label style="display:flex;align-items:center;gap:8px;margin-top:10px;font-weight:1000;color:#173271;">
+          <input id="schoolLockEnabled" type="checkbox" ${lock.enabled ? "checked" : ""}>
+          등교 준비 잠금 사용함
+        </label>
+        <div class="school-lock-grid">
+          <label class="field">
+            <span style="display:block;margin-bottom:6px;color:var(--muted);font-size:13px;font-weight:1000;">시작 시간</span>
+            <input id="schoolLockStart" type="time" value="${escapeHtml(lock.start)}">
+          </label>
+          <label class="field">
+            <span style="display:block;margin-bottom:6px;color:var(--muted);font-size:13px;font-weight:1000;">종료 시간</span>
+            <input id="schoolLockEnd" type="time" value="${escapeHtml(lock.end)}">
+          </label>
+        </div>
+        <div class="parent-actions">
+          <button class="btn alt small" id="schoolLockSkipToday" type="button">오늘만 잠금 해제</button>
+          <button class="btn gold small" id="schoolLockSaveSettings" type="button">설정 저장</button>
+        </div>
+        <p class="card-sub" style="margin-top:8px;">부모 메뉴는 매번 비밀번호 0903을 확인해요. 오늘만 해제해도 내일부터는 다시 등교 준비 시간이 적용돼요.</p>
+      </div>`;
+    }
+
+    function renderSchoolMorningLock(showSettings = false) {
+      document.getElementById("kidGateOverlay")?.remove();
+      const lock = normalizeSchoolMorningLock(state.gameMeta?.schoolMorningLock);
+      if (!state.gameMeta.schoolMorningLock) state.gameMeta.schoolMorningLock = lock;
+      const ov = document.createElement("div");
+      ov.id = "kidGateOverlay";
+      ov.className = "kid-gate-overlay";
+      ov.innerHTML = `<div class="school-lock-card" role="dialog" aria-label="등교 준비 잠금 안내">
+        <h2 class="school-lock-title">🚸 지금은 학교 갈 준비 시간이에요</h2>
+        <p class="school-lock-text">
+          미션 체크는 하교 후에 해도 괜찮아요.<br>
+          지금은 옷 입기, 밥 먹기, 양치, 가방 챙기기가 먼저예요.<br>
+          오늘의 보상은 하교 후에 정산해요.<br>
+          패드는 내려놓고 등교 작전을 시작하세요!
+        </p>
+        <div class="school-lock-plan">
+          <h3>오늘의 등교 작전</h3>
+          <ul>
+            <li>옷 입기</li>
+            <li>밥 먹기</li>
+            <li>양치하기</li>
+            <li>가방 챙기기</li>
+            <li>기분 좋게 출발하기</li>
+          </ul>
+        </div>
+        <button id="schoolLockParentBtn" class="school-lock-parent-link" type="button">부모 메뉴</button>
+        ${showSettings ? renderSchoolMorningParentPanel(lock) : ""}
+      </div>`;
+      document.body.appendChild(ov);
+      document.getElementById("schoolLockParentBtn")?.addEventListener("click", () => {
+        requireParentPassword(() => renderSchoolMorningLock(true));
+      });
+      document.getElementById("schoolLockSkipToday")?.addEventListener("click", () => {
+        state.gameMeta.schoolMorningLock = normalizeSchoolMorningLock(state.gameMeta.schoolMorningLock);
+        state.gameMeta.schoolMorningLock.skipDate = getTodayKey();
+        saveState();
+        showToast("오늘만 등교 준비 잠금을 해제했어요.");
+        renderKidGate();
+      });
+      document.getElementById("schoolLockSaveSettings")?.addEventListener("click", () => {
+        const previous = normalizeSchoolMorningLock(state.gameMeta.schoolMorningLock);
+        state.gameMeta.schoolMorningLock = normalizeSchoolMorningLock({
+          enabled: document.getElementById("schoolLockEnabled")?.checked === true,
+          start: document.getElementById("schoolLockStart")?.value || previous.start,
+          end: document.getElementById("schoolLockEnd")?.value || previous.end,
+          weekdays: previous.weekdays,
+          skipDate: previous.skipDate
+        });
+        saveState();
+        showToast("등교 준비 잠금 설정을 저장했어요.");
+        if (isSchoolMorningLockActive()) renderSchoolMorningLock(true);
+        else renderKidGate();
+      });
+    }
+
     function renderKidGate() {
       document.getElementById("kidGateOverlay")?.remove();
       const ov = document.createElement("div");
@@ -4938,6 +5103,55 @@
       </div>`;
     }
 
+    function renderSchoolMorningLockSettingsCard() {
+      const lock = normalizeSchoolMorningLock(state.gameMeta?.schoolMorningLock);
+      return `<div class="dash-card" style="margin-bottom:12px;text-align:left;">
+        <div class="dash-label">등교 준비 잠금</div>
+        <div class="dash-sub" style="margin:6px 0 10px;">평일 아침에는 아이들이 미션 체크보다 등교 준비를 먼저 하도록 안내해요.</div>
+        <label style="display:flex;align-items:center;gap:8px;font-weight:1000;color:#173271;margin-bottom:10px;">
+          <input id="parentSchoolLockEnabled" type="checkbox" ${lock.enabled ? "checked" : ""}>
+          사용함
+        </label>
+        <div class="grid-2">
+          <label class="field">
+            <span style="display:block;margin-bottom:6px;color:var(--muted);font-size:13px;font-weight:1000;">시작 시간</span>
+            <input id="parentSchoolLockStart" type="time" value="${escapeHtml(lock.start)}">
+          </label>
+          <label class="field">
+            <span style="display:block;margin-bottom:6px;color:var(--muted);font-size:13px;font-weight:1000;">종료 시간</span>
+            <input id="parentSchoolLockEnd" type="time" value="${escapeHtml(lock.end)}">
+          </label>
+        </div>
+        <div class="parent-actions">
+          <button class="btn alt small" id="parentSchoolLockSkipToday" type="button">오늘만 잠금 해제</button>
+          <button class="btn gold small" id="parentSchoolLockSave" type="button">등교 잠금 저장</button>
+        </div>
+        <p class="card-sub" style="margin-top:8px;">기본값은 월~금 06:30~08:30이에요. 오늘만 해제는 오늘 날짜에만 적용돼요.</p>
+      </div>`;
+    }
+
+    function saveSchoolMorningLockSettingsFromParent() {
+      const previous = normalizeSchoolMorningLock(state.gameMeta?.schoolMorningLock);
+      state.gameMeta.schoolMorningLock = normalizeSchoolMorningLock({
+        enabled: document.getElementById("parentSchoolLockEnabled")?.checked === true,
+        start: document.getElementById("parentSchoolLockStart")?.value || previous.start,
+        end: document.getElementById("parentSchoolLockEnd")?.value || previous.end,
+        weekdays: previous.weekdays,
+        skipDate: previous.skipDate
+      });
+      saveState();
+      showToast("등교 준비 잠금 설정을 저장했어요.");
+      renderParent();
+    }
+
+    function skipSchoolMorningLockTodayFromParent() {
+      state.gameMeta.schoolMorningLock = normalizeSchoolMorningLock(state.gameMeta?.schoolMorningLock);
+      state.gameMeta.schoolMorningLock.skipDate = getTodayKey();
+      saveState();
+      showToast("오늘만 등교 준비 잠금을 해제했어요.");
+      renderParent();
+    }
+
     function renderAppSettingsSection() {
       const soundOn = state.gameMeta.soundEnabled;
       const appMode = isStandaloneAppMode();
@@ -4958,8 +5172,8 @@
         <div class="dash-row" style="margin-bottom:12px;">
           <div class="dash-card">
             <div class="dash-label">앱 버전</div>
-            <div class="dash-val">v1.3.13</div>
-            <div class="dash-sub">부모 운영센터 패치</div>
+            <div class="dash-val">v1.4.2c</div>
+            <div class="dash-sub">등교 준비 잠금 모드 패치</div>
           </div>
           <div class="dash-card">
             <div class="dash-label">저장 방식</div>
@@ -4967,6 +5181,7 @@
             <div class="dash-sub">이 패드에만 저장돼요</div>
           </div>
         </div>
+        ${renderSchoolMorningLockSettingsCard()}
         <h4 style="margin:10px 0 8px;font-size:15px;font-weight:1000;">패드 홈앱 설치 안내</h4>
         <p class="card-sub">${appMode ? "현재 앱 모드로 실행 중이에요." : "현재는 브라우저 모드예요. 홈 화면에 추가하면 더 앱처럼 사용할 수 있어요."}</p>
         <ol class="card-sub" style="margin:10px 0 0 20px;line-height:1.7;">
@@ -5072,6 +5287,8 @@
       document.getElementById("parentApply")?.addEventListener("click", parentAdjust);
       document.getElementById("resetToday")?.addEventListener("click", resetTodayOnly);
       document.getElementById("resetIdeas")?.addEventListener("click", resetMissionIdeas);
+      document.getElementById("parentSchoolLockSave")?.addEventListener("click", saveSchoolMorningLockSettingsFromParent);
+      document.getElementById("parentSchoolLockSkipToday")?.addEventListener("click", skipSchoolMorningLockTodayFromParent);
       document.querySelectorAll("[data-idea-status]").forEach((select) => {
         select.addEventListener("change", () => updateMissionIdeaStatus(select.dataset.ideaStatus, select.value));
       });
@@ -5293,7 +5510,11 @@
     function startAppSplashThenGate() {
       window.setTimeout(() => {
         document.getElementById("appSplash")?.classList.add("app-splash-hidden");
-        renderKidGate();
+        if (isSchoolMorningLockActive()) {
+          renderSchoolMorningLock();
+        } else {
+          renderKidGate();
+        }
       }, 950);
     }
 

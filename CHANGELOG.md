@@ -1,6 +1,21 @@
 # 변경 이력
 
-문서 기준일: 2026-06-07
+문서 기준일: 2026-06-10
+
+## v1.4-2c (등교 준비 잠금 모드)
+
+- `index.html`에 평일 아침 등교 준비 잠금 모드 추가
+- 기본 설정: 사용함, 월~금, 06:30~08:30
+- 앱 시작 흐름을 `스플래시 → 잠금 판단 → 등교 준비 안내 또는 아이 선택/PIN`으로 변경
+- 잠금 화면은 안내 중심이며 아이용 큰 버튼, 체크 버튼, 계속하기 버튼 없음
+- 잠금 화면 하단에 작은 `부모 메뉴` 제공, 접근 시 매번 비밀번호 `0903` 요구
+- 부모 인증 후 오늘만 잠금 해제, 사용/해제, 시작/종료 시간 변경 가능
+- 기존 부모 메뉴 설정 탭에도 `등교 준비 잠금` 섹션 추가
+- 저장 구조 `state.gameMeta.schoolMorningLock` 추가, localStorage 키 `kidsPointGame_v1` 유지
+- 기존 XP, 코인, PIN, 보관함, 승인 대기, 가족 보상, 두뇌 던전 데이터 초기화 없음
+- `sw.js` 캐시 버전을 `kids-mission-battle-v1.4.2c`로 갱신
+- 백업: `_do_not_upload/backups/index.backup-before-v1-4-2c-school-morning-lock.html`, `_do_not_upload/backups/sw.backup-before-v1-4-2c-school-morning-lock.js`
+- Android 패드 업로드 후 일반 시간과 잠금 시간 실사용 검수 필요
 
 ## v1.4-2a (두뇌 던전 복구 + PWA 캐시 갱신)
 
